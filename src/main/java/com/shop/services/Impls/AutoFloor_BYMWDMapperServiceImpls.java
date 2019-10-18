@@ -1,6 +1,7 @@
 package com.shop.services.Impls;
 
 import com.github.pagehelper.Page;
+import com.shop.model.AUTOFLOOR_BYMWD;
 import com.shop.model.AUTOFLOOR_OP_ISSUE;
 import com.shop.model.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -16,5 +17,5 @@ import java.util.Map;
 public interface AutoFloor_BYMWDMapperServiceImpls {
 
     //日期查詢ID
-    Map<String,Object> SelectBYMWDList (@Param("T_MARK") String T_MARK);
+    Map<String,List<AUTOFLOOR_BYMWD>>  SelectBYMWDList (@Param("T_MARK") String T_MARK);
 }

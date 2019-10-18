@@ -359,10 +359,13 @@
 </body>
 
 <script type="text/javascript">
+/*<![CDATA[*/
     (function () {
         facilitybar();
     })();
+
     function facilitybar() {
+        var data = generateData([[${ALLBYMWDData}]]);
         var echartsShow1 = echarts.init(document.getElementById('facilitybar'));
 
         var	option = {
@@ -385,17 +388,24 @@
                 }
             },
             xAxis: {
-                type: 'category',
-                data: ['Sep','Oct-Week1','10/17','10/18'],
+                data: data.categoryData,
+                silent: false,
+                splitLine: {
+                    show: false
+                },
+                splitArea: {
+                    show: false
+                }
             },
+            dataZoom: [{type: 'inside'},
+						{type: 'slider'}],
             yAxis: {},
-            // Declare several bar series, each will be mapped
-            // to a column of dataset.source by default.
             color:['#209a20','#f9d830','#d64c4c'],
             series: [{
-                name: 'Health',
                 type: 'bar',
-                data: [ [[${OneDayMap.get('MonthHealth')}]],[[${OneDayMap.get('WeekHealth')}]],[[${OneDayMap.get('YesterDayHealth')}]],[[${OneDayMap.get('Health')}]] ],
+                data: [data.HealthData,data.WarningData,data.UNHealthData],
+                // Set `large` for large data amount
+                large: true,
                 label:{
                     show: true,//开启显示
                     position: 'top',
@@ -404,43 +414,35 @@
                         color: '#000',
                         fontSize: 14
                     }
-                }
+                },
 
-            }, {
-                name: 'Warning',
-                type: 'bar',
-                data: [ [[${OneDayMap.get('MonthUNHealth')}]],[[${OneDayMap.get('WeekUNHealth')}]],[[${OneDayMap.get('YesterDayUNHealth')}]],[[${OneDayMap.get('UNHealth')}]] ],
-                label:{
-                    show: true,//开启显示
-                    position: 'top',
-                    textStyle: {
-                        //数值样式
-                        color: '#000',
-                        fontSize: 14
-                    }
-                }
-            }, {
-                name: 'Unhealth',
-                type: 'bar',
-                data: [ [[${OneDayMap.get('MonthWarning')}]], [[${OneDayMap.get('WeekWarning')}]],[[${OneDayMap.get('YesterDayWarning')}]],[[${OneDayMap.get('Warning')}]] ],
-                label:{
-                    show: true,//开启显示
-                    position: 'top',
-                    textStyle: {
-                        //数值样式
-                        color: '#000',
-                        fontSize: 14
-                    }
-                }
             }
-
 			]
         };
-        /*]]>*/
-        /* echartsShow1.showLoading();*/
         echartsShow1.setOption(option);
         tools.loopShowTooltip(echartsShow1,option,{loopSeries: true});
     }
+
+    function generateData(date) {
+        var categoryData = [];
+        var HealthData = [];
+        var UNHealthData = [];
+        var WarningData = [];
+        for (var i = 0; i < date.length; i++) {
+            categoryData.push(date[i].tMark);
+            HealthData.push(date[i].Health);
+            UNHealthData.push(date[i].UNHealth);
+            WarningData.push(date[i].Warning);
+        }
+
+        return {
+            HealthData: HealthData,
+            UNHealthData: UNHealthData,
+            WarningData: WarningData,
+            categoryData: categoryData
+        };
+    }
+    /*]]>*/
 </script>
 
 <!-- 柱状图 -->
@@ -448,37 +450,6 @@
     $('#facilitytable').mouseover(function () {
         $('#facilitytable').unbind('mouseover');
     })
-   /* $.ajax({type:"get",url:"/Ajaxs/echartsshow",dataType:"json",data:{},
-        success:function (backData){
-            var xAdata = Array();
-            var yAdata = Array();
-            /!* for(var i=0;i<backData.length;i++){
-            xAdata=	backData.valueOf();
-
-            } *!/
-            $(backData).each(function(index){
-                xAdata.push($(this).attr("S_name"));
-                yAdata.push($(this).attr("S_id"));
-            })
-            echartsShow1.hideLoading();
-            echartsShow1.setOption ({
-                xAxis: {
-                    data:xAdata
-                },
-                yAxis:{
-
-                },
-                series:[{
-                    name:'id',
-                    data:yAdata
-                }
-                ]
-            })
-        },error:function (){
-
-            echartsShow1.setOption("...");
-        }
-    })*/
 </script>
 
 <script type="text/javascript">

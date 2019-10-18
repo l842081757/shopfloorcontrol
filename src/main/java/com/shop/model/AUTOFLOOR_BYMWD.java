@@ -18,6 +18,36 @@ public class AUTOFLOOR_BYMWD {
 
     private BigDecimal flag;
 
+    private Integer Health;
+
+    private Integer UNHealth;
+
+    private Integer Warning;
+
+    public Integer getHealth() {
+        return Health;
+    }
+
+    public void setHealth(Integer health) {
+        Health = health;
+    }
+
+    public Integer getUNHealth() {
+        return UNHealth;
+    }
+
+    public void setUNHealth(Integer UNHealth) {
+        this.UNHealth = UNHealth;
+    }
+
+    public Integer getWarning() {
+        return Warning;
+    }
+
+    public void setWarning(Integer warning) {
+        Warning = warning;
+    }
+
     public BigDecimal getId() {
         return id;
     }
@@ -72,5 +102,18 @@ public class AUTOFLOOR_BYMWD {
 
     public void setFlag(BigDecimal flag) {
         this.flag = flag;
+    }
+
+    @Override
+    public String toString() {
+        return "AUTOFLOOR_BYMWD{" +
+                "id=" + id +
+                ", tMonth='" + tMonth + '\'' +
+                ", tRemark='" + tRemark + '\'' +
+                ", tMark='" + tMark + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", flag=" + flag +
+                '}';
     }
 }

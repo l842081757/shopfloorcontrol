@@ -876,6 +876,7 @@ and LINE_NAME like #{line_name}||'%'
 
 
 
+
   <insert id="insertSelective" parameterType="com.shop.model.AutoFloor_Rate" >
     insert into AUTOFLOOR_RATE
     <trim prefix="(" suffix=")" suffixOverrides="," >

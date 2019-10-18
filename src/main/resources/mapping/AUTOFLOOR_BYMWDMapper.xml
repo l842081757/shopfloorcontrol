@@ -17,11 +17,20 @@
   <select id="SelectBYMWDByID" resultType="integer" >
     select ID from AUTOFLOOR_BYMWD where  T_MARK=#{T_MARK} and FLAG=1
   </select>
-  <!--//Id查詢所有數據-->
-  <select id="SelectBYMWDList" resultMap="BaseResultMap" >
+  <!--//Id查詢所有月數據-->
+  <select id="SelectBYMWDMList" resultMap="BaseResultMap" >
     <![CDATA[
     select * from AUTOFLOOR_BYMWD
     where ID<='${T_Id}'
+    and FLAG=1
+    ]]>
+  </select>
+  <!--//Id查詢所有周數據-->
+  <select id="SelectBYMWDWList" resultMap="BaseResultMap" >
+    <![CDATA[
+    select * from AUTOFLOOR_BYMWD
+    where ID>'${W_Id}'
+    and ID<'${D_Id}'
     and FLAG=1
     ]]>
   </select>

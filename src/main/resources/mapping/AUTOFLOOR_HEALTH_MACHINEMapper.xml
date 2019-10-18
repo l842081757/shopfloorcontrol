@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shop.dao.AUTOFLOOR_HEALTH_MACHINEMapper" >
+  <resultMap id="BaseResultMap" type="com.shop.model.AUTOFLOOR_HEALTH_MACHINE" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="FLOOR" property="floor" jdbcType="VARCHAR" />
+    <result column="LINE_NAME" property="lineName" jdbcType="VARCHAR" />
+    <result column="PRODUCT" property="product" jdbcType="VARCHAR" />
+    <result column="STATION_NAME" property="stationName" jdbcType="VARCHAR" />
+    <result column="MACHINE_NO" property="machineNo" jdbcType="VARCHAR" />
+    <result column="INPUT" property="input" jdbcType="DECIMAL" />
+    <result column="PASS" property="pass" jdbcType="DECIMAL" />
+    <result column="FAIL" property="fail" jdbcType="DECIMAL" />
+    <result column="RETEST" property="retest" jdbcType="DECIMAL" />
+    <result column="UNKNOWN" property="unknown" jdbcType="DECIMAL" />
+    <result column="FIRST_PASS" property="firstPass" jdbcType="DECIMAL" />
+    <result column="CYCLE_TYPE" property="cycleType" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="FAIL_COUNT" property="failCount" jdbcType="DECIMAL" />
+    <result column="START_DATE" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <!--一 天柱狀圖机台实时误测率使用此sql-->
+  <select id="SelectDayStationMidetect" resultMap="BaseResultMap">
+<![CDATA[
+ select LINE_NAME||MACHINE_NO as stationname ,case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as misdetet
+  from AUTOFLOOR_HEALTH_MACHINE
+  where START_DATE >= to_date('${start_date}','YYYY/MM/DD HH24:MI:SS')
+  AND  START_DATE < TO_DATE('${end_date}','YYYY/MM/DD HH24:MI:SS')
+  and FLOOR=#{floor_name}
+  AND CYCLE_TYPE='DAY'
+  group by LINE_NAME||MACHINE_NO
+]]>
+</select>
+  <!--一 周柱狀圖机台实时误测率使用此sql-->
+  <select id="SelectWeekStationMidetect" resultMap="BaseResultMap">
+<![CDATA[
+ select LINE_NAME||MACHINE_NO as stationname ,case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as misdetet
+  from AUTOFLOOR_HEALTH_MACHINE
+    where START_DATE >= to_date('${start_date}','YYYY/MM/DD HH24:MI:SS')
+  AND  START_DATE < TO_DATE('${end_date}','YYYY/MM/DD HH24:MI:SS')
+  and FLOOR=#{floor_name}
+  AND CYCLE_TYPE='WEEK'
+  group by LINE_NAME||MACHINE_NO
+]]>
+</select>
+  <!--一 月柱狀圖机台实时误测率使用此sql-->
+  <select id="SelectMonthStationMidetect" resultMap="BaseResultMap">
+<![CDATA[
+ select LINE_NAME||MACHINE_NO as stationname ,case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as misdetet
+  from AUTOFLOOR_HEALTH_MACHINE
+  where START_DATE >= to_date('${start_date}','YYYY/MM/DD HH24:MI:SS')
+  AND  START_DATE < TO_DATE('${end_date}','YYYY/MM/DD HH24:MI:SS')
+  and FLOOR=#{floor_name}
+  AND CYCLE_TYPE='MONTH'
+  group by LINE_NAME||MACHINE_NO
+]]>
+</select>
+
+</mapper>
