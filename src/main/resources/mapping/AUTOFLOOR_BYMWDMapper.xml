@@ -13,105 +13,17 @@
   <sql id="Base_Column_List" >
     ID, T_MONTH, T_REMARK, T_MARK, START_DATE, END_DATE, FLAG
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
-    select 
-    <include refid="Base_Column_List" />
-    from AUTOFLOOR_BYMWD
-    where ID = #{id,jdbcType=DECIMAL}
+  <!--//日期查詢ID-->
+  <select id="SelectBYMWDByID" resultType="integer" >
+    select ID from AUTOFLOOR_BYMWD where  T_MARK=#{T_MARK} and FLAG=1
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
-    delete from AUTOFLOOR_BYMWD
-    where ID = #{id,jdbcType=DECIMAL}
-  </delete>
-  <insert id="insert" parameterType="com.shop.model.AUTOFLOOR_BYMWD" >
-    insert into AUTOFLOOR_BYMWD (ID, T_MONTH, T_REMARK, 
-      T_MARK, START_DATE, END_DATE, 
-      FLAG)
-    values (#{id,jdbcType=DECIMAL}, #{tMonth,jdbcType=VARCHAR}, #{tRemark,jdbcType=VARCHAR}, 
-      #{tMark,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
-      #{flag,jdbcType=DECIMAL})
-  </insert>
-  <insert id="insertSelective" parameterType="com.shop.model.AUTOFLOOR_BYMWD" >
-    insert into AUTOFLOOR_BYMWD
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        ID,
-      </if>
-      <if test="tMonth != null" >
-        T_MONTH,
-      </if>
-      <if test="tRemark != null" >
-        T_REMARK,
-      </if>
-      <if test="tMark != null" >
-        T_MARK,
-      </if>
-      <if test="startDate != null" >
-        START_DATE,
-      </if>
-      <if test="endDate != null" >
-        END_DATE,
-      </if>
-      <if test="flag != null" >
-        FLAG,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=DECIMAL},
-      </if>
-      <if test="tMonth != null" >
-        #{tMonth,jdbcType=VARCHAR},
-      </if>
-      <if test="tRemark != null" >
-        #{tRemark,jdbcType=VARCHAR},
-      </if>
-      <if test="tMark != null" >
-        #{tMark,jdbcType=VARCHAR},
-      </if>
-      <if test="startDate != null" >
-        #{startDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endDate != null" >
-        #{endDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="flag != null" >
-        #{flag,jdbcType=DECIMAL},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.shop.model.AUTOFLOOR_BYMWD" >
-    update AUTOFLOOR_BYMWD
-    <set >
-      <if test="tMonth != null" >
-        T_MONTH = #{tMonth,jdbcType=VARCHAR},
-      </if>
-      <if test="tRemark != null" >
-        T_REMARK = #{tRemark,jdbcType=VARCHAR},
-      </if>
-      <if test="tMark != null" >
-        T_MARK = #{tMark,jdbcType=VARCHAR},
-      </if>
-      <if test="startDate != null" >
-        START_DATE = #{startDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endDate != null" >
-        END_DATE = #{endDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="flag != null" >
-        FLAG = #{flag,jdbcType=DECIMAL},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=DECIMAL}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.shop.model.AUTOFLOOR_BYMWD" >
-    update AUTOFLOOR_BYMWD
-    set T_MONTH = #{tMonth,jdbcType=VARCHAR},
-      T_REMARK = #{tRemark,jdbcType=VARCHAR},
-      T_MARK = #{tMark,jdbcType=VARCHAR},
-      START_DATE = #{startDate,jdbcType=TIMESTAMP},
-      END_DATE = #{endDate,jdbcType=TIMESTAMP},
-      FLAG = #{flag,jdbcType=DECIMAL}
-    where ID = #{id,jdbcType=DECIMAL}
-  </update>
+  <!--//Id查詢所有數據-->
+  <select id="SelectBYMWDList" resultMap="BaseResultMap" >
+    <![CDATA[
+    select * from AUTOFLOOR_BYMWD
+    where ID<='${T_Id}'
+    and FLAG=1
+    ]]>
+  </select>
+
 </mapper>

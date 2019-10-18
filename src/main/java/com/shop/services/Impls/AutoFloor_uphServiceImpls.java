@@ -1,4 +1,4 @@
-package com.shop.servicesimpls;
+package com.shop.services.Impls;
 
 import com.shop.model.AmountsUPH;
 import com.shop.model.AutoFloorUphS;

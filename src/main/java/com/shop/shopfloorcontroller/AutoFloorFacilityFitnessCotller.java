@@ -3,15 +3,13 @@ package com.shop.shopfloorcontroller;
 
 import com.shop.model.*;
 import com.shop.services.AUTOFLOOR_TARGEService;
+import com.shop.services.AutoFloor_BYMWDMapperService;
 import com.shop.services.AutoFloor_RateService;
-import com.shop.services.AutoFloor_RoBotService;
-import jdk.management.resource.internal.inst.SocketOutputStreamRMHooks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -31,7 +29,8 @@ public class AutoFloorFacilityFitnessCotller {
 
     @Autowired
     AutoFloor_RateService autoFloor_rateService;
-
+    @Autowired
+    AutoFloor_BYMWDMapperService autoFloor_bymwdMapperService;
     @Autowired
     TaskService taskService;
 
@@ -751,6 +750,10 @@ public class AutoFloorFacilityFitnessCotller {
             }
         }
         MonthWarning+=AllStation.size()-(MonthHealth+MonthUNHealth+MonthWarning);
+        Map<String, Object> stringObjectMap = autoFloor_bymwdMapperService.SelectBYMWDList(FloorName);
+
+
+
 
         OneDayMap.put("Health",Health);
         OneDayMap.put("UNHealth",UNHealth);

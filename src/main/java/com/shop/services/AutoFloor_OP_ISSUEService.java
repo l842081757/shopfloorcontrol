@@ -4,10 +4,9 @@ import com.github.pagehelper.Page;
 import com.shop.dao.AUTOFLOOR_OP_ISSUEMapper;
 import com.shop.model.AUTOFLOOR_OP_ISSUE;
 import com.shop.model.PageInfo;
-import com.shop.servicesimpls.AutoFloor_OP_ISSUEServiceImpls;
+import com.shop.services.Impls.AutoFloor_OP_ISSUEServiceImpls;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

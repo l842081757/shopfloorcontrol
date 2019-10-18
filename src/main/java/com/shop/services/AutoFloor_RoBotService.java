@@ -1,9 +1,8 @@
 package com.shop.services;
 
 import com.shop.dao.AutoFloor_Wait_TimeMapper;
-import com.shop.model.AutoFloor_Slant;
 import com.shop.model.AutoFloor_Wait_Time;
-import com.shop.servicesimpls.AutoFloor_RoBotServiceImpls;
+import com.shop.services.Impls.AutoFloor_RoBotServiceImpls;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

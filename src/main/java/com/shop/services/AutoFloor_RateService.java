@@ -2,7 +2,7 @@ package com.shop.services;
 
 import com.shop.dao.AutoFloor_RateMapper;
 import com.shop.model.AutoFloor_Rate;
-import com.shop.servicesimpls.AutoFloor_RateServiceImpls;
+import com.shop.services.Impls.AutoFloor_RateServiceImpls;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
