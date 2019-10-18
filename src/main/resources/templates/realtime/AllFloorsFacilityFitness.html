@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<title>设备监控追踪</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link th:href="@{/style/css/bootstrap.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap.min.css" />
+	<link th:href="@{/style/css/bootstrap-responsive.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap-responsive.min.css" />
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" />
+	<link th:href="@{/style/css/select2.css}"  rel="stylesheet" href="../../static/style/css/select2.css" />
+	<link th:href="@{/style/css/matrix-style.css}"  rel="stylesheet" href="../../static/style/css/matrix-style.css" />
+	<link th:href="@{/style/css/matrix-media.css}"  rel="stylesheet" href="../../static/style/css/matrix-media.css" />
+	<link th:href="@{/style/font-awesome/css/font-awesome.css}" href="../../static/style/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+	<link th:href="@{/css/tables2.css}" rel="stylesheet" href="../../static/css/tables2.css" type="text/css" />
+	<script th:src="@{/js/jquery-3.1.1.min.js}" src="../../static/js/jquery-3.1.1.min.js" type="text/javascript" ></script>
+	<script th:src="@{/style/js/jquery-1.4.4.min.js}" src="../../static/style/js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/style/js/jquery.dataTables.min.js}"  src="../../static/style/js/jquery.dataTables.min.js"></script>
+	<script th:src="@{/style/js/jquery.min.js}"  src="../../static/style/js/jquery.min.js"></script>
+	<script th:src="@{/style/js/jquery.ui.custom.js}"  src="../../static/style/js/jquery.ui.custom.js"></script>
+	<script th:src="@{/style/js/jquery.uniform.js}"  src="../../static/style/js/jquery.uniform.js"></script>
+	<script th:src="@{/style/js/bootstrap.min.js}"  src="../../static/style/js/bootstrap.min.js"></script>
+	<script th:src="@{/style/js/select2.min.js}"  src="../../static/style/js/select2.min.js"></script>
+	<script th:src="@{/style/js/matrix.js}"  src="../../static/style/js/matrix.js"></script>
+	<script th:src="@{/js/matrix.tables.js}"  src="../../static/style/js/matrix.tables.js"></script>
+	<script th:src="@{/js/mt-tabpage.js}"  type="text/javascript" src="../../static/js/mt-tabpage.js"></script>
+	<script th:src="@{/js/tables2.js}" src="../../static/js/tables2.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/echarts.js}" src="../../static/js/echarts.js" type="text/javascript" charset="UTF-8"></script>
+	<script th:src="@{/js/echarts-auto-tooltip.js}" src="../../static/js/echarts-auto-tooltip.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+<body>
+<!-- 顶部  -->
+<div id="header">
+	<ul>
+		<li style="float: left;">
+			<div id="">
+				<span class="top_title">Thales&nbsp;&nbsp;CN/ZZ/D/D073F<span th:text="${FloorName}"></span></span>
+			</div>
+		</li>
+		<li  style="float:right;">
+			<div class="top_div">
+				<img th:src="@{/static/img/shijian.png}"   style="height: 20px;width: 20px;float: left;margin-top: 5px;margin-right: -20px;">
+				<span class="top_span top_title" id="datespan"></span>
+			</div>
+		</li>
+	</ul>
+</div>
+<!-- 左侧导航栏 -->
+<div id="sidebar">
+	<div style="height:80px;width: 30px;">
+		<i id="shrink" class="icon-arrow-left ulshrink"   onclick="ulshrink()"></i>
+		<i id="unfold" class="icon-th-list ulunfold" onclick="ulunfold()"></i>
+	</div>
+	<ul id="left-ul" style="margin-left: -150px;">
+		<li  class="submenu licontent open">
+			<a href="#"><img  th:src="@{/static/img/dingwei_1.png}"    style="width: 18px; height: 18px;margin-right: 8px"><span></span>實時總覽<span class="label label-important"></span></a>
+			<ul style="border-top: 2px solid #478CB1">
+				<li><a th:href="@{/Allfloordata}" >樓層健康状况</a></li>
+				<li><a th:href="@{/AllFloorsFacilityFitness}" style="color: #65A5E2;">樓層健康可視化</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent">
+			<a><i class="icon-search"></i><span>智能盤點</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10002'}" class="">主板盤點</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent"><a>
+			<i class="icon-group"></i><span>人員管理</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a  th:href="@{'/AllfloorOPissue'}" >OP ISSUE</a></li>
+			</ul>
+		</li>
+
+		<li class="licontent"><a> <i class="icon-glass"></i><span>品質管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-briefcase"></i><span>成本管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-bell"></i><span>報警中心</span></a></li>
+		<li class="submenu licontent">
+			<a href="#"><i class="icon-cog"></i> <span></span>設置<span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10061'}" class="">資料維護</a></li>
+				<li><a th:href="@{'http://10.210.57.13:10001'}" class="">自動化Cell實時數據</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- 右侧数据列表 -->
+<div id="content" style="margin-left: 40px;">
+	<!-- Modal1 -->
+	<div class="modal fade" id="myModal"style="width: 630px" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="flase">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div >
+					<table  style="width: 100%;" >
+						<tr>
+							<td>
+								<table width="100%">
+									<tr id="Facilitytitle" style="background-color: #2196f3a1;height: 45px;">
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr >
+							<td>
+								<table width="100%">
+									<tr style="border-bottom: 1px solid;">
+										<td class="centers center"  style="width:12%;border-right: 1px solid;">NO</td>
+										<td class="centers center"  style="width:25%;border-right: 1px solid;">機台</td>
+										<td class="centers center"  style="width:13%;border-right: 1px solid;" >誤測率</td>
+										<td class="centers center"  style="width:55%;" >異常預判</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr >
+							<td>
+								<table id="FacilityTopTab" width="100%">
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<div style="height: 30px;width:95%;padding-top: 10px;">
+		<h4 style="text-align: center;margin-top: 10px;"><img th:src="@{/static/img/dingwei_1.png}" style="width: 24px; height: 24px;margin-right: 10px;">设备健康追踪</h4>
+	</div>
+
+	<div     style="padding-left: 20px;"><p>Remark:&nbsp;綠色:<=目標*2,&nbsp;&nbsp;黃色預警:>=目標*2,<=目標*5,&nbsp;&nbsp;紅色預警:>目標*5</p></div>
+	<div id="facilitybar" style="width:79%;height:260px;margin-top: 20px;border: 1px solid;margin-left: 20px"></div>
+	<!-- 表切换导航-->
+	<div class="table-responsive" style="overflow: scroll;width:100%;padding: 10px 0px 0 20px;">
+		<!-- 表格标题-->
+	<div><p>Remark:&nbsp;停線顯示灰色,&nbsp;&nbsp;黃色預警:>=目標,<=目標*2,&nbsp;&nbsp;紅色預警:>目標*2</p></div>
+		<table id="capacitytab" style="width:80%;border-collapse: separate;border-spacing: 0px 8px;" class="table">
+			<!--Lotus-->
+			<tr  th:each="facility : ${FacilityList}" style="box-shadow: #9E9E9E 2px 1px 7px 0px;border-radius: 5px;">
+				<td th:text="${facility.getPRODUCT()}"  th:style="${facility.getArea()==1 ? 'color:#999;':'color: black'}"></td>
+				<td width="10%"  class="centers center" th:text="${facility.getLinename()}" th:style="${facility.getArea()==1 ? 'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;color:#999;':'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;'}">ARF01</td>
+				<!--DFU-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'DFU','Lotus')" width="9%" th:title="'目標值：'+${MisdetetMap.get('DFU')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getDFUStation()*100,1,2)}+'%'" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${facility.getDFUStation()*100>MisdetetMap.get('DFU')&&facility.getDFUStation()*100<MisdetetMap.get('DFU')*2 ? 'background-color: #f9d830;':'display: none;'}" >
+
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">DFU</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'DFU','Lotus')" width="9%" th:title="'目標值：'+${MisdetetMap.get('DFU')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getDFUStation()*100,1,2)}+'%'" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${facility.getDFUStation()*100>MisdetetMap.get('DFU')*2 ? 'background-color: #d64c4c;':'display: none;'}" >
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">DFU</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'DFU','Lotus')" width="9%" th:title="'目標值：'+${MisdetetMap.get('DFU')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getDFUStation()*100,1,2)}+'%'" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${facility.getDFUStation()*100<MisdetetMap.get('DFU') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">DFU</span>
+				</td>
+
+				<td  th:onclick="Machineno([[${facility.getLinename()}]],'FCT','Lotus')" th:title="'目標值：'+${MisdetetMap.get('FCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getFCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getFCTStation()*100)>MisdetetMap.get('FCT')&&(facility.getFCTStation()*100)<MisdetetMap.get('FCT')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">FCT</span>
+				</td>
+				<td  th:onclick="Machineno([[${facility.getLinename()}]],'FCT','Lotus')" th:title="'目標值：'+${MisdetetMap.get('FCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getFCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getFCTStation()*100)>MisdetetMap.get('FCT')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">FCT</span>
+				</td>
+				<td  th:onclick="Machineno([[${facility.getLinename()}]],'FCT','Lotus')" th:title="'目標值：'+${MisdetetMap.get('FCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getFCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getFCTStation()*100)<MisdetetMap.get('FCT') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">FCT</span>
+				</td>
+				<!--FTC-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S1','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS1Station()*100,1,2)}+'%'" width="9%" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${(facility.getS1Station()*100)>MisdetetMap.get('S1')&&(facility.getS1Station()*100)<MisdetetMap.get('S1')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S1','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS1Station()*100,1,2)}+'%'" width="9%" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${(facility.getS1Station()*100)>MisdetetMap.get('S1')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S1','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS1Station()*100,1,2)}+'%'" width="9%" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${(facility.getS1Station()*100)<MisdetetMap.get('S1') ? '':'display: none;'}" >
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S1</span>
+				</td>
+				<!--S1-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S2','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS2Station()*100)>MisdetetMap.get('S2')&&(facility.getS2Station()*100)<MisdetetMap.get('S2')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S2','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS2Station()*100)>MisdetetMap.get('S2')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S2','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS2Station()*100)<MisdetetMap.get('S2') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S2</span>
+				</td>
+				<!--S2-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S3','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S3')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS3Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS3Station()*100)>MisdetetMap.get('S3')&&(facility.getS3Station()*100)<MisdetetMap.get('S3')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S3</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S3','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S3')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS3Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS3Station()*100)>MisdetetMap.get('S3')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S3</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S3','Lotus')" th:title="'目標值：'+${MisdetetMap.get('S3')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS3Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS3Station()*100)<MisdetetMap.get('S3') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S3</span>
+				</td>
+				<!--S3-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'CCT','Lotus')" th:title="'目標值：'+${MisdetetMap.get('CCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getCCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getCCTStation()*100)>MisdetetMap.get('CCT')&&(facility.getCCTStation()*100)<MisdetetMap.get('CCT')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">CCT</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'CCT','Lotus')" th:title="'目標值：'+${MisdetetMap.get('CCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getCCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getCCTStation()*100)>MisdetetMap.get('CCT')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">CCT</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'CCT','Lotus')" th:title="'目標值：'+${MisdetetMap.get('CCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getCCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getCCTStation()*100)<MisdetetMap.get('CCT') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">CCT</span>
+				</td>
+				<!--CCT-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W1','Lotus')" th:title="'目標值：'+${MisdetetMap.get('W1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW1Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW1Station()*100)>MisdetetMap.get('W1')&&(facility.getW1Station()*100)<MisdetetMap.get('W1')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W1','Lotus')" th:title="'目標值：'+${MisdetetMap.get('W1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW1Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW1Station()*100)>MisdetetMap.get('W1')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W1','Lotus')" th:title="'目標值：'+${MisdetetMap.get('W1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW1Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW1Station()*100)<MisdetetMap.get('W1') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W1</span>
+				</td>
+				<!--W1-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W2','Lotus')" th:title="'目標值：'+${MisdetetMap.get('W2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW2Station()*100)>MisdetetMap.get('W2')&&(facility.getW2Station()*100)<MisdetetMap.get('W2')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W2','Lotus')" th:title="'目標值：'+${MisdetetMap.get('W2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW2Station()*100)>MisdetetMap.get('W2')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W2','Lotus')" th:title="'目標值：'+${MisdetetMap.get('W2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW2Station()*100)<MisdetetMap.get('W2') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W2</span>
+				</td>
+				<!--W2-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'UWB','Lotus')" th:title="'目標值：'+${MisdetetMap.get('UWB')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getUWBStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getUWBStation()*100)>MisdetetMap.get('UWB')&&(facility.getUWBStation()*100)<MisdetetMap.get('UWB')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">UWB</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'UWB','Lotus')" th:title="'目標值：'+${MisdetetMap.get('UWB')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getUWBStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getUWBStation()*100)>MisdetetMap.get('UWB')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">UWB</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'UWB','Lotus')" th:title="'目標值：'+${MisdetetMap.get('UWB')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getUWBStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getUWBStation()*100)<MisdetetMap.get('UWB') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">UWB</span>
+				</td>
+				<!--UWB-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'SCOND','Lotus')" th:title="'目標值：'+${MisdetetMap.get('SCOND')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getSCONDStation()*100,1,2)}+'%'"  width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getSCONDStation()*100)>MisdetetMap.get('SCOND')&&(facility.getSCONDStation()*100)<MisdetetMap.get('SCOND')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">SCOND</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'SCOND','Lotus')" th:title="'目標值：'+${MisdetetMap.get('SCOND')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getSCONDStation()*100,1,2)}+'%'"  width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getSCONDStation()*100)>MisdetetMap.get('SCOND')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">SCOND</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'SCOND','Lotus')" th:title="'目標值：'+${MisdetetMap.get('SCOND')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getSCONDStation()*100,1,2)}+'%'"  width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getSCONDStation()*100)<MisdetetMap.get('SCOND') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">SCOND</span>
+				</td>
+				<!--SCOND-->
+			</tr>
+			<tr> <td colspan="12" style="padding: 0px"><hr style="height: 1px;border-top: 1px solid #9E9E9E;margin: 0;"/></td></tr>
+			<!--Macan-->
+			<tr  th:each="facility : ${FacilityListMacan}" style="box-shadow: #9E9E9E 2px 1px 7px 0px;border-radius: 5px;">
+				<td th:text="${facility.getPRODUCT()}"  th:style="${facility.getArea()==1 ? 'color:#999;':'color: black'}"></td>
+				<td width="10%"  class="centers center" th:text="${facility.getLinename()}" th:style="${facility.getArea()==1 ? 'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;color:#999;':'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;'}">ARF01</td>
+				<!--DFU-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'DFU','Macan')" width="9%" th:title="'目標值：'+${MisdetetMap.get('DFU')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getDFUStation()*100,1,2)}+'%'" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${facility.getDFUStation()*100>MisdetetMap.get('DFU')&&facility.getDFUStation()*100<MisdetetMap.get('DFU')*2 ? 'background-color: #f9d830;':'display: none;'}" >
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">DFU</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'DFU','Macan')" width="9%" th:title="'目標值：'+${MisdetetMap.get('DFU')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getDFUStation()*100,1,2)}+'%'" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${facility.getDFUStation()*100>MisdetetMap.get('DFU')*2 ? 'background-color: #d64c4c;':'display: none;'}" >
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">DFU</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'DFU','Macan')" width="9%" th:title="'目標值：'+${MisdetetMap.get('DFU')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getDFUStation()*100,1,2)}+'%'" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${facility.getDFUStation()*100<MisdetetMap.get('DFU') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">DFU</span>
+				</td>
+
+				<td  th:onclick="Machineno([[${facility.getLinename()}]],'FCT','Macan')" th:title="'目標值：'+${MisdetetMap.get('FCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getFCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getFCTStation()*100)>MisdetetMap.get('FCT')&&(facility.getFCTStation()*100)<MisdetetMap.get('FCT')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">FCT</span>
+				</td>
+				<td  th:onclick="Machineno([[${facility.getLinename()}]],'FCT','Macan')" th:title="'目標值：'+${MisdetetMap.get('FCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getFCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getFCTStation()*100)>MisdetetMap.get('FCT')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">FCT</span>
+				</td>
+				<td  th:onclick="Machineno([[${facility.getLinename()}]],'FCT','Macan')" th:title="'目標值：'+${MisdetetMap.get('FCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getFCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getFCTStation()*100)<MisdetetMap.get('FCT') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">FCT</span>
+				</td>
+				<!--FTC-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S1','Macan')" th:title="'目標值：'+${MisdetetMap.get('S1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS1Station()*100,1,2)}+'%'" width="9%" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${(facility.getS1Station()*100)>MisdetetMap.get('S1')&&(facility.getS1Station()*100)<MisdetetMap.get('S1')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S1','Macan')" th:title="'目標值：'+${MisdetetMap.get('S1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS1Station()*100,1,2)}+'%'" width="9%" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${(facility.getS1Station()*100)>MisdetetMap.get('S1')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S1','Macan')" th:title="'目標值：'+${MisdetetMap.get('S1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS1Station()*100,1,2)}+'%'" width="9%" class="center facility_border"  data-toggle="modal" data-target="#myModal" th:style="${(facility.getS1Station()*100)<MisdetetMap.get('S1') ? '':'display: none;'}" >
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S1</span>
+				</td>
+				<!--S1-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S2','Macan')" th:title="'目標值：'+${MisdetetMap.get('S2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS2Station()*100)>MisdetetMap.get('S2')&&(facility.getS2Station()*100)<MisdetetMap.get('S2')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S2','Macan')" th:title="'目標值：'+${MisdetetMap.get('S2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS2Station()*100)>MisdetetMap.get('S2')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S2','Macan')" th:title="'目標值：'+${MisdetetMap.get('S2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS2Station()*100)<MisdetetMap.get('S2') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S2</span>
+				</td>
+				<!--S2-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S3','Macan')" th:title="'目標值：'+${MisdetetMap.get('S3')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS3Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS3Station()*100)>MisdetetMap.get('S3')&&(facility.getS3Station()*100)<MisdetetMap.get('S3')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S3</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S3','Macan')" th:title="'目標值：'+${MisdetetMap.get('S3')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS3Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS3Station()*100)>MisdetetMap.get('S3')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S3</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'S3','Macan')" th:title="'目標值：'+${MisdetetMap.get('S3')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getS3Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getS3Station()*100)<MisdetetMap.get('S3') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">S3</span>
+				</td>
+				<!--S3-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'CCT','Macan')" th:title="'目標值：'+${MisdetetMap.get('CCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getCCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getCCTStation()*100)>MisdetetMap.get('CCT')&&(facility.getCCTStation()*100)<MisdetetMap.get('CCT')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">CCT</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'CCT','Macan')" th:title="'目標值：'+${MisdetetMap.get('CCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getCCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getCCTStation()*100)>MisdetetMap.get('CCT')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">CCT</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'CCT','Macan')" th:title="'目標值：'+${MisdetetMap.get('CCT')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getCCTStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getCCTStation()*100)<MisdetetMap.get('CCT') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">CCT</span>
+				</td>
+				<!--CCT-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W1','Macan')" th:title="'目標值：'+${MisdetetMap.get('W1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW1Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW1Station()*100)>MisdetetMap.get('W1')&&(facility.getW1Station()*100)<MisdetetMap.get('W1')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W1','Macan')" th:title="'目標值：'+${MisdetetMap.get('W1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW1Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW1Station()*100)>MisdetetMap.get('W1')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W1</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W1','Macan')" th:title="'目標值：'+${MisdetetMap.get('W1')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW1Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW1Station()*100)<MisdetetMap.get('W1') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W1</span>
+				</td>
+				<!--W1-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W2','Macan')" th:title="'目標值：'+${MisdetetMap.get('W2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW2Station()*100)>MisdetetMap.get('W2')&&(facility.getW2Station()*100)<MisdetetMap.get('W2')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W2','Macan')" th:title="'目標值：'+${MisdetetMap.get('W2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW2Station()*100)>MisdetetMap.get('W2')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W2</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'W2','Macan')" th:title="'目標值：'+${MisdetetMap.get('W2')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getW2Station()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getW2Station()*100)<MisdetetMap.get('W2') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">W2</span>
+				</td>
+				<!--W2-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'UWB','Macan')" th:title="'目標值：'+${MisdetetMap.get('UWB')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getUWBStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getUWBStation()*100)>MisdetetMap.get('UWB')&&(facility.getUWBStation()*100)<MisdetetMap.get('UWB')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">UWB</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'UWB','Macan')" th:title="'目標值：'+${MisdetetMap.get('UWB')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getUWBStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getUWBStation()*100)>MisdetetMap.get('UWB')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">UWB</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'UWB','Macan')" th:title="'目標值：'+${MisdetetMap.get('UWB')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getUWBStation()*100,1,2)}+'%'" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getUWBStation()*100)<MisdetetMap.get('UWB') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">UWB</span>
+				</td>
+				<!--UWB-->
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'SCOND','Macan')" th:title="'目標值：'+${MisdetetMap.get('SCOND')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getSCONDStation()*100,1,2)}+'%'"  width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getSCONDStation()*100)>MisdetetMap.get('SCOND')&&(facility.getSCONDStation()*100)<MisdetetMap.get('SCOND')*2 ? 'background-color: #f9d830;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">SCOND</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'SCOND','Macan')" th:title="'目標值：'+${MisdetetMap.get('SCOND')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getSCONDStation()*100,1,2)}+'%'"  width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getSCONDStation()*100)>MisdetetMap.get('SCOND')*2 ? 'background-color: #d64c4c;':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">SCOND</span>
+				</td>
+				<td th:onclick="Machineno([[${facility.getLinename()}]],'SCOND','Macan')" th:title="'目標值：'+${MisdetetMap.get('SCOND')}+'%'+'&#10;'+'誤測率：'+${#numbers.formatDecimal(facility.getSCONDStation()*100,1,2)}+'%'"  width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal" th:style="${(facility.getSCONDStation()*100)<MisdetetMap.get('SCOND') ? '':'display: none;'}">
+					<span th:style="${facility.getArea()==1 ? 'color:#999;':''}">SCOND</span>
+				</td>
+				<!--SCOND-->
+			</tr>
+			<tr>
+			</tr>
+		</table>
+	</div>
+	</div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    (function () {
+        facilitybar();
+    })();
+    function facilitybar() {
+        var echartsShow1 = echarts.init(document.getElementById('facilitybar'));
+
+        var	option = {
+            legend: {},
+            tooltip:{
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    //dataView : {readOnly:false},
+                    //magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+				    magicType : {show: true, type: [ 'tiled','stack']},
+                    //restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Sep','Oct-Week1','10/17','10/18'],
+            },
+            yAxis: {},
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default.
+            color:['#209a20','#f9d830','#d64c4c'],
+            series: [{
+                name: 'Health',
+                type: 'bar',
+                data: [ [[${OneDayMap.get('MonthHealth')}]],[[${OneDayMap.get('WeekHealth')}]],[[${OneDayMap.get('YesterDayHealth')}]],[[${OneDayMap.get('Health')}]] ],
+                label:{
+                    show: true,//开启显示
+                    position: 'top',
+                    textStyle: {
+                        //数值样式
+                        color: '#000',
+                        fontSize: 14
+                    }
+                }
+
+            }, {
+                name: 'Warning',
+                type: 'bar',
+                data: [ [[${OneDayMap.get('MonthUNHealth')}]],[[${OneDayMap.get('WeekUNHealth')}]],[[${OneDayMap.get('YesterDayUNHealth')}]],[[${OneDayMap.get('UNHealth')}]] ],
+                label:{
+                    show: true,//开启显示
+                    position: 'top',
+                    textStyle: {
+                        //数值样式
+                        color: '#000',
+                        fontSize: 14
+                    }
+                }
+            }, {
+                name: 'Unhealth',
+                type: 'bar',
+                data: [ [[${OneDayMap.get('MonthWarning')}]], [[${OneDayMap.get('WeekWarning')}]],[[${OneDayMap.get('YesterDayWarning')}]],[[${OneDayMap.get('Warning')}]] ],
+                label:{
+                    show: true,//开启显示
+                    position: 'top',
+                    textStyle: {
+                        //数值样式
+                        color: '#000',
+                        fontSize: 14
+                    }
+                }
+            }
+
+			]
+        };
+        /*]]>*/
+        /* echartsShow1.showLoading();*/
+        echartsShow1.setOption(option);
+        tools.loopShowTooltip(echartsShow1,option,{loopSeries: true});
+    }
+</script>
+
+<!-- 柱状图 -->
+<script type="text/javascript">
+    $('#facilitytable').mouseover(function () {
+        $('#facilitytable').unbind('mouseover');
+    })
+   /* $.ajax({type:"get",url:"/Ajaxs/echartsshow",dataType:"json",data:{},
+        success:function (backData){
+            var xAdata = Array();
+            var yAdata = Array();
+            /!* for(var i=0;i<backData.length;i++){
+            xAdata=	backData.valueOf();
+
+            } *!/
+            $(backData).each(function(index){
+                xAdata.push($(this).attr("S_name"));
+                yAdata.push($(this).attr("S_id"));
+            })
+            echartsShow1.hideLoading();
+            echartsShow1.setOption ({
+                xAxis: {
+                    data:xAdata
+                },
+                yAxis:{
+
+                },
+                series:[{
+                    name:'id',
+                    data:yAdata
+                }
+                ]
+            })
+        },error:function (){
+
+            echartsShow1.setOption("...");
+        }
+    })*/
+</script>
+
+<script type="text/javascript">
+    /* 标题导航栏jq */
+    $(function () {
+        $('[js-tab=3]').tab({
+            curDisplay: 1,/* 默认div第一位标题 */
+        });
+    });
+
+    function Machineno(a,b,c){
+        //var Floorname=document.getElementById('Floorname').innerText;
+        //var Linename=document.getElementById('Linename').innerText;
+        //var TimeDayFail= document.getElementById('TimeDayFail').innerText;
+        //var td= $(no).find("td");
+
+       var Linename_M =a;
+       var Station =b;
+       var product_name =c;
+
+        var url ='/shopfloorcontrol/FacilityAjax';
+        $.ajax({
+            type:'Get',
+            data:{ Linename_M:Linename_M,Station:Station,product_name:product_name},
+            async:false,
+            url:url,
+            dataType:'json',
+            success:function (data) {
+                var  FacilityMap=data;
+                var  FacilityJson=FacilityMap.FacilityTopJson;
+                var  FacilityTop= JSON.parse(FacilityJson);
+                var  str="";
+                str+="<td colspan='4' style='font-size: 15px;'  class='centers center'>"+Linename_M+"-"+Station+"異常設備top5</td>"
+				document.getElementById("Facilitytitle").innerHTML=str;
+
+                var strs="";
+                for (var i = 0; i <FacilityTop.length; i++) {
+                    strs+="<tr style='border-bottom: 1px solid;'>" +
+						"<td style='width:12%;border-right: 1px solid;' class='centers center'>"+FacilityTop[i].rOWNUM+"</td>"+
+                        "<td style='width:25%;border-right: 1px solid;' class='centers center'>"+FacilityTop[i].mACHINE_NO+"</td>"+
+                        "<td style='width:13%;border-right: 1px solid;' class='centers center'>"+FacilityTop[i].rate+"%</td>"+
+                        "<td style='width:55%;' class='centers center'>/</td>" +
+						"</tr>";
+                    document.getElementById("FacilityTopTab").innerHTML=strs;
+                }
+            }
+        })
+    }
+
+</script>
+</html>

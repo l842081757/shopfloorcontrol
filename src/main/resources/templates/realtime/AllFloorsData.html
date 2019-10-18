@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<base href="<%=basePath%>">
+	<title>樓層健康管理系统</title>
+	<meta charset="UTF-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link th:href="@{/style/css/bootstrap.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap.min.css" type="text/css" />
+	<link th:href="@{/style/css/bootstrap-responsive.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap-responsive.min.css" type="text/css"/>
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" type="text/css"/>
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" type="text/css"/>
+	<link th:href="@{/style/css/matrix-style.css}" rel="stylesheet" href="../../static/style/css/matrix-style.css" type="text/css"/>
+	<link th:href="@{/style/css/matrix-media.css}" rel="stylesheet" href="../../static/style/css/matrix-media.css" type="text/css"/>
+	<link th:href="@{/style/font-awesome/css/font-awesome.css}" rel="stylesheet" href="../../static/style/font-awesome/css/font-awesome.css" type="text/css" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+	<link th:href="@{/css/tables2.css}" rel="stylesheet" href="../../static/css/tables2.css" type="text/css" />
+	<link th:href="@{/style/css/select2.css}" rel="stylesheet" href="../../static/style/css/select2.css" type="text/css">
+	<script th:src="@{/js/jquery-3.1.1.min.js}" src="../../static/js/jquery-3.1.1.min.js" type="text/javascript" ></script>
+	<script th:src="@{/style/js/jquery-1.4.4.min.js}" src="../../static/style/js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/style/js/jquery.dataTables.min.js}" src="../../static/style/js/jquery.dataTables.min.js" type="text/javascript"></script>
+	<script th:src="@{/style/js/jquery.min.js}" src="../../static/style/js/jquery.min.js" type="text/javascript"></script>
+	<script th:src="@{/style/js/jquery.ui.custom.js}" src="../../static/style/js/jquery.ui.custom.js" type="text/javascript"></script>
+	<script th:src="@{/style/js/jquery.uniform.js}" src="../../static/style/js/jquery.uniform.js" type="text/javascript"></script>
+	<script th:src="@{/style/js/bootstrap.min.js}" src="../../static/style/js/bootstrap.min.js" type="text/javascript"></script>
+	<script th:src="@{/style/js/select2.min.js}" src="../../static/style/js/select2.min.js" type="text/javascript"></script>
+	<script th:src="@{/style/js/matrix.js}" src="../../static/style/js/matrix.js" type="text/javascript"></script>
+	<script th:src="@{/style/js/matrix.tables.js}" src="../../static/style/js/matrix.tables.js" type="text/javascript"></script>
+	<script th:src="@{/js/mt-tabpage.js}" src="../../static/js/mt-tabpage.js" type="text/javascript" ></script>
+	<script th:src="@{/js/tables2.js}" src="../../static/js/tables2.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+<!-- 顶部  -->
+<div id="header">
+	<ul>
+		<li class="header_li1">
+		</li>
+		<li  class="header_li2">
+			<div class="top_div">
+				<img  th:src="@{/static/img/shijian.png}" class="top_div_img">
+				<span class="top_span top_title" id="datespan"></span>
+			</div>
+		</li>
+	</ul>
+</div>
+<!-- 左侧导航栏 -->
+<div id="sidebar">
+	<div style="height:80px;width: 30px;">
+		<i id="shrink" class="icon-arrow-left ulshrink"   onclick="ulshrink()"></i>
+		<i id="unfold" class="icon-th-list ulunfold" onclick="ulunfold()"></i>
+	</div>
+	<ul id="left-ul" style="margin-left: -150px;">
+		<li  class="submenu licontent open">
+			<a href="#"><img  th:src="@{/static/img/dingwei_1.png}"    style="width: 18px; height: 18px;margin-right: 8px"><span></span>實時總覽<span class="label label-important"></span></a>
+			<ul style="border-top: 2px solid #478CB1">
+				<li><a th:href="@{/Allfloordata}" style="color: #65A5E2;">樓層健康状况</a></li>
+				<li><a th:href="@{/AllFloorsFacilityFitness}">樓層健康可視化</a></li>
+				<!--<li><a href="javascript:" class="">產能狀況</a></li>
+				<li><a href="javascript:" class="">測試機臺</a></li>
+				<li><a href="javascript:" class="">Robot</a></li>
+				<li><a href="javascript:" class="">PD設備</a></li>-->
+			</ul>
+		</li>
+		<li class="submenu licontent">
+			<a><i class="icon-search"></i><span>智能盤點</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10002'}" class="">主板盤點</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent"><a>
+			<i class="icon-group"></i><span>人員管理</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a class="" th:href="@{'/AllfloorOPissue'}" >OP ISSUE</a></li>
+			</ul>
+		</li>
+
+		<li class="licontent"><a> <i class="icon-glass"></i><span>品質管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-briefcase"></i><span>成本管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-bell"></i><span>報警中心</span></a></li>
+		<li class="submenu licontent">
+			<a href="#"><i class="icon-cog"></i> <span></span>設置<span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10061'}" class="">資料維護</a></li>
+				<li><a th:href="@{'http://10.210.57.13:10001'}" class="">自動化Cell實時數據</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<!-- 右侧数据列表 -->
+<div id="content" style="margin-left: 40px;">
+	<div style="width: 35%;position: absolute;margin-top: -30px;margin-left: 45px;">
+		<label style="float: left;color: #fff;">更換樓層： </label>
+		<select id="floornames" style="width: 120px;float: right">
+			<option>請選擇樓層</option>
+			<option  value="D073F">D07-3F</option>
+			<option  value="D052F">D05-2F</option>
+			<option  value="L063F">L06-3F</option>
+		</select>
+	</div>
+	<span ></span>
+	<div class="content_div">
+		<h4 class="content_div_title" style="font-size: 33.5px;"><img th:src="@{/static/img/dingwei_1.png}" class="content_div_title_img">樓層健康管理系统</h4>
+		<!-- 分类 -->
+		<div>
+			<ul class="tabul content_div_ul">
+				<li ><a id="tabulAlla"class="acolor" href="javascript:;"  >全部&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+				<li ><a id="tabulLota" href="javascript:;">Lot&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+				<li ><a id="tabulMaca" href="javascript:;" >Mac</a></li>
+				<li ><a id="tabulNightAlla"class="span_none acolor" href="javascript:;"  >全部&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+				<li ><a id="tabulNightLota" class="span_none" href="javascript:;">Lot&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+				<li ><a id="tabulNightMaca" class="span_none" href="javascript:;" >Mac</a></li>
+			</ul>
+		</div>
+		<!-- 表切换导航-->
+		<ul class="content_div_ul2">
+			<li >
+				<a th:href="@{'/AllfloorYestrerdaydata?FloorName='+${FloorName} }">  <button  class="btn content_div_ul2_but" >昨日</button></a>
+				<a th:href="@{'/AllfloorNightdata?FloorName='+${FloorName} }">  <button  class="btn content_div_ul2_but" >夜班</button></a>
+				<a th:href="@{'/Allfloordaydata?FloorName='+${FloorName}   }">  <button  class="btn content_div_ul2_but" > 白班</button></a>
+				<a th:href="@{'/Allfloordata?FloorName='+${FloorName} }">		<button class="btn content_div_ul2_but btn-success" >最近2小时</button></a>
+			</li>
+		</ul>
+
+	</div>
+
+	<!-- 表切换导航-->
+	<div class="page_div">
+		<div style="height: 21px;width: 100%;">
+			<div style="width:100%;text-align: right;">
+				<span>数据更新时间：</span>
+				<span  th:text="${DataStartTime}"></span>
+				<span>~</span>
+				<span  th:text="${DataEndTime}" style="margin-right: 120px;"></span>
+			</div>
+		</div>
+		<!--------***-------------datatable ---------***----------->
+		<!-------***---------- 产能状况-------***-------------------->
+		<div>
+		<table  class="table table-hover datatable" style="width: 28%;margin-right: 4px;">
+			<tr class="tabtitle1 actives1 datatable_tr">
+				<td class="center" colspan="5">產能狀況</td>
+			</tr>
+			<tr class="tabtitle2 actives datatable_tr2">
+				<td class="center">機種</td>
+				<td class="center">線別</td>
+
+                <td class="center"><span>目標</span></td>
+                <td class="center"><span class="span_width">累計</span></td>
+                <td class="center"><span class="span_width">達成率</span></td>
+			</tr>
+			<!--------***-----------产能TTL--------***--------->
+			<tr  id="autoAllsum" class="actives2">
+				<td class="center">Lot</td>
+				<td class="center">TTL</td>
+				<td class="center" th:text="${autoAllsum.getdTargetsum()}">0.00</td>
+				<td class="center" >
+					<span>
+                        <span class="span_width"  th:text="${autoAllsum.getActualOutsum()}">0.00</span>
+                    </span>
+				</td>
+				<td class="center">
+					<span th:classappend="${(autoAllsum.getActualOutsum()+(autoDayTargetsize*FloatNum)) >= Lotdouble2 && autoAllsum.getActualOutsum()!=0 ? '':'span_none'}">
+                        <i class="icon-circle-arrow-up awup"></i>
+                        <span class="span_width"  th:text="${autoAllsum.getAchievingRatesum()} + '%'">0.00%</span></span>
+					<span th:classappend="${(autoAllsum.getActualOutsum()+(autoDayTargetsize*FloatNum)) < Lotdouble2 && autoAllsum.getActualOutsum()!=0 ? '':'span_none'}">
+                        <i class="icon-circle-arrow-down awdown" ></i>
+                        <span class="span_width"  th:text="${autoAllsum.getAchievingRatesum()} + '%'">0.00%</span>
+                    </span>
+					<span th:classappend="${autoAllsum.getActualOutsum()==0 ? '':'span_none'}">
+                       	<i class="icon-circle-arrow-down awNUll" ></i>
+                        <span class="span_width"  th:text="${autoAllsum.getAchievingRatesum()} + '%'">0.00%</span>
+                    </span>
+				</td>
+			</tr>
+			<!-----------***------产能T01s------****----------->
+			<tr  class="autoAll" th:each="all : ${LotDayautoFloorNo3List}" >
+				<td th:style="${all.getdTarget()!=0 ? '':'color: #999;'}" class="center">Lot</td>
+				<td th:style="${all.getdTarget()!=0 ? '':'color: #999;'}" class="center" th:text="${all.getLineName()}">T01</td>
+				<td th:style="${all.getdTarget()!=0 ? '':'color: #999;'}" class="center" th:text="${all.getdTarget()}"></td>
+				<td   class="center">
+					<span th:style="${all.getdTarget()== 0 ? 'display: none':''}" th:classappend="${all.getdTarget() < all.getActualOuts() ? '':'span_none'}">
+						<a th:if="${TimeGNumber==1}" class="center span_width"  th:href="@{'/AllfloorsOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus' }" th:text="${all.getActualOuts()}">0</a>
+						<a th:if="${TimeGNumber==0}" class="center span_width"  th:href="@{'/AllfloorsNightOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus' }" th:text="${all.getActualOuts()}">0</a>
+					</span>
+					<span th:style="${all.getdTarget()== 0 or  all.getActualOuts()== 0 ? 'display: none':''}"  th:classappend="${all.getdTarget() > all.getActualOuts() ? '':'span_none'}">
+						<a th:if="${TimeGNumber==1}"  class="center span_width" th:style="${all.getdTarget()!=0 ? '':'color: #999;'}" th:href="@{'/AllfloorsOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus'}" th:text="${all.getActualOuts()}">0</a>
+						<a th:if="${TimeGNumber==0}"  class="center span_width" th:style="${all.getdTarget()!=0 ? '':'color: #999;'}" th:href="@{'/AllfloorsNightOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus'}" th:text="${all.getActualOuts()}">0</a>
+					</span>
+					<span th:classappend="${all.getdTarget()== 0 or all.getActualOuts()== 0 ? '':'span_none'}">
+						<a th:if="${TimeGNumber==1}" class="center span_width"    style="color: #999;"  th:href="@{'/AllfloorsOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus'}" th:text="${all.getActualOuts()}">0</a>
+						<a th:if="${TimeGNumber==0}" class="center span_width"    style="color: #999;"  th:href="@{'/AllfloorsNightOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus'}" th:text="${all.getActualOuts()}">0</a>
+					</span>
+				</td>
+				<td class="center">
+					<span th:style="${all.getdTarget()== 0 ? 'display: none':''}" th:classappend="${(all.getActualOuts()+FloatNum) >=all.getActualData()  and all.getAchievingRate()!=(0.0) ? '':'span_none'}" >
+						<i class="icon-circle-arrow-up awup" ></i>
+						<a th:if="${TimeGNumber==1}" class="span_width" th:text="${all.getAchievingRate()!=null ? all.getAchievingRate():'0.00' }+'%'" th:href="@{'/AllfloorsOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus' }">0.0%</a>
+						<a th:if="${TimeGNumber==0}" class="span_width" th:text="${all.getAchievingRate()!=null ? all.getAchievingRate():'0.00' }+'%'" th:href="@{'/AllfloorsNightOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus'}">0.0%</a>
+					</span>
+
+					<span th:style="${all.getdTarget()== 0 or  all.getActualOuts()== 0 ? 'display: none':''}" th:classappend="${(all.getActualOuts()+FloatNum) < all.getActualData()  or all.getAchievingRate() ==(0.0) ? '':'span_none'}" >
+						<i class="icon-circle-arrow-down awdown" ></i>
+						<a  th:if="${TimeGNumber==1}" class="span_width" th:href="@{'/AllfloorsOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus' }" th:text="${all.getAchievingRate()!=null ? all.getAchievingRate():'0.00' }+'%'">0.0%</a>
+						<a  th:if="${TimeGNumber==0}"  class="span_width" th:href="@{'/AllfloorsNightOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus' }" th:text="${all.getAchievingRate()!=null ? all.getAchievingRate():'0.00' }+'%'">0.0%</a>
+					</span>
+					<span th:classappend="${all.getdTarget() ==0  or all.getActualOuts()== 0 ? '':'span_none'}" >
+						<i class="icon-circle-arrow-down awNUll" ></i>
+						<a th:if="${TimeGNumber==1}" style="color: #999;"   class="span_width" th:href="@{'/AllfloorsOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus' }" th:text="${all.getAchievingRate()!=null ? all.getAchievingRate():'0.00' }+'%'">0.0%</a>
+						<a th:if="${TimeGNumber==0}" style="color: #999;"   class="span_width" th:href="@{'/AllfloorsNightOutput?Linename='+${all.getLineName()}+'&&Productname=Lotus' }" th:text="${all.getAchievingRate()!=null ? all.getAchievingRate():'0.00' }+'%'">0.0%</a>
+					</span>
+				</td>
+			</tr>
+
+
+			<!--------***--------Mac产能-------****------>
+			<tr id="MacautoAllsum" class="actives2 MacautoAllsum" >
+				<td class="center">Mac</td>
+				<td class="center">TTL</td>
+				<td class="center" th:text="${MacautoAllsum.getdTargetsum()}">0.00</td>
+				<td class="center" >
+					<span>
+						<span class="span_width"  th:text="${MacautoAllsum.getActualOutsum()}">0.00</span>
+					</span>
+				</td>
+				<td class="center">
+					<span th:classappend="${(MacautoAllsum.getActualOutsum()+(MacautoDaysize*FloatNum)) >= Macdouble2 && MacautoAllsum.getActualOutsum()!=0 ? '':'span_none'}">
+						<i class="icon-circle-arrow-up awup"></i>
+						<span class="span_width" th:text="${MacautoAllsum.getAchievingRatesum()} + '%'">0.00%</span>
+					</span>
+					<span th:classappend="${(MacautoAllsum.getActualOutsum()+(MacautoDaysize*FloatNum)) < Macdouble2 && MacautoAllsum.getActualOutsum()!=0 ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awdown" ></i>
+						<span class="span_width" th:text="${MacautoAllsum.getAchievingRatesum()} + '%'">0.00%</span>
+					</span>
+					<span th:classappend="${MacautoAllsum.getActualOutsum()==0 ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awNUll" ></i>
+						<span class="span_width" th:text="${MacautoAllsum.getAchievingRatesum()} + '%'">0.00%</span>
+					</span>
+				</td>
+			</tr>
+			<!-------***------Mac 产能T01s-----***------------>
+			<tr class="MacautoAll" th:each="macall : ${MacDayAutoFloorNo3List}" th:style="${macall.getActualOuts()!=0 ? '':''}">
+				<td th:style="${macall.getdTarget()!=0 ? '':'color: #999;'}"  class="center">Mac</td>
+				<td th:style="${macall.getdTarget()!=0 ? '':'color: #999;'}"  class="center" th:text="${macall.getLineName()}">T01</td>
+
+				<td th:style="${macall.getdTarget()!=0 ? '':'color: #999;'}"   class="center" th:text="${macall.getdTarget()}"></td>
+				<td  class="center">
+					<span th:style="${macall.getdTarget()== 0 or macall.getActualOuts()== 0 ? 'display: none':''}" th:classappend="${macall.getdTarget() < macall.getActualOuts() ? '':'span_none'}">
+						<a th:if="${TimeGNumber==1}"  class="center span_width" th:text="${macall.getActualOuts() }" th:href="@{'/AllfloorsOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }">0.0</a>
+						<a th:if="${TimeGNumber==0}"  class="center span_width" th:text="${macall.getActualOuts() }" th:href="@{'/AllfloorsNightOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }">0.0</a>
+					</span>
+					<span th:style="${macall.getdTarget()== 0 or macall.getActualOuts()== 0 ? 'display: none':''}"  th:classappend="${macall.getdTarget() > macall.getActualOuts() ? '':'span_none'}">
+						<a th:if="${TimeGNumber==1}"  class="center span_width"  th:href="@{'/AllfloorsOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }"  th:text="${macall.getActualOuts()}">0.0</a>
+						<a th:if="${TimeGNumber==0}"  class="center span_width"  th:href="@{'/AllfloorsNightOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }"  th:text="${macall.getActualOuts()}">0.0</a>
+					</span>
+					<span th:classappend="${ macall.getdTarget()==0 or macall.getActualOuts()== 0 ? '':'span_none'}">
+						<a th:if="${TimeGNumber==1}"  class="center span_width" style="color: #999;" th:href="@{'/AllfloorsOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }"  th:text="${macall.getActualOuts()}">0.0</a>
+						<a th:if="${TimeGNumber==0}"  class="center span_width" style="color: #999;" th:href="@{'/AllfloorsNightOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }"  th:text="${macall.getActualOuts()}">0.0</a>
+					</span>
+				</td>
+				<td class="center">
+					<span th:style="${macall.getdTarget()== 0 or macall.getActualOuts()== 0 ? 'display: none':''}" th:classappend="${(macall.getActualOuts()+FloatNum) >= macall.getActualData()  and macall.getAchievingRate()!=(0.0) ? '':'span_none'}" >
+						<i class="icon-circle-arrow-up awup"></i>
+						<a th:if="${TimeGNumber==1}"  th:href="@{'/AllfloorsOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }"class="span_width" th:text="${macall.getAchievingRate()!=null ? macall.getAchievingRate():'0.00' }+'%'">0.0%</a>
+						<a th:if="${TimeGNumber==0}"  th:href="@{'/AllfloorsNightOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }"class="span_width" th:text="${macall.getAchievingRate()!=null ? macall.getAchievingRate():'0.00' }+'%'">0.0%</a></span>
+					<span th:style="${macall.getdTarget()== 0  or macall.getActualOuts()== 0 ? 'display: none':''}" th:classappend="${(macall.getActualOuts()+FloatNum) < macall.getActualData() or macall.getAchievingRate() ==(0.0) ? '':'span_none'}" >
+						<i class="icon-circle-arrow-down awdown"></i>
+						<a th:if="${TimeGNumber==1}" th:style="${macall.getdTarget()!=0 ? '':'color: #999;'}"  class="span_width" th:href="@{'/AllfloorsOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }" th:text="${macall.getAchievingRate()!=null ? macall.getAchievingRate():'0.00' }+'%'">0.0%</a>
+						<a th:if="${TimeGNumber==0}" th:style="${macall.getdTarget()!=0 ? '':'color: #999;'}"  class="span_width" th:href="@{'/AllfloorsNightOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }" th:text="${macall.getAchievingRate()!=null ? macall.getAchievingRate():'0.00' }+'%'">0.0%</a>
+					</span>
+					<span th:classappend="${macall.getdTarget() ==0 or macall.getActualOuts()== 0  ? '':'span_none'}" >
+						<i class="icon-circle-arrow-down awNUll" ></i>
+						<a th:if="${TimeGNumber==1}" style="color: #999;"  class="span_width" th:href="@{'/AllfloorsOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }" th:text="${macall.getAchievingRate()!=null ? macall.getAchievingRate():'0.00' }+'%'">0.0%</a>
+						<a th:if="${TimeGNumber==0}" style="color: #999;"  class="span_width" th:href="@{'/AllfloorsNightOutput?Linename='+${macall.getLineName()}+'&&Productname=Macan' }" th:text="${macall.getAchievingRate()!=null ? macall.getAchievingRate():'0.00' }+'%'">0.0%</a>
+					</span>
+				</td>
+			</tr>
+		</table>
+
+
+
+			<!---------------------****** 测试机台*****------------------------------------->
+			<table  class="table table-hover datatable" style="width: 31%;margin-right: 4px;">
+				<tr class="tabtitle1 actives1 datatable_tr">
+					<td class="center" colspan="5">測試機台</td>
+				</tr>
+				<tr class="tabtitle2 actives datatable_tr2">
+					<td class="center">
+						<span>直通率</span>
+						<span>(83.65%)</span>
+					</td>
+					<td class="center">
+						<span>良率</span>
+						<span>(99.15%)</span>
+					</td>
+					<td class="center">
+						<span>誤測率</span>
+						<span>(15.5%)</span>
+					</td>
+					<td class="center">
+						<span>Unknown</span>
+						<span>(6.5%)</span>
+					</td>
+					<!--<td class="center ">
+						<span>健康等級</span>
+					</td>-->
+				</tr>
+				<!-----*----LotAll总和----*----->
+				<tr id="testmachinesum" class="actives2">
+					<!--直通率-->
+					<td class="center">
+					<span th:style="${amountsLotUPHAll.getFPY()==(0.00) ? 'display: none':''}"   th:class="${amountsLotUPHAll.getFPY() >= (83.65) ? '':'span_none'}">
+                        <i class="icon-circle-arrow-up awup"></i>
+                        <span th:text="${amountsLotUPHAll.getFPY()>0 ? amountsLotUPHAll.getFPY():'0.0%'}+'%'">0.00%</span>
+                    </span>
+						<span th:style="${amountsLotUPHAll.getFPY()==(0.00) ? 'display: none':''}"  th:class="${amountsLotUPHAll.getFPY() < (83.65) ? '':'span_none'}">
+                        <i class="icon-circle-arrow-down awdown"></i>
+                        <span th:text="${amountsLotUPHAll.getFPY()}+'%'">0.00%</span>
+                    </span>
+						<span th:class="${amountsLotUPHAll.getFPY() == (0.00) ? '':'span_none'}">
+                        <i class="icon-circle-arrow-down awNUll" ></i>
+                        <span  style=" color: #999;"  >0.00%</span>
+                    </span>
+					</td>
+					<!--良率-->
+					<td class="center">
+					<span th:style="${amountsLotUPHAll.getYIELD()==(100.0) || amountsLotUPHAll.getYIELD()==(0.0) ? 'display: none':''}" >
+                        <!--<i class="icon-circle-arrow-down awdown"></i>-->
+                        <span th:text="${amountsLotUPHAll.getYIELD()}+'%'">0.00%</span>
+                    </span>
+						<span th:class="${amountsLotUPHAll.getYIELD() == (100.0) || amountsLotUPHAll.getYIELD()==(0.0) ? '':'span_none'}">
+                      <!--  <i class="icon-circle-arrow-down awNUll" ></i>-->
+                        <span  style=" color: #999;" >0.00%</span>
+                    </span>
+					</td>
+					<!--误测率-->
+					<td class="center">
+					<span th:style="${amountsLotUPHAll.getMISDETET()==(0.0)  ? 'display: none':''}" >
+                        <!--<i class="icon-circle-arrow-down awdown" ></i>-->
+                        <span th:text="${amountsLotUPHAll.getMISDETET()}+'%'">0.00%</span>
+                    </span>
+						<span th:class="${amountsLotUPHAll.getMISDETET() ==(0.0) ? '':'span_none'}">
+                      <!--  <i class="icon-circle-arrow-down awNUll" ></i>-->
+                        <span  style=" color: #999;" >0.00%</span>
+                    </span>
+					</td>
+					<!--Unknown-->
+					<td class="center">
+
+					<span th:style="${amountsLotUPHAll.getUnknown()==(0.0) ? 'display: none':''}">
+						<span th:text="${amountsLotUPHAll.getUnknown()}+'%'">0.00%</span>
+					</span>
+						<span th:class="${amountsLotUPHAll.getUnknown()==(0.0) ? '':'span_none'}">
+						<span style=" color: #999;" >0.00%</span>
+					</span>
+					</td>
+					<!--<td class="center">
+						<img  th:src="@{/static/img/green_circle.png}"  class="datatable_td_img " th:style="${FPYMap.get('rateFPYAlldouble')>(83.65) ? '':'display: none'}"/>
+						<img  th:src="@{/static/img/oracnge_circle.png}" class="datatable_td_img "th:style="${(83.65)-FPYMap.get('rateFPYAlldouble')<2&&(83.65)-FPYMap.get('rateFPYAlldouble')>0 ? '':'display: none'}" />
+						<img  th:src="@{/static/img/reg_circle.png}"     class="datatable_td_img" th:style="${(83.65)-FPYMap.get('rateFPYAlldouble')>2 ? '':'display: none'}"/>
+					</td>-->
+				</tr>
+				<!-----*-----D073FARF01-----*------>
+				<tr class="testmachineAll" th:each="LotreteList : ${autoFloor_LotreteList}">
+					<!--直通率-->
+					<td class="center">
+					<span th:style="${LotreteList.getFPY()==(0.00) ? 'display:none':''}"  th:class="${LotreteList.getFPY()>=(83.65)  ? '':'span_none'}">
+						<i class="icon-circle-arrow-up awup"></i>
+						<a th:text="${LotreteList.getFPY() > 0 ? LotreteList.getFPY():'0.0%'}+'%'" th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+					</span>
+						<span th:style="${LotreteList.getFPY()==(0.00) ? 'display:none':''}"  th:class="${LotreteList.getFPY()<(83.65)  ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awdown"></i>
+						<a th:text="${LotreteList.getFPY() > 0 ? LotreteList.getFPY():'0.0%'}+'%'" th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+					</span>
+						<span th:class="${LotreteList.getFPY()==(0.00) ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awNUll" ></i>
+						<a style=" color: #999;"  th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}" th:text="${LotreteList.getFPY()}+'%'">0.00%</a>
+					</span>
+					</td>
+					<!--良率-->
+					<td class="center">
+					<span th:style="${LotreteList.getYIELD()==(100.0) || LotreteList.getYIELD()==(0.0) ? 'display:none':''}" >
+						<!--<i class="icon-circle-arrow-down awdown" ></i>-->
+					<a th:text="${LotreteList.getYIELD()}+'%'" th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+                    </span>
+						<span th:class="${LotreteList.getYIELD()==(100.0) || LotreteList.getYIELD()==(0.0) ? '':'span_none'}">
+                       <!-- <i class="icon-circle-arrow-down awNUll" ></i>-->
+                        <a style="color: #999"  th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+                    </span>
+					</td>
+					<!--误测率-->
+					<td class="center">
+
+					<span th:style="${LotreteList.getMISDETET()==(0.0) ? 'display:none':''}">
+						<!--<i class="icon-circle-arrow-down awdown"></i>-->
+						<a th:text="${LotreteList.getMISDETET()}+'%'" th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+					</span>
+						<span th:class="${LotreteList.getMISDETET()==(0.0) ? '':'span_none'}">
+						<!--<i class="icon-circle-arrow-down awNUll"></i>-->
+						<a style=" color: #999;"   th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+					</span>
+					</td>
+					<!--Unknown-->
+					<td class="center">
+					<span th:style="${LotreteList.getUnknown()==(0.0) ? 'display: none':''}" >
+						<a th:text="${LotreteList.getUnknown()}+'%'" th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+					</span>
+						<span th:class="${LotreteList.getUnknown()==(0.0) ? '':'span_none'}">
+						<a style=" color: #999;"   th:href="@{'/Allfloormidetect?Linename='+${LotreteList.getLINE_NAME()}+'&&productName=Lotus&&TimeDay=two'}">0.00%</a>
+					</span>
+					</td>
+					<!--<td class="center">
+						<img  th:src="@{/static/img/green_circle.png}"  class="datatable_td_img " th:style="${FPYMap.get('FPYARF01double')>(83.65) ? '':'display: none'}"/>
+						<img  th:src="@{/static/img/oracnge_circle.png}" class="datatable_td_img "th:style="${(83.65)-FPYMap.get('FPYARF01double')<2&&(83.65)-FPYMap.get('FPYARF01double')>0 ? '':'display: none'}" />
+						<img  th:src="@{/static/img/reg_circle.png}"     class="datatable_td_img" th:style="${(83.65)-FPYMap.get('FPYARF01double')>2 ? '':'display: none'}"/>
+					</td>-->
+				</tr>
+
+				<!------------------***----------- Mac ------------------***---------------->
+				<!---------****---- TTL -------***--------------->
+				<tr id="mactestmachinesum" class="actives2">
+					<!-- 直通率 -->
+					<td class="center">
+					<span th:style="${amountsMacUPHAll.getFPY()==(0.0) ? 'display: none':''}" th:class="${amountsMacUPHAll.getFPY()>=(83.65)  ? '':'span_none'}">
+						<i class="icon-circle-arrow-up awup"></i>
+						<span th:text="${amountsMacUPHAll.getFPY()>0 ? amountsMacUPHAll.getFPY():'0.0'}+'%'">0.00%</span>
+					</span>
+						<span th:style="${amountsMacUPHAll.getFPY()==(0.0) ? 'display: none':''}" th:class="${amountsMacUPHAll.getFPY()<(83.65)  ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awdown"></i>
+						<span th:text="${amountsMacUPHAll.getFPY()>0 ? amountsMacUPHAll.getFPY():'0.0'}+'%'" >0.00%</span>
+					</span>
+						<span th:class="${amountsMacUPHAll.getFPY()==(0.0) ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awNUll" ></i>
+						<span style=" color: #999;"  >0.00%</span>
+					</span>
+					</td>
+					<!-- 良率 -->
+					<td class="center">
+                    <span th:style="${amountsMacUPHAll.getYIELD()==(0.0) ? 'display: none':''}"  >
+						<!--<i class="icon-circle-arrow-down awdown" ></i>-->
+					<span th:text="${amountsMacUPHAll.getYIELD()}+'%'" >93.5%</span>
+                    </span>
+						<span th:class="${amountsMacUPHAll.getYIELD()==(0.0) ? '':'span_none'}">
+                        <!--<i class="icon-circle-arrow-down awNUll" ></i>-->
+                        <span style="color: #999"   >0.00%</span>
+                    </span>
+					</td>
+					<!-- 误测率 -->
+					<td class="center">
+                    <span th:style="${amountsMacUPHAll.getMISDETET()==(0.0) ? 'display: none':''}">
+						<!--<i class="icon-circle-arrow-down awdown"></i>-->
+						<span th:text="${amountsMacUPHAll.getMISDETET()}+'%'" >0.00%</span>
+					</span>
+						<span th:class="${amountsMacUPHAll.getMISDETET()==(0.0) ? '':'span_none'}">
+						<!--<i class="icon-circle-arrow-down awNUll"></i>-->
+						<span style=" color: #999;"   >0.00%</span>
+					</span>
+					</td>
+					<!-- Unknown -->
+					<td class="center">
+						<span th:style="${amountsMacUPHAll.getUnknown()==(0.0) ? 'display: none':''}">
+                        <span th:text="${amountsMacUPHAll.getUnknown()}+'%'">0.00%</span>
+                    </span>
+						<span th:class="${amountsMacUPHAll.getUnknown()==(0.0) ? '':'span_none'}">
+                        <span style=" color: #999;"  th:href="@{'/Allfloormidetect'}">0.00%</span></span>
+					</td>
+					<!--<td class="center">
+						<img  th:src="@{/static/img/green_circle.png}"  class="datatable_td_img " th:style="${FPYMacMap.get('rateFPYAlldouble')>(83.65) ? '':'display: none'}"/>
+						<img  th:src="@{/static/img/oracnge_circle.png}" class="datatable_td_img "th:style="${(83.65)-FPYMacMap.get('rateFPYAlldouble')<2&&(83.65)-FPYMacMap.get('rateFPYAlldouble')>0 ? '':'display: none'}" />
+						<img  th:src="@{/static/img/reg_circle.png}"     class="datatable_td_img" th:style="${(83.65)-FPYMacMap.get('rateFPYAlldouble')>2 ? '':'display: none'}"/>
+					</td>-->
+				</tr>
+				<!----- D073FARF07------>
+				<tr class="mactestmachineAll" th:each="MacreteList : ${autoFloor_MacreteList}">
+					<!-- 直通率 -->
+					<td class="center">
+					<span th:style="${MacreteList.getFPY()==(0.0) ? 'display: none':''}" th:class="${MacreteList.getFPY()>=(83.65)  ? '':'span_none'}">
+						<i class="icon-circle-arrow-up awup"></i>
+						<a th:text="${MacreteList.getFPY()>0 ? MacreteList.getFPY():'0.0'}+'%'" th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a>
+					</span>
+						<span th:style="${MacreteList.getFPY()==(0.0) ? 'display: none':''}" th:class="${MacreteList.getFPY()<(83.65)  ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awdown"></i>
+						<a th:text="${MacreteList.getFPY()>0 ? MacreteList.getFPY():'0.0'}+'%'" th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a>
+					</span>
+						<span th:class="${MacreteList.getFPY()==(0.0) ? '':'span_none'}">
+						<i class="icon-circle-arrow-down awNUll" ></i>
+						<a style=" color: #999;"  th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a>
+					</span>
+					</td>
+					<!-- 良率 -->
+					<td class="center">
+                    <span th:style="${MacreteList.getYIELD()==(100.0) || MacreteList.getYIELD()==(0.0) ? 'display: none':''}" >
+						<!--<i class="icon-circle-arrow-down awdown" ></i>-->
+					<a th:text="${MacreteList.getYIELD()}+'%'" th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">93.5%</a>
+                    </span>
+						<span th:class="${MacreteList.getYIELD()==(100.0) || MacreteList.getYIELD()==(0.0) ? '':'span_none'}">
+                        <!--<i class="icon-circle-arrow-down awNUll" ></i>-->
+                        <a style="color: #999"   th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a>
+                    </span>
+					</td>
+					<!-- 误测率 -->
+					<td class="center">
+                    <span th:style="${MacreteList.getMISDETET()==(0.0) ? 'display: none':''}">
+						<!--<i class="icon-circle-arrow-down awdown"></i>-->
+						<a th:text="${MacreteList.getMISDETET()}+'%'" th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a>
+					</span>
+						<span th:class="${MacreteList.getMISDETET()==(0.0) ? '':'span_none'}">
+						<!--<i class="icon-circle-arrow-down awNUll"></i>-->
+						<a style=" color: #999;"   th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a>
+					</span>
+					</td>
+					<!-- Unknown -->
+					<td class="center">
+						<span th:style="${MacreteList.getUnknown()==(0.0) ? 'display: none':''}" >
+                        <a th:text="${MacreteList.getUnknown()}+'%'" th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a>
+                    </span>
+						<span th:class="${MacreteList.getUnknown()==(0.0) ? '':'span_none'}">
+                        <a style=" color: #999;"  th:href="@{'/Allfloormidetect?Linename='+${MacreteList.getLINE_NAME()}+'&&productName=Macan&&TimeDay=two'}">0.00%</a></span>
+					</td>
+					<!--<td class="center">
+						<img  th:src="@{/static/img/green_circle.png}"  class="datatable_td_img " th:style="${FPYMacMap.get('FPYARF07double')>(83.65) ? '':'display: none'}"/>
+						<img  th:src="@{/static/img/oracnge_circle.png}" class="datatable_td_img "th:style="${(83.65)-FPYMacMap.get('FPYARF07double')<2&&(83.65)-FPYMacMap.get('FPYARF07double')>0 ? '':'display: none'}" />
+						<img  th:src="@{/static/img/reg_circle.png}"     class="datatable_td_img" th:style="${(83.65)-FPYMacMap.get('FPYARF07double')>2 ? '':'display: none'}"/>
+					</td>-->
+				</tr>
+			</table>
+
+
+			<!-- Robot--------------------------------------------------- -->
+			<table  class="table table-hover datatable" style="width: 15%;margin-right: 4px;">
+				<tr class="tabtitle1 actives1 datatable_tr">
+
+					<td class="center" colspan="2">Robot</td>
+
+				</tr>
+				<tr class="tabtitle2 actives datatable_tr2">
+
+					<td class="center">偏位機故率(2%)</td>
+					<td class="center ">待板率</td>
+
+				</tr>
+				<tr class="actives2" id="testrobotssum">
+					<td class="center">
+						<span class="center" >
+							<i class="icon-circle-arrow-up awup" th:style="${LotRobotNoNormalRate <= 0.02 && LotRobotNoNormalRate!=(0.0) ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awdown" th:style="${LotRobotNoNormalRate > 0.02  ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awNUll" th:style="${LotRobotNoNormalRate ==(0.0)  ? '':'display: none'}"></i>
+						    <span  th:style="${LotRobotNoNormalRate==0 ? 'color: #999':''}" th:text="${#numbers.formatDecimal(LotRobotNoNormalRate*100,1,2)}+'%'">0.00%</span>
+						</span>
+					</td>
+					<td class="center">
+						<span class="center">
+							<span  th:style="${LotRobotPlateRate==0 ? 'color: #999':''}" th:text="${#numbers.formatDecimal(LotRobotPlateRate*100,1,2)}+'%'" >0.00%</span>
+						</span>
+					</td>
+				</tr>
+				<tr class="testrobotsAll" th:each="robot : ${AutoFloor_Wait_TimeList}">
+
+					<td class="center">
+						<span class="center">
+							<i class="icon-circle-arrow-up awup" th:style="${robot.getLineNoNormalRate() <= 0.02 && robot.getLineNoNormalRate()!=(0.0) ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awdown" th:style="${robot.getLineNoNormalRate() > 0.02  ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awNUll" th:style="${robot.getLineNoNormalRate() ==(0.0)  ? '':'display: none'}"></i>
+							<a  th:style="${robot.getLineNoNormalRate()==0 ? 'color: #999':''}" th:text="${#numbers.formatDecimal(robot.getLineNoNormalRate()*100,1,2)}+'%'" th:href="@{'/AllfloorRobot?TimeDay=two&&FloorName='+${FloorName}}">0.00%</a>
+						</span>
+					</td>
+
+					<td class="center">
+						<span class="center">
+							<a th:style="${robot.getLinePlateRate()==0 ? 'color: #999':''}" th:text="${#numbers.formatDecimal(robot.getLinePlateRate()*100,1,2)}+'%'" th:href="@{'/AllfloorRobot?TimeDay=two&&FloorName='+${FloorName}}">0.00%</a>
+						</span>
+					</td>
+				</tr>
+
+				<tr class="actives2" id="mactestrobotssum">
+
+					<td class="center">
+						<span class="center">
+							<i class="icon-circle-arrow-up awup" th:style="${MacRobotNoNormalRate <= 0.02 && MacRobotNoNormalRate!=(0.0) ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awdown" th:style="${MacRobotNoNormalRate > 0.02  ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awNUll" th:style="${MacRobotNoNormalRate ==(0.0)  ? '':'display: none'}"></i>
+							<span th:style="${MacRobotNoNormalRate==0 ? 'color: #999':''}" th:text="${#numbers.formatDecimal(MacRobotNoNormalRate*100,1,2)}+'%'">0.00%</span>
+						</span>
+					</td>
+					<td class="center">
+						<span class="center">
+							<span th:style="${MacRobotPlateRate==0 ? 'color: #999':''}"  th:text="${#numbers.formatDecimal(MacRobotPlateRate*100,1,2)}+'%'">0.00%</span>
+						</span>
+					</td>
+				</tr>
+				<tr class="mactestrobotsAll" th:each="Macrobot : ${AutoFloor_Wait_TimeListMac}">
+					<td class="center">
+						<span class="center">
+							<i class="icon-circle-arrow-up awup" th:style="${Macrobot.getLineNoNormalRate() <= 0.02 && Macrobot.getLineNoNormalRate()!=(0.0) ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awdown" th:style="${Macrobot.getLineNoNormalRate() > 0.02  ? '':'display: none'}"></i>
+							<i class="icon-circle-arrow-down awNUll" th:style="${Macrobot.getLineNoNormalRate() ==(0.0)  ? '':'display: none'}"></i>
+
+							<a th:style="${Macrobot.getLineNoNormalRate()==0 ? 'color: #999':''}" th:text="${#numbers.formatDecimal(Macrobot.getLineNoNormalRate()*100,1,2)}+'%'" th:href="@{'/AllfloorRobot?TimeDay=two&&FloorName='+${FloorName}}">0.00%</a>
+						</span>
+					</td>
+					<td class="center">
+						<span class="center">
+						   <a th:style="${Macrobot.getLinePlateRate()==0 ? 'color: #999':''}" th:text="${#numbers.formatDecimal(Macrobot.getLinePlateRate()*100,1,2)}+'%'"  th:href="@{'/AllfloorRobot?TimeDay=two&&FloorName='+${FloorName}}">0.00%</a>
+						</span>
+					</td>
+				</tr>
+			</table>
+			<!-- PD設備--------------------------------------------------- -->
+			<table  class="table table-hover datatable" style="width: 14%;margin-right: 4px;">
+				<tr class="tabtitle1 actives1 datatable_tr">
+					<td class="center" colspan="3">PD設備</td>
+				</tr>
+				<tr class="tabtitle2 actives datatable_tr2">
+					<td class="center">拋料率</td>
+					<td class="center">偏位率</td>
+				</tr>
+				<tr class="actives2">
+
+					<td class="center">
+						<span style=" color: #999;"><i class="icon-circle-arrow-up awNUll"></i>17.4%</span>
+						<span class="span_none"><i class="icon-circle-arrow-down awNUll" ></i><a style=" color: #999;"> 17.4%</a></span>
+					</td>
+					<td class="center">
+						<span style=" color: #999;"><i class="icon-circle-arrow-up awNUll"></i>6.50%</span>
+						<span class="span_none"><i class="icon-circle-arrow-down awNUll" ></i><a style=" color: #999;">6.50%</a></span>
+					</td>
+				</tr>
+				<tr>
+					<td class="center">
+						<span style=" color: #999;"><i class="icon-circle-arrow-up awNUll"></i>17.4%</span>
+						<span class="span_none"><i class="icon-circle-arrow-down awNUll" ></i><a style=" color: #999;"> 17.4%</a></span>
+					</td>
+					<td class="center">
+						<span style=" color: #999;"><i class="icon-circle-arrow-up awNUll"></i>6.50%</span>
+						<span class="span_none"><i class="icon-circle-arrow-down awNUll" ></i><a style=" color: #999;">6.50%</a></span>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+		<!--datatable */*/*/*/*/*/*/*/*/*/*/*/end-->
+                <div class="unusual_div" style="clear: both;float: initial;">
+                    <!--<h5 class="unusual_div_title">實時異常集中 lssue TOP5</h5>-->
+                </div>
+		<!--     產能異常件數 -->
+		<!--
+		<div class="widget-box" style="border-top: 0">
+			<div class="widget-title" style="border: 1px solid #CDCDCD;">
+				<h5 style="width: 140px;">產能異常件數</h5>
+				<span class="unusual_top_span">
+				<a class="unusual_top_span_a">4件</a>
+			</span>
+			</div>
+			<div class="widget-content ">
+				&lt;!&ndash; LOt &ndash;&gt;
+				<table class="unusual_datatab" >
+					<thead>
+					<tr>
+						<td class="unusual_datatab_td">Lot</td>
+					</tr>
+					</thead>
+					<tr>
+						<td></td>
+						<td>T01</td>
+						<td>未達標&nbsp;</td>
+						<td>目標產能：&nbsp;55,110pcs ；</td>
+						<td>當前累計產能：&nbsp;26,110 pcs；</td>
+						<td>產能達成率：&nbsp;92.8%</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>T03</td>
+						<td>未達標&nbsp;</td>
+						<td>目標產能：&nbsp;34,110pcs ；</td>
+						<td>當前累計產能：&nbsp;26,110 pcs；</td>
+						<td>產能達成率：&nbsp;96.8%</td>
+					</tr>
+				</table>
+				<div class="unusual_datadiv" ></div>
+				&lt;!&ndash; Mac &ndash;&gt;
+				<table class="unusual_datatab" >
+					<thead>
+					<tr>
+						<td class="unusual_datatab_td">Mac</td>
+					</tr>
+					</thead>
+					<tr>
+						<td></td>
+						<td>T09</td>
+						<td>未達標&nbsp;</td>
+						<td>目標產能：&nbsp;55,110pcs ；</td>
+						<td>當前累計產能：&nbsp;26,110 pcs；</td>
+						<td>產能達成率：&nbsp;92.8%</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>T13</td>
+						<td>未達標&nbsp;</td>
+						<td>目標產能：&nbsp;34,110pcs ；</td>
+						<td>當前累計產能：&nbsp;26,110 pcs；</td>
+						<td>產能達成率：&nbsp;96.8%</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		-->
+		<!-- 測試機台異常件數2 -->
+	</div>
+</div>
+</body>
+
+<script type="text/javascript">
+    /* 标题导航栏jq */
+    $(function () {
+        $('[js-tab=3]').tab({
+            curDisplay: 1,/* 默认div第一位标题 */
+        });
+        var floorname= '[[${FloorName}]]';
+        var floor=floorname.substring(0,3);
+        var ceng=floorname.substring(3,floorname.length);
+        var floors=floor+"-"+ceng;
+        $("#select2-span").text(floors);
+
+    });
+
+	$("#floornames").change(function () {
+		var name= $("#floornames").val();
+		var pathName=window.document.location.pathname;
+		var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+		window.location.href=projectName+'/Allfloordata?FloorName='+name;
+    })
+	/*楼层健康状况全部LotMac显示控制按钮*/
+    $(function () {
+		$("#tabulAlla").on("click",function () {
+		    /*全部 Lot Mac*/
+            $("#tabulAlla").addClass("acolor");
+            $("#tabulMaca").removeClass("acolor");
+            $("#tabulLota").removeClass("acolor");
+
+
+			/*产能 */
+            $("#autoAllsum").removeClass("span_none");
+            $(".autoAll").removeClass("span_none");
+            $(".MacautoAll").removeClass("span_none");
+            $("#MacautoAllsum").removeClass("span_none");
+			/*测试*/
+            $("#testmachinesum").removeClass("span_none");
+            $(".testmachineAll").removeClass("span_none");
+            $("#mactestmachinesum").removeClass("span_none");
+            $(".mactestmachineAll").removeClass("span_none");
+
+            /*Robot*/
+            $("#testrobotssum").removeClass("span_none");
+            $(".testrobotsAll").removeClass("span_none");
+            $("#mactestrobotssum").removeClass("span_none");
+            $(".mactestrobotsAll").removeClass("span_none");
+
+
+        })
+        /*Lot*/
+        $("#tabulLota").on("click",function () {
+            $("#tabulMaca").removeClass("acolor");
+            $("#tabulAlla").removeClass("acolor");
+			$("#tabulLota").addClass("acolor");
+			/*产能Lot*/
+			$("#autoAllsum").removeClass("span_none");
+			$(".autoAll").removeClass("span_none");
+			/*产能Mac*/
+            $(".MacautoAll").addClass("span_none");
+            $("#MacautoAllsum").addClass("span_none");
+            /*测试Lot*/
+            $("#testmachinesum").removeClass("span_none");
+            $(".testmachineAll").removeClass("span_none");
+            /*测试Mac*/
+            $("#mactestmachinesum").addClass("span_none");
+            $(".mactestmachineAll").addClass("span_none");
+
+            /*RobotLot*/
+            $("#testrobotssum").removeClass("span_none");
+            $(".testrobotsAll").removeClass("span_none");
+            /*RobotMac*/
+            $("#mactestrobotssum").addClass("span_none");
+            $(".mactestrobotsAll").addClass("span_none");
+
+
+
+        })
+		/*Mac*/
+        $("#tabulMaca").on("click",function () {
+            $("#tabulLota").removeClass("acolor");
+            $("#tabulAlla").removeClass("acolor");
+            $("#tabulMaca").addClass("acolor");
+			/*产能Mac*/
+            $(".MacautoAll").removeClass("span_none");
+            $("#MacautoAllsum").removeClass("span_none");
+			/*产能Lot*/
+            $(".autoAll").addClass("span_none");
+            $("#autoAllsum").addClass("span_none");
+            /*测试Lot*/
+            $("#testmachinesum").addClass("span_none");
+            $(".testmachineAll").addClass("span_none");
+            /*测试Mac*/
+            $("#mactestmachinesum").removeClass("span_none");
+            $(".mactestmachineAll").removeClass("span_none");
+
+            /*RobotLot*/
+            $("#testrobotssum").addClass("span_none");
+            $(".testrobotsAll").addClass("span_none");
+            /*RobotMac*/
+            $("#mactestrobotssum").removeClass("span_none");
+            $(".mactestrobotsAll").removeClass("span_none");
+        })
+
+
+    })
+
+    function myrefresh(){
+        window.location.reload();
+	}
+    /*	setTimeout('myrefresh()',6000*1);*/
+</script>
+</html>

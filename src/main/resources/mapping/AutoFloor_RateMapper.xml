@@ -1,0 +1,976 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shop.dao.AutoFloor_RateMapper" >
+  <resultMap id="BaseResultMap" type="com.shop.model.AutoFloor_Rate" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="FLOOR" property="floor" jdbcType="VARCHAR" />
+    <result column="LINE_NAME" property="lineName" jdbcType="VARCHAR" />
+    <result column="PRODUCT" property="product" jdbcType="VARCHAR" />
+    <result column="STATION_NAME" property="stationName" jdbcType="VARCHAR" />
+    <result column="INPUT" property="input" jdbcType="DECIMAL" />
+    <result column="PASS" property="pass" jdbcType="DECIMAL" />
+    <result column="FAIL" property="fail" jdbcType="DECIMAL" />
+    <result column="RETEST" property="retest" jdbcType="DECIMAL" />
+    <result column="UNKNOWN" property="unknown" jdbcType="DECIMAL" />
+    <result column="FIRST_PASS" property="firstPass" jdbcType="DECIMAL" />
+    <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="TIME_SLOT" property="timeSlot" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <!-- 查询语句 -->
+
+
+  <!--一、良率(相乘)  10:30:00-20:29:59 使用此sql-->
+<select id="AutoFloorRate_Yield" resultMap="BaseResultMap">
+<![CDATA[
+select station_name, case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Rate
+from autofloor_rate
+  where
+  start_time >=sysdate -2/24 and start_time <sysdate
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+
+  <!--一、良率(相乘) 8:30:00-10:30:00 使用此sql-->
+<select id="AutoFloorRate_Yield08aciton" resultMap="BaseResultMap">
+  <![CDATA[
+select station_name, case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Rate
+   from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+  <!--一、良率(相乘) 20:30:00-22:30:00 使用此sql-->
+  <select id="AutoFloorRate_Yield20aciton" resultMap="BaseResultMap">
+  <![CDATA[
+select station_name, case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Rate
+   from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+  <!--一、良率(相乘) 白班 使用此sql-->
+  <select id="AutoFloorRate_YieldDay" resultMap="BaseResultMap">
+  <![CDATA[
+  select station_name, case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Rate
+  from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 20:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+
+  <!--一、良率(相乘) 夜班 使用此sql-->
+  <select id="AutoFloorRate_YieldNight" resultMap="BaseResultMap">
+  <![CDATA[
+  select station_name, case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Rate
+  from autofloor_rate
+  where
+  start_time >= to_date('${start_Time} 20:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+  <!--一、良率(相乘) 昨日 使用此sql-->
+  <select id="AutoFloorRate_YieldYesterday" resultMap="BaseResultMap">
+  <![CDATA[
+  select station_name, case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Rate
+  from autofloor_rate
+  where
+  start_time >= to_date('${start_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+
+  <!--二、误测率(相加) 10:30:00-20:29:00 使用此sql-->
+<select id="AutoFloorRate_Misdetet" resultMap="BaseResultMap">
+  <![CDATA[
+  select station_name, case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Rate
+  from autofloor_rate
+  where
+  start_time >=sysdate -2/24 and start_time <sysdate
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+
+  <!--二、误测率(相加) 8:30:00-10:30:00 使用此sql-->
+<select id="AutoFloorRate_Misdetet08aciton" resultMap="BaseResultMap">
+  <![CDATA[
+ select station_name, case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Rate
+ from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+  <!--二、误测率(相加) 20:30:00-22:30:00 使用此sql-->
+  <select id="AutoFloorRate_Misdetet20aciton" resultMap="BaseResultMap">
+  <![CDATA[
+ select station_name, case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Rate
+ from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+
+  <!--二、误测率(相加) 白班 使用此sql-->
+  <select id="AutoFloorRate_MisdetetDay" resultMap="BaseResultMap">
+<![CDATA[
+select station_name, case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Rate
+from autofloor_rate
+where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 20:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+  <!--二、误测率(相加) 夜班 使用此sql-->
+  <select id="AutoFloorRate_MisdetetNight" resultMap="BaseResultMap">
+<![CDATA[
+select station_name, case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Rate
+from autofloor_rate
+where
+  start_time >= to_date('${start_Time} 20:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+  <!--二、误测率(相加) 昨日 使用此sql-->
+  <select id="AutoFloorRate_MisdetetYesterday" resultMap="BaseResultMap">
+<![CDATA[
+select station_name, case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Rate
+from autofloor_rate
+where
+  start_time >= to_date('${start_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+
+  <!--三、Unknown Rate （相加）10:30:00-20:29:00 使用此sql-->
+<select id="AutoFloorRate_Unknown" resultMap="BaseResultMap">
+  <![CDATA[
+select station_name,
+case(sum(unknown)+ sum(input)) when 0 then 0.00 else
+round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as Rate
+ from autofloor_rate
+ where
+  start_time >=sysdate -2/24 and start_time <sysdate
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+
+  <!--三、Unknown Rate （相加）8:30:00-10:30:00 使用此sql-->
+  <select id="AutoFloorRate_Unknown08aciton" resultMap="BaseResultMap">
+  <![CDATA[
+select station_name, case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as Rate
+ from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+  <!--三、Unknown Rate （相加）20:30:00-22:30:00 使用此sql-->
+  <select id="AutoFloorRate_Unknown20aciton" resultMap="BaseResultMap">
+  <![CDATA[
+select station_name, case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as Rate
+ from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and product=#{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+]]>
+</select>
+
+  <!--三、Unknown Rate （相加）白班 使用此sql-->
+  <select id="AutoFloorRate_UnknownDay" resultMap="BaseResultMap">
+    <![CDATA[
+select station_name, case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as Rate
+ from autofloor_rate
+  where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 20:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor= #{floor_name}
+  and product= #{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+  <!--三、Unknown Rate （相加）夜班 使用此sql-->
+  <select id="AutoFloorRate_UnknownNight" resultMap="BaseResultMap">
+    <![CDATA[
+select station_name, case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as Rate
+ from autofloor_rate
+  where
+  start_time >= to_date('${start_Time} 20:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor= #{floor_name}
+  and product= #{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+  <!--三、Unknown Rate （相加）昨日 使用此sql-->
+  <select id="AutoFloorRate_UnknownYesterday" resultMap="BaseResultMap">
+    <![CDATA[
+select station_name, case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as Rate
+ from autofloor_rate
+  where
+  start_time >= to_date('${start_Time} 20:30:00','YYYY-MM-DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY-MM-DD HH24:MI:SS')
+  and floor= #{floor_name}
+  and product= #{product_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  group by station_name  order by station_name
+  ]]>
+</select>
+
+  <!--FPYTop5直通率 使用此sql 白班-->
+  <select id="FPYTop5Machine" resultMap="BaseResultMap">
+    <![CDATA[
+  select * from
+(select machine_no,(case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) - (
+ case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as Zty,sum(fail_count) as Fail_Q
+from autofloor_rate_machine
+  where  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  and station_name=#{product_name}  group by machine_no ORDER BY Fail_Q desc) t where rownum<6 and t.Fail_Q>0
+  ]]>
+</select>
+  <!--FPYTop5直通率 0830-1030使用此sql 白班-->
+  <select id="FPYTop5Machine08action" resultMap="BaseResultMap">
+    <![CDATA[
+  select * from
+(select machine_no,(case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) - (
+ case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as Zty,sum(fail_count) as Fail_Q
+from autofloor_rate_machine
+  where  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  and station_name=#{product_name}  group by machine_no ORDER BY Fail_Q desc) t where rownum<6 and t.Fail_Q>0
+  ]]>
+</select>
+
+  <!--FPYTop5直通率 0830-1030使用此sql 白班-->
+  <select id="FPYTop5Machine20action" resultMap="BaseResultMap">
+    <![CDATA[
+  select * from
+(select machine_no,(case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) - (
+ case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as Zty,sum(fail_count) as Fail_Q
+from autofloor_rate_machine
+  where  start_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  and station_name=#{product_name}  group by machine_no ORDER BY Fail_Q desc) t where rownum<6 and t.Fail_Q>0
+  ]]>
+</select>
+<!--FPYTop5直通率 使用此sql 夜班-->
+<select id="FPYTop5MachineNight" resultMap="BaseResultMap">
+    <![CDATA[
+  select * from
+(select machine_no,(case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) - (
+ case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as Zty,sum(fail_count) as Fail_Q
+from autofloor_rate_machine
+  where  start_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  and station_name=#{product_name}  group by machine_no ORDER BY Fail_Q desc) t where rownum<6 and t.Fail_Q>0
+  ]]>
+</select>
+  <!--FPYTop5直通率 使用此sql 夜班-->
+  <select id="FPYTop5MachineYesterday" resultMap="BaseResultMap">
+    <![CDATA[
+  select * from
+(select machine_no,(case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) - (
+ case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as Zty,sum(fail_count) as Fail_Q
+from autofloor_rate_machine
+  where  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  and station_name=#{product_name}  group by machine_no ORDER BY Fail_Q desc) t where rownum<6 and t.Fail_Q>0
+  ]]>
+</select>
+
+  <!--FPYTop5直通率 使用此sql-->
+  <select id="FPYTop5Machinetwo" resultMap="BaseResultMap">
+    <![CDATA[
+  select * from
+(select machine_no,(case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) - (
+ case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as Zty,sum(fail_count) as Fail_Q
+from autofloor_rate_machine
+  where
+   start_time >=sysdate -2/24 and start_time <sysdate
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME!=' '
+  and station_name=#{product_name}  group by machine_no ORDER BY Fail_Q desc) t where rownum<6 and t.Fail_Q>0
+  ]]>
+</select>
+
+
+<!--Fail机台 最近两小时使用此sql-->
+  <select id="MidetectFailtwo" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select fail_item,count(*)as fail_qty from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+ out_station_time >=sysdate -2/24 and out_station_time <sysdate
+and line_name  = #{line_name}
+and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by fail_qty desc )
+where rownum<6
+]]>
+</select>
+  <!--Fail机台 使用此sql白班-->
+  <select id="MidetectFail" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select fail_item,count(*)as fail_qty from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+out_station_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and line_name = #{line_name}
+and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by fail_qty desc )
+where rownum<6
+  ]]>
+</select>
+  <!--Fail机台 使用此sql白班-->
+  <select id="MidetectFail08action" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select fail_item,count(*)as fail_qty from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+out_station_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+and line_name = #{line_name}
+and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by fail_qty desc )
+where rownum<6
+  ]]>
+</select>
+  <!--Fail机台 使用此sql白班-->
+  <select id="MidetectFail20action" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select fail_item,count(*)as fail_qty from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+out_station_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+and line_name  = #{line_name}
+and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by fail_qty desc )
+where rownum<6
+  ]]>
+</select>
+
+<!--Fail机台 使用此sql 夜班-->
+  <select id="MidetectFailNight" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select fail_item,count(*)as fail_qty from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+out_station_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and line_name  = #{line_name}
+and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by fail_qty desc )
+where rownum<6
+  ]]>
+</select>
+  <!--Fail机台 使用此sql 昨日-->
+  <select id="MidetectFailYesterday" resultMap="BaseResultMap">
+    <![CDATA[
+    select * from
+    (select fail_item,count(*)as fail_qty from
+    (select t.out_station_time,t.sn,t.fail_item
+    from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+    from autofloor_wip  a
+    where
+    out_station_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and out_station_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and line_name  = #{line_name}
+    and machine_no=#{machine_no}
+    and test_result =1 ) t
+    where t.rw=1 )m  group by fail_item order by fail_qty desc )
+    where rownum<6
+  ]]>
+</select>
+
+
+  <!--Failsum机台 最近0830-2030白班使用此sql-->
+  <select id="MidetectFailsum" resultType="int">
+<![CDATA[
+ select sum(w.cont) from
+(select count(*)as cont from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+   out_station_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and line_name  = #{line_name}
+  and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by cont desc )w
+where rownum<6
+  ]]>
+</select>
+  <!--Failsum机台 最近0830-1030白班使用此sql-->
+  <select id="MidetectFailsum08action" resultType="int">
+<![CDATA[
+ select sum(w.cont) from
+(select count(*)as cont from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+   out_station_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+  and line_name = #{line_name}
+  and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by cont desc )w
+where rownum<6
+  ]]>
+</select>
+  <!--Failsum机台 最近0830-1030白班使用此sql-->
+  <select id="MidetectFailsum20action" resultType="int">
+<![CDATA[
+ select sum(w.cont) from
+(select count(*)as cont from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+   out_station_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+  and line_name  = #{line_name}
+  and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by cont desc )w
+where rownum<6
+  ]]>
+</select>
+  <!--Failsum机台 最近两小时使用此sql-->
+<select id="MidetectFailsumtwo" resultType="int">
+<![CDATA[
+ select sum(w.cont) from
+(select count(*)as cont from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+   out_station_time >=sysdate -2/24 and out_station_time <sysdate
+  and line_name  = #{line_name}
+  and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by cont desc )w
+where rownum<6
+  ]]>
+</select>
+<!--Failsum机台 最近两小时使用此sql 夜班-->
+  <select id="MidetectFailsumNight" resultType="int">
+<![CDATA[
+ select sum(w.cont) from
+(select count(*)as cont from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+    out_station_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and line_name =#{line_name}
+  and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by cont desc )w
+where rownum<6
+  ]]>
+</select>
+
+  <!--Failsum机台 使用此sql 昨日-->
+  <select id="MidetectFailsumYesterday" resultType="int">
+<![CDATA[
+ select sum(w.cont) from
+(select count(*)as cont from
+(select t.out_station_time,t.sn,t.fail_item
+from (select a.*,row_number() over(partition by a.sn order by a.out_station_time desc) rw
+from autofloor_wip  a
+where
+    out_station_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and out_station_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and line_name =#{line_name}
+  and machine_no=#{machine_no}
+and test_result =1 ) t
+where t.rw=1 )m  group by fail_item order by cont desc )w
+where rownum<6
+  ]]>
+</select>
+
+  <!--机台input pass 最近两小时使用此sql 夜班-->
+  <select id="MidetectAutoTwo" resultMap="BaseResultMap">
+<![CDATA[
+  select  station_name,sum(input) as input,sum(pass) as pass from autofloor_rate where
+  start_time >=sysdate -2/24 and start_time <sysdate
+      and floor=#{floor_name}
+      and product=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+      group by station_name
+  ]]>
+</select>
+  <!--机台input pass 夜班使用此sql 夜班-->
+  <select id="MidetectAutoNight" resultMap="BaseResultMap">
+<![CDATA[
+  select station_name, sum(input) as input,sum(pass) as pass from autofloor_rate where
+  start_time >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and product=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+      group by station_name
+  ]]>
+</select>
+  <!--机台input pass 夜班使用此sql 昨日-->
+  <select id="MidetectAutoYesterday" resultMap="BaseResultMap">
+<![CDATA[
+  select station_name, sum(input) as input,sum(pass) as pass from autofloor_rate where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and product=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+      group by station_name
+  ]]>
+</select>
+  <!--机台input pass 夜班使用此sql 白班-->
+  <select id="MidetectAutoDay" resultMap="BaseResultMap">
+<![CDATA[
+  select  station_name,sum(input) as input,sum(pass) as pass from autofloor_rate where
+  start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time < to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and product=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+      group by station_name
+  ]]>
+</select>
+  <!--机台input pass 夜班使用此sql 08-30 - 10-30-->
+  <select id="MidetectAuto08" resultMap="BaseResultMap">
+<![CDATA[
+  select  station_name,sum(input) as input,sum(pass) as pass from autofloor_rate where
+   START_TIME between to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and product=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+      group by station_name
+  ]]>
+</select>
+  <!--机台input pass 夜班使用此sql 20-30 - 22-30-->
+  <select id="MidetectAuto20" resultMap="BaseResultMap">
+<![CDATA[
+  select  station_name,sum(input) as input,sum(pass) as pass from autofloor_rate where
+    START_TIME between to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and product=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+      group by station_name
+  ]]>
+</select>
+
+  <!--机台直通率top5 俩小时使用此sql-->
+<select id="MidetectFPYTwo" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select line_name,machine_no,sum(input) as input,sum(pass) as pass,sum(fail_count) as ttl_fail,sum(fail) as fail,sum(retest) as retest,sum(unknown) as Unknown,
+case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet,
+case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as unknownRate,
+case(sum(input)) when 0 then 0.00 else round(sum(FIRST_PASS)/(sum(input)),4) end as FPY
+from autofloor_rate_machine
+where  start_time >=sysdate -2/24 and start_time <sysdate
+      and floor=#{floor_name}
+      and STATION_NAME=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+group by line_name,machine_no order by FPY ASC)T
+where rownum<6
+]]>
+</select>
+  <!--机台直通率top5 白班使用此sql-->
+  <select id="MidetectFPYDay" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select line_name,machine_no,sum(input) as input,sum(pass) as pass,sum(fail_count) as ttl_fail,sum(fail) as fail,sum(retest) as retest,sum(unknown) as Unknown,
+case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet,
+case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as unknownRate,
+case(sum(input)) when 0 then 0.00 else round(sum(FIRST_PASS)/(sum(input)),4) end as FPY
+from autofloor_rate_machine
+ where start_time >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time < to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and STATION_NAME=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+group by line_name,machine_no order by FPY ASC)T
+where rownum<6
+]]>
+</select>
+  <!--机台直通率top5 夜班使用此sql-->
+  <select id="MidetectFPYNight" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select line_name,machine_no,sum(input) as input,sum(pass) as pass,sum(fail_count) as ttl_fail,sum(fail) as fail,sum(retest) as retest,sum(unknown) as Unknown,
+case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet,
+case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as unknownRate,
+case(sum(input)) when 0 then 0.00 else round(sum(FIRST_PASS)/(sum(input)),4) end as FPY
+from autofloor_rate_machine
+where
+  start_time >= to_date('${start_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and STATION_NAME=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+group by line_name,machine_no order by FPY ASC)T
+where rownum<6
+]]>
+</select>
+  <!--机台直通率top5 昨日使用此sql-->
+  <select id="MidetectFPYYesterday" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select line_name,machine_no,sum(input) as input,sum(pass) as pass,sum(fail_count) as ttl_fail,sum(fail) as fail,sum(retest) as retest,sum(unknown) as Unknown,
+case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet,
+case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as unknownRate,
+case(sum(input)) when 0 then 0.00 else round(sum(FIRST_PASS)/(sum(input)),4) end as FPY
+from autofloor_rate_machine
+where
+  start_time >= to_date('${start_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time < to_date('${end_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and STATION_NAME=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+group by line_name,machine_no order by FPY ASC)T
+where rownum<6
+]]>
+</select>
+  <!--机台直通率top5 08使用此sql-->
+  <select id="MidetectFPY08" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select line_name,machine_no,sum(input) as input,sum(pass) as pass,sum(fail_count) as ttl_fail,sum(fail) as fail,sum(retest) as retest,sum(unknown) as Unknown,
+case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet,
+case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as unknownRate,
+case(sum(input)) when 0 then 0.00 else round(sum(FIRST_PASS)/(sum(input)),4) end as FPY
+from autofloor_rate_machine
+where
+   START_TIME  >= to_date('${rate_Time} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and START_TIME < to_date('${rate_Time} 10:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and STATION_NAME=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+group by line_name,machine_no order by FPY ASC)T
+where rownum<6
+]]>
+</select>
+  <!--机台直通率top5 20使用此sql-->
+  <select id="MidetectFPY20" resultMap="BaseResultMap">
+<![CDATA[
+select * from
+(select line_name,machine_no,sum(input) as input,sum(pass) as pass,sum(fail_count) as ttl_fail,sum(fail) as fail,sum(retest) as retest,sum(unknown) as Unknown,
+case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet,
+case(sum(unknown)+ sum(input)) when 0 then 0.00 else round(sum(unknown)/(sum(unknown)+ sum(input)),4) end as unknownRate,
+case(sum(input)) when 0 then 0.00 else round(sum(FIRST_PASS)/(sum(input)),4) end as FPY
+from autofloor_rate_machine
+where
+    START_TIME >= to_date('${rate_Time} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and START_TIME < to_date('${rate_Time} 22:30:00','YYYY/MM/DD HH24:MI:SS')
+      and floor=#{floor_name}
+      and STATION_NAME=#{product_name}
+      and line_name like #{line_name}||'%'
+      and STATION_NAME!=' '
+group by line_name,machine_no order by FPY ASC)T
+where rownum<6
+]]>
+</select>
+
+  <!--一天的机台实时误测率使用此sql-->
+  <select id="AllDayStationMidetect" resultType="com.shop.model.AutoFloor_Rate">
+<![CDATA[
+select LINE_NAME||MACHINE_NO as stationname ,case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as misdetet
+from AUTOFLOOR_RATE_MACHINE
+where START_TIME >= to_date('${rate_Time} 00:00:00','YYYY/MM/DD HH24:MI:SS')
+  and END_TIME < to_date('${end_Time} 23:59:59','YYYY/MM/DD HH24:MI:SS')
+  and FLOOR=#{floor_name}
+group by LINE_NAME||MACHINE_NO
+]]>
+</select>
+  <!--一周的机台实时误测率使用此sql-->
+  <select id="AllWeekStationMidetect" resultType="com.shop.model.AutoFloor_Rate">
+<![CDATA[
+ select LINE_NAME||MACHINE_NO as stationname ,case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as misdetet
+  from AUTOFLOOR_RATE_MACHINE
+  where START_TIME >= TO_DATE(TO_CHAR (sysdate-7,'YYYY-MM-DD'),'YYYY-MM-DD')
+  and END_TIME <= sysdate
+  and FLOOR=#{floor_name}
+  group by LINE_NAME||MACHINE_NO
+]]>
+</select>
+
+  <!--一月的机台实时误测率使用此sql-->
+  <select id="AllMonthStationMidetect" resultType="com.shop.model.AutoFloor_Rate">
+<![CDATA[
+ select LINE_NAME||MACHINE_NO as stationname ,case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as misdetet
+  from AUTOFLOOR_RATE_MACHINE
+  where START_TIME >= TO_DATE(TO_CHAR (sysdate-30,'YYYY-MM-DD'),'YYYY-MM-DD')
+  and END_TIME <= sysdate
+  and FLOOR=#{floor_name}
+  group by LINE_NAME||MACHINE_NO
+]]>
+</select>
+
+
+
+  <!--所有机台名称使用此sql-->
+  <select id="AllStation" resultType="com.shop.model.AutoFloor_Rate">
+<![CDATA[
+select LINE_NAME||MACHINE_NO as stationname,T_PRODUCT as product  from AUTOFLOOR_MACHINE_DETAIL
+where T_FLOOR=#{floor_name}
+and LINE_NAME like #{line_name}||'%'
+]]>
+</select>
+  <!--设备健康机台Top5-->
+  <select id="AllStationTop5" resultType="com.shop.model.AutoFloor_Rate">
+<![CDATA[
+  select ROWNUM,t.* from
+  (select machine_no,(case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as rate from autofloor_rate_machine
+  where
+  start_time >=sysdate -2/24 and start_time <sysdate
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and STATION_NAME like #{product_name}||'%'
+  and STATION_NAME!=' '
+  group by machine_no ORDER BY rate desc) t where rownum<6
+]]>
+</select>
+
+
+
+  <insert id="insertSelective" parameterType="com.shop.model.AutoFloor_Rate" >
+    insert into AUTOFLOOR_RATE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="floor != null" >
+        FLOOR,
+      </if>
+      <if test="lineName != null" >
+        LINE_NAME,
+      </if>
+      <if test="product != null" >
+        PRODUCT,
+      </if>
+      <if test="stationName != null" >
+        STATION_NAME,
+      </if>
+      <if test="input != null" >
+        INPUT,
+      </if>
+      <if test="pass != null" >
+        PASS,
+      </if>
+      <if test="fail != null" >
+        FAIL,
+      </if>
+      <if test="retest != null" >
+        RETEST,
+      </if>
+      <if test="unknown != null" >
+        UNKNOWN,
+      </if>
+      <if test="firstPass != null" >
+        FIRST_PASS,
+      </if>
+      <if test="startTime != null" >
+        START_TIME,
+      </if>
+      <if test="endTime != null" >
+        END_TIME,
+      </if>
+      <if test="timeSlot != null" >
+        TIME_SLOT,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="floor != null" >
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null" >
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="product != null" >
+        #{product,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null" >
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="input != null" >
+        #{input,jdbcType=DECIMAL},
+      </if>
+      <if test="pass != null" >
+        #{pass,jdbcType=DECIMAL},
+      </if>
+      <if test="fail != null" >
+        #{fail,jdbcType=DECIMAL},
+      </if>
+      <if test="retest != null" >
+        #{retest,jdbcType=DECIMAL},
+      </if>
+      <if test="unknown != null" >
+        #{unknown,jdbcType=DECIMAL},
+      </if>
+      <if test="firstPass != null" >
+        #{firstPass,jdbcType=DECIMAL},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeSlot != null" >
+        #{timeSlot,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<title>誤測狀況</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link th:href="@{/style/css/bootstrap.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap.min.css" />
+	<link th:href="@{/style/css/bootstrap-responsive.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap-responsive.min.css" />
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" />
+	<link th:href="@{/style/css/select2.css}"  rel="stylesheet" href="../../static/style/css/select2.css" />
+	<link th:href="@{/style/css/matrix-style.css}"  rel="stylesheet" href="../../static/style/css/matrix-style.css" />
+	<link th:href="@{/style/css/matrix-media.css}"  rel="stylesheet" href="../../static/style/css/matrix-media.css" />
+	<link th:href="@{/style/font-awesome/css/font-awesome.css}" href="../../static/style/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+	<link th:href="@{/css/tables2.css}" rel="stylesheet" href="../../static/css/tables2.css" type="text/css" />
+	<script th:src="@{/js/jquery-3.1.1.min.js}" src="../../static/js/jquery-3.1.1.min.js" type="text/javascript" ></script>
+	<script th:src="@{/style/js/jquery-1.4.4.min.js}" src="../../static/style/js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/style/js/jquery.dataTables.min.js}"  src="../../static/style/js/jquery.dataTables.min.js"></script>
+	<script th:src="@{/style/js/jquery.min.js}"  src="../../static/style/js/jquery.min.js"></script>
+	<script th:src="@{/style/js/jquery.ui.custom.js}"  src="../../static/style/js/jquery.ui.custom.js"></script>
+	<script th:src="@{/style/js/jquery.uniform.js}"  src="../../static/style/js/jquery.uniform.js"></script>
+	<script th:src="@{/style/js/bootstrap.min.js}"  src="../../static/style/js/bootstrap.min.js"></script>
+	<script th:src="@{/style/js/select2.min.js}"  src="../../static/style/js/select2.min.js"></script>
+	<script th:src="@{/style/js/matrix.js}"  src="../../static/style/js/matrix.js"></script>
+	<script th:src="@{/js/matrix.tables.js}"  src="../../static/style/js/matrix.tables.js"></script>
+	<script th:src="@{/js/mt-tabpage.js}"  type="text/javascript" src="../../static/js/mt-tabpage.js"></script>
+	<script th:src="@{/js/tables2.js}" src="../../static/js/tables2.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<!-- 顶部  -->
+<div id="header">
+
+
+
+	<ul>
+		<li style="float: left;">
+			<div id="">
+				<span class="top_title">Thales&nbsp;&nbsp;CN/ZZ/D/<span id="Floorname" th:text="${Floorname}">D07-3F</span></span>
+			</div>
+		</li>
+		<li  style="float:right;">
+			<div class="top_div">
+				<img th:src="@{/static/img/shijian.png}"   style="height: 20px;width: 20px;float: left;margin-top: 5px;margin-right: -20px;">
+				<span class="top_span top_title" id="datespan"></span>
+			</div>
+			<span th:text="${TimeDayFail}" style="display: none" id="TimeDayFail">
+			</span>
+
+		</li>
+	</ul>
+</div>
+<!-- 左侧导航栏 -->
+<div id="sidebar">
+	<div style="height:80px;width: 30px;">
+		<i id="shrink" class="icon-arrow-left ulshrink"   onclick="ulshrink()"></i>
+		<i id="unfold" class="icon-th-list ulunfold" onclick="ulunfold()"></i>
+	</div>
+	<ul id="left-ul" style="margin-left: -150px;">
+		<li  class="submenu licontent open">
+			<a href="#"><img  th:src="@{/static/img/dingwei_1.png}"    style="width: 18px; height: 18px;margin-right: 8px"><span></span>實時總覽<span class="label label-important"></span></a>
+			<ul style="border-top: 2px solid #478CB1">
+				<li><a th:href="@{/Allfloordata}" style="color: #65A5E2;">樓層健康状况</a></li>
+				<li><a th:href="@{/AllFloorsFacilityFitness}">樓層健康可視化</a></li>
+				<!--<li><a href="javascript:" class="">產能狀況</a></li>
+				<li><a href="javascript:" class="">測試機臺</a></li>
+				<li><a href="javascript:" class="">Robot</a></li>
+				<li><a href="javascript:" class="">PD設備</a></li>-->
+			</ul>
+		</li>
+		<li class="submenu licontent">
+			<a><i class="icon-search"></i><span>智能盤點</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10002'}" class="">主板盤點</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent"><a>
+			<i class="icon-group"></i><span>人員管理</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a class="" th:href="@{'/AllfloorOPissue'}" >OP ISSUE</a></li>
+			</ul>
+		</li>
+
+		<li class="licontent"><a> <i class="icon-glass"></i><span>品質管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-briefcase"></i><span>成本管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-bell"></i><span>報警中心</span></a></li>
+		<li class="submenu licontent">
+			<a href="#"><i class="icon-cog"></i> <span></span>設置<span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10061'}" class="">資料維護</a></li>
+				<li><a th:href="@{'http://10.210.57.13:10001'}" class="">自動化Cell實時數據</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- 右侧数据列表 -->
+<div id="content" style="margin-left: 40px;">
+
+	<!-- Modal1 -->
+	<div class="modal fade" id="myModal"style="width: 630px" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="flase">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="">
+					<table  style="width: 100%;">
+						<tr style="background-color: #fdee68;height: 60px;">
+							<td class="center" style="width: 20%;">Machine_NO</td>
+							<td class="center" style="width: 20%;">FailQ'ty</td>
+							<td class="center" style="width: 60%;" >
+                            <table>
+								<tr id="facilitytable">
+									<td class="center" style="width: 60%;">Fail Item</td>
+									<td class="center" style="width: 20%;">Fail Number</td>
+									<td class="center" style="width: 20%;">改善建議</td>
+								</tr>
+                            </table>
+                            </td>
+
+						</tr>
+                        <tr>
+                            <td class="center" id="FailQTabletr" style="width: 20%;">
+                            </td>
+                            <td class="center"  id="FailQTabletr2" style="width: 20%;">
+                            </td>
+                            <td class="center" style="width: 60%">
+                                <table id="FailQTabletr3">
+                                    <tr>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+					</table>
+					<!--<table style="float: left;width:29%;height: 160px" >
+					</table>
+
+					<table style="float: right;width:71%;" >
+					</table>-->
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- Modal2 -->
+	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">說明及幫助</h4>
+				</div>
+				<div class="modal-body">
+					<p>1. .......</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<div style="height: 30px;width:95%;padding-top: 10px;">
+			<h4 style="text-align: center;margin-top: 10px;"><img th:src="@{/static/img/dingwei_1.png}" style="width: 24px; height: 24px;margin-right: 10px;">誤測狀況-<span id="Linename" th:text="${linename}"></span></h4></span></h4>
+		<!-- 分类 -->
+		<div>
+			<ul class="tabul" style="float: left;margin-top: -12px;">
+				<li style="color: #02a4ec;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+				<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+				<li></li>
+			</ul>
+
+		<!-- 表切换导航-->
+		<ul style="margin-top: -20px;float: right;width: 12%;margin-bottom: 20px;">
+		</ul>
+		</div>
+	</div>
+
+	<!-- 表切换导航-->
+	<div style="margin-top:40px;overflow: scroll;width: 98%;padding: 0 0px 0 20px;overflow-y: hidden;overflow-x: hidden;">
+		<!-- Button trigger modal -->
+		<span data-toggle="modal" data-target="#myModal2" class="span_none">
+			<i class="icon-info-sign" ></i>幫助
+		</span>
+		<!-- 表格标题-->
+		<table id="capacitytab" style="width: 78%;float: left;margin: 0px;border-bottom: 1px solid #2e363f26;" class="table table-striped">
+			<tr></tr>
+			<tr class="tabtitle1" style=" background:#FDEE68;font-family: fantasy;font-size: 14px;">
+				<td class="center" ></td>
+				<td class="center">Input</td>
+				<td class="center">Pass</td>
+				<td class="center" colspan="2">直通率</td>
+				<td class="center" colspan="2" >良率</td>
+				<td class="center" colspan="2">誤測率</td>
+				<td class="center" colspan="2">UnKnown率</td>
+			</tr>
+			<tr></tr>
+			<tr class="tabtitle2 actives" style="color: #333;background:#CBF7E4;border-bottom: 1px solid #ddd;">
+				<td class="center" >工站</td>
+				<td class="center">Q'ty</td>
+				<td class="center">Q'ty</td>
+				<td class="center" >Target</td>
+				<td class="center" >Rate</td>
+				<td class="center" >Target</td>
+				<td class="center" >Rate</td>
+				<td class="center" >Target</td>
+				<td class="center" >Rate</td>
+				<td class="center" >Target</td>
+				<td class="center" >Rate</td>
+
+			</tr>
+
+			<!--DFU-->
+			<tr class="">
+				<td class="centers center" >DFU<span th:text="'('+${DFUMachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoDFU')} !=null" th:text="${MidetectAutoMap.get('AutoDFU').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoDFU')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoDFU')} !=null" th:text="${MidetectAutoMap.get('AutoDFU').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoDFU')} ==null">0</td>
+				<td class="center" colspan="1">98.90%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYDFUVlaue')>=0 || FPYOrangeMap.get('FPYDFUVlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYDFUVlaue')==-1  ? 'OrangeBa':''}">
+					<span    th:text="${FPYMap.get('FPYDFU')==null ? '0':FPYMap.get('FPYDFU')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYDFUVlaue')>=0  || FPYRedMap.get('FPYDFUVlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYDFUVlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYDFU')==null ? '0':FPYMap.get('FPYDFU')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYDFUVlaue')==-1 || FPYRedMap.get('FPYDFUVlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYDFU')==null ? '0':FPYMap.get('FPYDFU')}+'%'">98.90%</span>
+				</td>
+
+				<td class="center" colspan="1">99.70%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldDFU')==null ? '0':YieldMap.get('YieldDFU')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">0.80%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetDFU')==null ? '0':MisdetetMap.get('MisdetetDFU')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">2.00%</td>
+				<td class="center" colspan="1" ><span th:text="${UnknownMap.get('UnknownDFU')==null ? '0':UnknownMap.get('UnknownDFU')}+'%'">0.45%</span></td>
+
+			</tr>
+			<!--FCT-->
+			<tr class="">
+				<td class="centers center" >FCT<span th:text="'('+${FCTMachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoFCT')} !=null" th:text="${MidetectAutoMap.get('AutoFCT').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoFCT')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoFCT')} !=null" th:text="${MidetectAutoMap.get('AutoFCT').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoFCT')} ==null">0</td>
+				<td class="center" colspan="1">99.20%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYFCTVlaue')>=0 || FPYOrangeMap.get('FPYFCTVlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYFCTVlaue')==-1  ? 'OrangeBa':''}">
+					<span    th:text="${FPYMap.get('FPYFCT')==null ? '0':FPYMap.get('FPYFCT')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYFCTVlaue')>=0  || FPYRedMap.get('FPYFCTVlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYFCTVlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYFCT')==null ? '0':FPYMap.get('FPYFCT')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYFCTVlaue')==-1 || FPYRedMap.get('FPYFCTVlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYFCT')==null ? '0':FPYMap.get('FPYFCT')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.90%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldFCT')==null ? '0':YieldMap.get('YieldFCT')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">0.70%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetFCT')==null ? '0':MisdetetMap.get('MisdetetFCT')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center" colspan="1" ><span th:text="${UnknownMap.get('UnknownFCT')==null ? '0':UnknownMap.get('UnknownFCT')}+'%'">0.45%</span></td>
+			</tr>
+			<!--S1-->
+			<tr class="">
+				<td class="centers center" >S1<span th:text="'('+${S1MachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoS1')} !=null" th:text="${MidetectAutoMap.get('AutoS1').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoS1')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoS1')} !=null" th:text="${MidetectAutoMap.get('AutoS1').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoS1')} ==null">0</td>
+				<td class="center" colspan="1">97.35%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYS1Vlaue')>=0 || FPYOrangeMap.get('FPYS1Vlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYS1Vlaue')==-1  ? 'OrangeBa':''}">
+					<span    th:text="${FPYMap.get('FPYS1')==null ? '0':FPYMap.get('FPYS1')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYS1Vlaue')>=0  || FPYRedMap.get('FPYS1Vlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYS1Vlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYS1')==null ? '0':FPYMap.get('FPYS1')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYS1Vlaue')==-1 || FPYRedMap.get('FPYS1Vlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYS1')==null ? '0':FPYMap.get('FPYS1')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.85%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldS1')==null ? '0':YieldMap.get('YieldS1')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">2.50%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetS1')==null ? '0':MisdetetMap.get('MisdetetS1')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">0.5%</td>
+				<td class="center" colspan="1" th:text="${UnknownMap.get('UnknownS1')==null ? '0':UnknownMap.get('UnknownS1')}+'%'"><span>0.45%</span></td>
+
+			</tr>
+			<!--S2-->
+			<tr class="">
+				<td class="centers center" >S2<span th:text="'('+${S2MachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoS2')} !=null" th:text="${MidetectAutoMap.get('AutoS2').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoS2')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoS2')} !=null" th:text="${MidetectAutoMap.get('AutoS2').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoS2')} ==null">0</td>
+				<td class="center" colspan="1">96.40%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYS2Vlaue')>=0 || FPYOrangeMap.get('FPYS2Vlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYS2Vlaue')==-1  ? 'OrangeBa':''}">
+					<span    th:text="${FPYMap.get('FPYS2')==null ? '0':FPYMap.get('FPYS2')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYS2Vlaue')>=0  || FPYRedMap.get('FPYS2Vlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYS2Vlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYS2')==null ? '0':FPYMap.get('FPYS2')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYS2Vlaue')==-1 || FPYRedMap.get('FPYS2Vlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYS2')==null ? '0':FPYMap.get('FPYS2')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.90%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldS2')==null ? '0':YieldMap.get('YieldS2')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">3.50%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetS2')==null ? '0':MisdetetMap.get('MisdetetS2')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center" colspan="1" th:text="${UnknownMap.get('UnknownS2')==null ? '0':UnknownMap.get('UnknownS2')}+'%'"><span>0.45%</span></td>
+
+			</tr>
+			<!--S3-->
+			<tr class="">
+				<td class="centers center" >S3<span th:text="'('+${S3MachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoS3')} !=null" th:text="${MidetectAutoMap.get('AutoS3').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoS3')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoS3')} !=null" th:text="${MidetectAutoMap.get('AutoS3').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoS3')} ==null">0</td>
+				<td class="center" colspan="1">98.45%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYS3Vlaue')>=0 || FPYOrangeMap.get('FPYS3Vlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYS3Vlaue')==-1  ? 'OrangeBa':''}">
+					<span    th:text="${FPYMap.get('FPYS3')==null ? '0':FPYMap.get('FPYS3')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYS3Vlaue')>=0  || FPYRedMap.get('FPYS3Vlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYS3Vlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYS3')==null ? '0':FPYMap.get('FPYS3')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYS3Vlaue')==-1 || FPYRedMap.get('FPYS3Vlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYS3')==null ? '0':FPYMap.get('FPYS3')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.95%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldS3')==null ? '0':YieldMap.get('YieldS3')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">1.50%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetS3')==null ? '0':MisdetetMap.get('MisdetetS3')}+'%'">0.45%</span></td>
+				<td class="center" colspan="1">0.5%</td>
+				<td class="center" colspan="1" ><span th:text="${UnknownMap.get('UnknownS3')==null ? '0':UnknownMap.get('UnknownS3')}+'%'">0.45%</span></td>
+
+			</tr>
+			<!--CCT-->
+			<tr class="">
+				<td class="centers center" >CCT<span th:text="'('+${CCTMachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoCCT')} !=null" th:text="${MidetectAutoMap.get('AutoCCT').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoCCT')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoCCT')} !=null" th:text="${MidetectAutoMap.get('AutoCCT').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoCCT')} ==null">0</td>
+				<td class="center" colspan="1">99.49%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYCCTVlaue')>=0 || FPYOrangeMap.get('FPYCCTVlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYCCTVlaue')==-1  ? 'OrangeBa':''}">
+					<span     th:text="${FPYMap.get('FPYCCT')==null ? '0':FPYMap.get('FPYCCT')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYCCTVlaue')>=0  || FPYRedMap.get('FPYCCTVlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYCCTVlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYCCT')==null ? '0':FPYMap.get('FPYCCT')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYCCTVlaue')==-1 || FPYRedMap.get('FPYCCTVlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYCCT')==null ? '0':FPYMap.get('FPYCCT')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.99%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldCCT')==null ? '0':YieldMap.get('YieldCCT')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetCCT')==null ? '0':MisdetetMap.get('MisdetetCCT')}+'%'">0.45%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center" colspan="1" ><span th:text="${UnknownMap.get('UnknownCCT')==null ? '0':UnknownMap.get('UnknownCCT')}+'%'">0.45%</span></td>
+
+			</tr>
+			<!--W1-->
+			<tr class="">
+				<td class="centers center" >W1<span th:text="'('+${W1MachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoW1')} !=null" th:text="${MidetectAutoMap.get('AutoW1').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoW1')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoW1')} !=null" th:text="${MidetectAutoMap.get('AutoW1').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoW1')} ==null">0</td>
+				<td class="center" colspan="1">97.45%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYW1Vlaue')>=0 || FPYOrangeMap.get('FPYW1Vlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYW1Vlaue')==-1  ? 'OrangeBa':''}">
+					<span     th:text="${FPYMap.get('FPYW1')==null ? '0':FPYMap.get('FPYW1')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYW1Vlaue')>=0  || FPYRedMap.get('FPYW1Vlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYW1Vlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYW1')==null ? '0':FPYMap.get('FPYW1')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYW1Vlaue')==-1 || FPYRedMap.get('FPYW1Vlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYW1')==null ? '0':FPYMap.get('FPYW1')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.95%</td>
+				<td class="center border_right" colspan="1" th:text="${YieldMap.get('YieldW1')==null ? '0':YieldMap.get('YieldW1')}+'%'"><span>0.00%</span></td>
+				<td class="center" colspan="1">2.50%</td>
+				<td class="center border_right" colspan="1" th:text="${MisdetetMap.get('MisdetetW1')==null ? '0':MisdetetMap.get('MisdetetW1')}+'%'"><span>0.45%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center" colspan="1" ><span th:text="${UnknownMap.get('UnknownW1')==null ? '0':UnknownMap.get('UnknownW1')}+'%'">0.45%</span></td>
+
+			</tr>
+			<!--W2-->
+			<tr class="">
+				<td class="centers center" >W2<span th:text="'('+${W2MachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoW2')} !=null" th:text="${MidetectAutoMap.get('AutoW2').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoW2')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoW2')} !=null" th:text="${MidetectAutoMap.get('AutoW2').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoW2')} ==null">0</td>
+				<td class="center" colspan="1">98.99%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYW2Vlaue')>=0 || FPYOrangeMap.get('FPYW2Vlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYW2Vlaue')==-1  ? 'OrangeBa':''}">
+					<span     th:text="${FPYMap.get('FPYW2')==null ? '0':FPYMap.get('FPYW2')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYW2Vlaue')>=0  || FPYRedMap.get('FPYW2Vlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYW2Vlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYW2')==null ? '0':FPYMap.get('FPYW2')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYW2Vlaue')==-1 || FPYRedMap.get('FPYW2Vlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYW2')==null ? '0':FPYMap.get('FPYW2')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.99%</td>
+				<td class="center border_right" colspan="1"><span th:text="${YieldMap.get('YieldW2')==null ? '0':YieldMap.get('YieldW2')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">1.00%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetW2')==null ? '0':MisdetetMap.get('MisdetetW2')}+'%'">0.45%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center" colspan="1"><span th:text="${UnknownMap.get('UnknownW2')==null ? '0':UnknownMap.get('UnknownW2')}+'%'">0.45%</span></td>
+
+			</tr>
+			<!--UWB-->
+			<tr class="">
+				<td class="centers center" >UWB<span th:text="'('+${UWBMachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoUWB')} !=null" th:text="${MidetectAutoMap.get('AutoUWB').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoUWB')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoUWB')} !=null" th:text="${MidetectAutoMap.get('AutoUWB').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoUWB')} ==null">0</td>
+				<td class="center " colspan="1">98.95%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYUWBVlaue')>=0 || FPYOrangeMap.get('FPYUWBVlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYUWBVlaue')==-1  ? 'OrangeBa':''}">
+					<span    th:text="${FPYMap.get('FPYUWB')==null ? '0':FPYMap.get('FPYUWB')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYUWBVlaue')>=0  || FPYRedMap.get('FPYUWBVlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYUWBVlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYUWB')==null ? '0':FPYMap.get('FPYUWB')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYUWBVlaue')==-1 || FPYRedMap.get('FPYUWBVlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYUWB')==null ? '0':FPYMap.get('FPYUWB')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.95%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldUWB')==null ? '0':YieldMap.get('YieldUWB')}+'%'">0.00%</span></td>
+				<td class="center" colspan="1">1.00%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetUWB')==null ? '0':MisdetetMap.get('MisdetetUWB')}+'%'">0.45%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center" colspan="1" ><span th:text="${UnknownMap.get('UnknownUWB')==null ? '0':UnknownMap.get('UnknownUWB')}+'%'">0.45%</span></td>
+
+			</tr>
+			<!--SCOND-->
+			<tr class="">
+				<td class="centers center" >SCOND<span th:text="'('+${SCONDMachinaeSum}+')'"></span></td>
+				<td class="center"  th:if="${MidetectAutoMap.get('AutoSCOND')} !=null" th:text="${MidetectAutoMap.get('AutoSCOND').getInput()}"></td>
+				<td class="center" 	th:if="${MidetectAutoMap.get('AutoSCOND')} ==null">0</td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoSCOND')} !=null" th:text="${MidetectAutoMap.get('AutoSCOND').getPass()}"></td>
+				<td class="center  border_right"  th:if="${MidetectAutoMap.get('AutoSCOND')} ==null">0</td>
+				<td class="center" colspan="1">98.47%</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYSCONDVlaue')>=0 || FPYOrangeMap.get('FPYSCONDVlaue')==null  ? 'display: none;':''}"   th:class="${FPYOrangeMap.get('FPYSCONDVlaue')==-1  ? 'OrangeBa':''}">
+					<span    th:text="${FPYMap.get('FPYSCOND')==null ? '0':FPYMap.get('FPYSCOND')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYRedMap.get('FPYSCONDVlaue')>=0  || FPYRedMap.get('FPYSCONDVlaue')==null  ? 'display: none;':''}"  th:class="${FPYRedMap.get('FPYSCONDVlaue')==-1  ? 'RedBa':''}">
+					<span    th:text="${FPYMap.get('FPYSCOND')==null ? '0':FPYMap.get('FPYSCOND')}+'%'">98.90%</span>
+				</td>
+				<td class="center border_right" th:style="${FPYOrangeMap.get('FPYSCONDVlaue')==-1 || FPYRedMap.get('FPYSCONDVlaue')==-1   ? 'display: none;':''}">
+					<span   th:text="${FPYMap.get('FPYSCOND')==null ? '0':FPYMap.get('FPYSCOND')}+'%'">98.90%</span>
+				</td>
+				<td class="center" colspan="1">99.97%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${YieldMap.get('YieldSCOND')==null ? '0':YieldMap.get('YieldSCOND')}+'%'">99.80%</span></td>
+				<td class="center" colspan="1">1.50%</td>
+				<td class="center border_right" colspan="1" ><span th:text="${MisdetetMap.get('MisdetetSCOND')==null ? '0':MisdetetMap.get('MisdetetSCOND')}+'%'">0.45%</span></td>
+				<td class="center" colspan="1">0.50%</td>
+				<td class="center" colspan="1" ><span th:text="${UnknownMap.get('UnknownSCOND')==null ? '0':UnknownMap.get('UnknownSCOND')}+'%'">0.45%</span></td>
+			</tr>
+			<!--SCOND-->
+			<tr class="" style=" font-size: 13px;">
+				<td class="centers center"  style="width: 10%;">ALL</td>
+				<td class="center " style="width: 9%" >
+					<span  >/</span>
+				</td>
+				<td class="center border_right" style="width:  9%" >
+					<span  >/</span>
+				</td>
+				<td class="center " style="width: 9%" ><span>83.65%</span></td>
+				<td class="center border_right" style="width: 9%" >
+					<span th:if="${FPYAllsum}!='0'" th:text="${#numbers.formatDecimal((ALLYieldALL - ALLMisdetetALL)*100,1,2)}+'%'"></span>
+					<span th:if="${FPYAllsum}=='0'" >0.0%</span>
+				</td>
+				<td class="center " style="width: 9%"><span>99.15%</span></td>
+				<td class="center border_right" style="width: 9%">
+					<span th:if="${YieldAllsum}!='0'" th:text="${#numbers.formatDecimal(ALLYieldALL*100,1,2)}+'%'"></span>
+					<span th:if="${YieldAllsum}=='0'" >0.0%</span>
+				</td>
+				<td class="center"  style="width: 9%"><span>15.50%</span></td>
+				<td class="center border_right"  style="width: 9%">
+					<span th:if="${MisdetetAllsum}!='0'" th:text="${#numbers.formatDecimal(ALLMisdetetALL*100,1,2)}+'%'"></span>
+					<span th:if="${MisdetetAllsum}=='0'" >0.0%</span>
+				</td>
+				<td class="center"  style="width: 9%"><span>6.50%</span></td>
+				<td class="center"  style="width: 9%">
+					<span th:if="${UnknownAllsum}!='0'" th:text="${#numbers.formatDecimal(ALLUnknownALL*100,1,2)}+'%'"></span>
+					<span th:if="${UnknownAllsum}=='0'" >0.0%</span>
+				</td>
+			</tr>
+			<tr>
+				<td class="centers center">Remark:   </td>
+				<td class="centers center" style="text-align: left !important;" colspan="10">Gap 0~2%，黃色報警 ；Gap 2%以上，紅色報警 </td>
+			</tr>
+		</table>
+
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO1Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO1Machine_no')} != null ">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(0)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top1 : ${FPYTOP5No.get('NO1Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"  th:text="${top1.getLineName()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"  th:text="${top1.getMACHINE_NO()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top1.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top1.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top1.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top1.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top1.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top1.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top1.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top1.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top1.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top1.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+			<tr class="bordertd" th:if="${FPYTOP5No.get('NO1Machine_no').size()} < '1'">
+                <td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+                <td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+                <td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO1Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO1Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO1Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+			<tr class="bordertd"  th:if="${FPYTOP5No.get('NO1Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO2Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO2Machine_no')}!= null">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(1)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top2 : ${FPYTOP5No.get('NO2Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top2.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top2.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top2.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top2.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top2.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+			<tr class="bordertd" th:if="${FPYTOP5No.get('NO2Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO2Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO2Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO2Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO2Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO3Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO3Machine_no')} != null">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(2)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top3 : ${FPYTOP5No.get('NO3Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top3.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top3.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top3.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top3.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top3.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"  ></td>
+			</tr>
+			<tr class="bordertd" th:if="${FPYTOP5No.get('NO3Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO3Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO3Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO3Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO3Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO4Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO4Machine_no')} != null">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(3)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top4 : ${FPYTOP5No.get('NO4Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top4.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top4.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top4.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top4.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top4.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+			<tr class="bordertd" th:if="${FPYTOP5No.get('NO4Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO4Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO4Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO4Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO4Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" >&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+            </tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO5Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO5Machine_no')} != null">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(4)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top5 : ${FPYTOP5No.get('NO5Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top5.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top5.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top5.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top5.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top5.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+			<tr class="bordertd" th:if="${FPYTOP5No.get('NO5Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO5Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO5Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO5Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO5Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO6Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO6Machine_no')} != null ">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(5)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top6 : ${FPYTOP5No.get('NO6Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top6.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top6.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top6.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top6.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top6.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"  ></td>
+			</tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO6Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO6Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO6Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO6Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO6Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO7Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO7Machine_no')} != null">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(6)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top7 : ${FPYTOP5No.get('NO7Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top7.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top7.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top7.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top7.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top7.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO7Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO7Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO7Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO7Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO7Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO8Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO8Machine_no')}!= null">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(7)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top8 : ${FPYTOP5No.get('NO8Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top8.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top8.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top8.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top8.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top8.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO8Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO8Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO8Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO8Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO8Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO9Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO9Machine_no')} != null ">
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(8)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top9 : ${FPYTOP5No.get('NO9Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top9.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top9.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top9.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top9.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top9.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO9Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO9Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO9Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO9Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO9Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+		</table>
+
+		<table class="FPYTable" th:style="${FPYTOP5No.get('NO10Machine_no').size()>0 ? '':'display: none'}" th:if="${FPYTOP5No.get('NO10Machine_no')} != null" >
+			<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="13"><span th:text="${Top5Name.get(9)}"></span>&nbsp;TOP5&nbsp;直通率分析</th></tr>
+			<tr class="bordertd" style="height: 39px;">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="14%">線體</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="13%">機台號</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Input</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Pass</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">TTL_Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Fail</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Retest</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="5%">Unknown</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">Retest_Yield</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="10%">Unknown Rate</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="6%">直通率</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="15%">異常預判</td>
+			</tr>
+			<tr class="bordertd" th:each="top10 : ${FPYTOP5No.get('NO10Machine_no')}" onclick="Machineno(this)"   data-toggle="modal" data-target="#myModal">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getLineName()}">Scond-05</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getMACHINE_NO()}">91.00%</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getInput()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getPass()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getTTL_fail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getFail()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getRetest()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${top10.getUnknown()}"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top10.getYield()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top10.getMisdetet()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top10.getUnknownRate()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" th:text="${#numbers.formatDecimal(top10.getFPY()*100,1,2)}+'%'"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" ></td>
+			</tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO10Machine_no').size()} < '1'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd" th:if="${FPYTOP5No.get('NO10Machine_no').size()} < '2'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO10Machine_no').size()} < '3'">
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO10Machine_no').size()} < '4'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+            <tr class="bordertd"  th:if="${FPYTOP5No.get('NO10Machine_no').size()} < '5'" >
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">&nbsp;</td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+				<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+            </tr>
+		</table>
+
+
+
+</div>
+</div>
+
+</body>
+
+
+
+<script type="text/javascript">
+
+    $('#midetecttable').mouseover(function () {
+        $('#midetecttable').unbind('mouseover');
+    })
+    /* 标题导航栏jq */
+    $(function () {
+        $('[js-tab=3]').tab({
+            curDisplay: 1,/* 默认div第一位标题 */
+        });
+    });
+
+ 	/*$(document).on('click','.FailQ',function () {
+		alert("js原生");
+    })*/
+    /* MACHINENO*/
+	function Machineno(no){
+	    var Floorname=document.getElementById('Floorname').innerText;
+        var Linename=document.getElementById('Linename').innerText;
+        var TimeDayFail= document.getElementById('TimeDayFail').innerText;
+        var td= $(no).find("td");
+        var Linename_M =td.eq(0).text();
+        var Machinenos =td.eq(1).text();
+        var url ='/shopfloorcontrol/MidetectFailQ';
+        $.ajax({
+            type:'Get',
+            data:{ Linename_M:Linename_M,MachineNo:Machinenos,Floorname:Floorname,Linename:Linename ,TimeDayFail:TimeDayFail},
+            async:false,
+            url:url,
+			dataType:'json',
+            success:function (data) {
+              var  MachinenFail=data;
+              var  FailList=MachinenFail.MidetectFailList;
+              var  FailJson=MachinenFail.MidetectJson;
+              var  FailJsonList= JSON.parse(FailJson);
+
+                var str="";
+                str+= "<td class='center'   style='word-wrap: break-word;max-width: 10px;width: 122px;white-space: inherit;' >"+MachinenFail.MachineNo+"</td>";
+                document.getElementById("FailQTabletr").innerHTML=str;
+                var strtd="";
+                strtd+="<td class='center'  style='width: 133px;' >"+MachinenFail.MidetectFailsum+"</td>";
+                document.getElementById("FailQTabletr2").innerHTML=strtd;
+                var strs="";
+                for (var i = 0; i <FailJsonList.length; i++) {
+                    strs+="<tr class='bordertd' style='border-top: 0;'>"+
+								"<td title='"+FailJsonList[i].fAIL_ITEM+"' style='width:66%;' class='contant'>"+FailJsonList[i].fAIL_ITEM+"</td>"+
+								"<td style='width:20%;'  class='center' >"+FailJsonList[i].fAIL_QTY+"</td>"+
+								"<td style='width:20%;'  class='center'>更換設備</td>"+
+						   "</tr>";
+                    document.getElementById("FailQTabletr3").innerHTML=strs;
+                }
+            }
+
+        })
+	}
+
+</script>
+</html>

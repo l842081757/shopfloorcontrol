@@ -1,0 +1,166 @@
+
+server:
+################
+### 内置Tomcat配置
+################
+   port: 8089
+   servlet:
+     context-path: /shopfloorcontrol
+   tomcat:
+      uri-encoding: UTF-8
+     # 配置最小线程数
+      min-spare-threads: 20
+      # 配置最大线程数
+      max-threads: 100
+   connection-timeout: 5000
+debug: true
+spring:
+###############
+### 热部署
+###############
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+  freemarker:
+    cache: false    #页面不加载缓存，修改即时生效
+###############
+### 数据库配置
+###############
+  datasource:
+
+      ##mysql
+      #name: mysql
+      #url: jdbc:mysql://10.199.6.222:3309/test
+      #username: root
+      #password: tfb45966
+      #driver-class-name: com.mysql.jdbc.Driver-->
+      ##oracle
+      name: oracle
+      username: F3102565
+      password: 123
+      url: jdbc:oracle:thin:@10.195.227.239:1526:ZMLBAUTO
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      type: com.alibaba.druid.pool.DruidDataSource
+###############
+### druid数据源
+###############
+      druid:
+        # 下面为连接池的补充设置，应用到上面所有数据源中
+        # 初始化大小，最小，最大
+        initial-size: 5
+        min-idle: 5
+        max-active: 20
+        # 配置获取连接等待超时的时间
+        max-wait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        time-between-eviction-runs-millis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        min-evictable-idle-time-millis: 300000
+        validation-query: SELECT 1 FROM DUAL
+        test-while-idle: true
+        test-on-borrow: false
+        test-on-return: false
+        # 打开PSCache，并且指定每个连接上PSCache的大小
+        pool-prepared-statements: true
+        #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        max-pool-prepared-statement-per-connection-size: 20
+        filters: stat,wall
+        use-global-data-source-stat: true
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        # 配置监控服务器
+        stat-view-servlet:
+          login-username: admin
+          login-password: 123456
+          reset-enable: false
+          url-pattern: /druid/*
+          # 添加IP白名单
+          #allow:
+          # 添加IP黑名单，当白名单和黑名单重复时，黑名单优先级更高
+          #deny:
+###############
+### druid过滤器
+###############
+        web-stat-filter:
+          # 添加过滤规则
+          url-pattern: /*
+          # 忽略过滤格式
+          exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+###############
+###FREEMARKER
+###############
+  #Freemarker配置
+  #freemarker:
+    #allow-request-override: false
+    #cache: true
+   # check-template-location: true
+   # charset: UTF-8
+   # content-type: text/html
+   # expose-request-attributes: false
+   # expose-session-attributes: false
+   # expose-spring-macro-helpers: false
+    #spring.freemarker.request-context-attribute=
+    #spring.freemarker.settings.*=
+    #spring.freemarker.prefix=
+    #spring.freemarker.suffix=.ftl
+    #suffix: .ftl
+    #template-loader-path: classpath:/templates/
+    #comma-separated list
+    #spring.freemarker.view-names= # whitelist of view names that can be resolved
+###############
+### 文件上传设置
+###############
+  servlet.multipart:
+    # 上传文件总的最大值
+    max-request-size: 10MB
+    # 单个文件的最大值
+    max-file-size: 10MB
+
+###############
+### jsp
+###############
+  mvc:
+    view:
+      prefix: /jsp/
+      suffix: .jsp
+  http:
+    encoding.charset: UTF-8
+    encoding.force: true
+    encoding.enabled: true
+####################
+### thymeleaf
+####################
+  thymeleaf:
+    mode: LEGACYHTML5  #HTML5
+    encoding: UTF-8
+#开发时关闭缓存,不然没法看到实时页面
+    cache: false
+    servlet:
+      content-type: text/html
+####################
+### mybatis 配置
+####################
+mybatis:
+  type-aliases-package: com.shop.dao       #实例类包地址
+  mapper-locations: classpath*:mapping/*.xml  #classpath就是应用程序resources的路径
+#########################
+### pagehelper分页插件配置
+#########################
+pagehelper:
+  helperDialect: oracle
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+############
+### sql日志
+############
+logging:
+  level:
+    com.shop.dao: debug
+    org.springframework.boot.autoconfigure: ERROR
+
+###############
+### pagehelp
+###############
+
+

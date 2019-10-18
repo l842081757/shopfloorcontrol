@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<title>设备监控追踪</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link th:href="@{/style/css/bootstrap.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap.min.css" />
+	<link th:href="@{/style/css/bootstrap-responsive.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap-responsive.min.css" />
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" />
+	<link th:href="@{/style/css/select2.css}"  rel="stylesheet" href="../../static/style/css/select2.css" />
+	<link th:href="@{/style/css/matrix-style.css}"  rel="stylesheet" href="../../static/style/css/matrix-style.css" />
+	<link th:href="@{/style/css/matrix-media.css}"  rel="stylesheet" href="../../static/style/css/matrix-media.css" />
+	<link th:href="@{/style/font-awesome/css/font-awesome.css}" href="../../static/style/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+	<link th:href="@{/css/tables2.css}" rel="stylesheet" href="../../static/css/tables2.css" type="text/css" />
+	<link th:href="@{/css/zane-calendar.css}" rel="stylesheet" href="../../static/css/zane-calendar.css" type="text/css" />
+	<script th:src="@{/js/jquery-3.1.1.min.js}" src="../../static/js/jquery-3.1.1.min.js" type="text/javascript" ></script>
+	<script th:src="@{/style/js/jquery-1.4.4.min.js}" src="../../static/style/js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/style/js/jquery.dataTables.min.js}"  src="../../static/style/js/jquery.dataTables.min.js"></script>
+	<script th:src="@{/style/js/jquery.min.js}"  src="../../static/style/js/jquery.min.js"></script>
+	<script th:src="@{/style/js/jquery.ui.custom.js}"  src="../../static/style/js/jquery.ui.custom.js"></script>
+	<script th:src="@{/style/js/jquery.uniform.js}"  src="../../static/style/js/jquery.uniform.js"></script>
+	<script th:src="@{/style/js/bootstrap.min.js}"  src="../../static/style/js/bootstrap.min.js"></script>
+	<script th:src="@{/style/js/select2.min.js}"  src="../../static/style/js/select2.min.js"></script>
+	<script th:src="@{/style/js/matrix.js}"  src="../../static/style/js/matrix.js"></script>
+	<script th:src="@{/js/matrix.tables.js}"  src="../../static/style/js/matrix.tables.js"></script>
+	<script th:src="@{/js/mt-tabpage.js}"  type="text/javascript" src="../../static/js/mt-tabpage.js"></script>
+	<script th:src="@{/js/tables2.js}" src="../../static/js/tables2.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/echarts.js}" src="../../static/js/echarts.js" type="text/javascript" charset="UTF-8"></script>
+	<script th:src="@{/js/echarts-auto-tooltip.js}" src="../../static/js/echarts-auto-tooltip.js" type="text/javascript" charset="UTF-8"></script>
+	<script th:src="@{/js/zane-calendar.js}" src="../../static/js/zane-calendar.js" type="text/javascript" charset="UTF-8"></script>
+</head>
+<body>
+<!-- 顶部  -->
+<div id="header">
+	<ul>
+		<li style="float: left;">
+			<div id="">
+				<span class="top_title">Thales&nbsp;&nbsp;CN/ZZ/D/D073F<span th:text="${FloorName}"></span></span>
+			</div>
+		</li>
+		<li  style="float:right;">
+			<div class="top_div">
+				<img th:src="@{/static/img/shijian.png}"   style="height: 20px;width: 20px;float: left;margin-top: 5px;margin-right: -20px;">
+				<span class="top_span top_title" id="datespan"></span>
+			</div>
+		</li>
+	</ul>
+</div>
+<!-- 左侧导航栏 -->
+<div id="sidebar">
+	<div style="height:80px;width: 30px;">
+		<i id="shrink" class="icon-arrow-left ulshrink"   onclick="ulshrink()"></i>
+		<i id="unfold" class="icon-th-list ulunfold" onclick="ulunfold()"></i>
+	</div>
+	<ul id="left-ul" style="margin-left: -150px;">
+		<li class="submenu licontent" style="display: none">
+		</li>
+		<li  class="submenu licontent">
+			<a href="#"><img  th:src="@{/static/img/dingwei_1.png}"    style="width: 18px; height: 18px;margin-right: 8px"><span></span>實時總覽<span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{/Allfloordata}" >樓層健康状况</a></li>
+				<li><a th:href="@{/AllFloorsFacilityFitness}">樓層健康可視化</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent">
+			<a><i class="icon-search"></i><span>智能盤點</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10002'}" class="">主板盤點</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent open active"><a>
+			<i class="icon-group"></i><span>人員管理</span></a>
+			<ul style="border-top: 2px solid #478CB1">
+				<li><a  th:href="@{'/AllfloorOPissue'}" style="color: #65A5E2;">OP ISSUE</a></li>
+			</ul>
+		</li>
+
+		<li class="licontent"><a> <i class="icon-glass"></i><span>品質管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-briefcase"></i><span>成本管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-bell"></i><span>報警中心</span></a></li>
+		<li class="submenu licontent">
+			<a href="#"><i class="icon-cog"></i> <span></span>設置<span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10061'}" class="">資料維護</a></li>
+				<li><a th:href="@{'http://10.210.57.13:10001'}" class="">自動化Cell實時數據</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- 右侧数据列表 -->
+<div id="content" style="margin-left: 40px;">
+	<!-- Modal1 -->
+	<div class="modal fade" id="myModal"style="width: 650px;position: absolute;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="flase">
+		<div class="modal-dialog">
+
+			<div class="modal-content">
+				<div style="background-color: #2196f3a1;height: 40px;width: 100%"><span class="center" id="opissuetitle" style="font-size: 16px;padding-left: 215px !important;"></span></div>
+				<div  style="overflow: scroll; max-height:350px;height:350px;overflow-x: hidden;">
+					<table  width="100%">
+
+						<tr  style="background-color: #fff">
+							<td class="center" style="width:100%;border-bottom: 1px solid;">
+								<table width="100%" >
+								<td class="center" style="width: 30%;border-right: 1px solid;">SN</td>
+							<td class="center" style="width: 20%;border-right: 1px solid;">異常內容</td>
+							<td class="center" style="width: 30%;border-right: 1px solid;">異常時間</td>
+							<td class="center" style="width: 20%;">異常機台</td>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td class="center" style="width: 80%;">
+								<table width="100%" id="opissuetab">
+								</table>
+							</td>
+						</tr>
+					</table>
+					<div style="height:10px;width: 100%;" id="pagenum">
+					</div>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<div style="height: 30px;width:95%;padding-top: 10px;">
+		<h4 style="text-align: center;margin-top: 10px;"><img th:src="@{/static/img/dingwei_1.png}" style="width: 24px; height: 24px;margin-right: 10px;">OP  Issue Tracking</h4>
+	</div>
+	<div style="padding-left: 20px;"><p>Remark:0＜異常＜2筆時，黃色預警；異常≥2筆時，紅色預警</p></div>
+	<div id="facilitybar" style="width:79%;height:260px;margin-top: 20px;border: 1px solid;margin-left: 20px"></div>
+
+	<!-- 表切换导航-->
+	<div class="table-responsive" style="overflow: scroll;width:100%;padding: 10px 0px 0 20px;">
+		<!-- 表格标题-->
+	<div><p>Remark:&nbsp;停線顯示灰色,0＜異常＜2筆時，黃色預警；異常≥2筆時，紅色預警</p></div>
+
+		<div style="width: 75%;height: 30px">
+			<form action="#" th:action="@{/AllfloorOPissueSelect}" method="post">
+				<label style="float: left;"><span>開始時間:&nbsp;</span><input   style="margin: 0px;" name="dateinput1" id="zane-input1" type="text" class="input"  th:placeholder="${dateinput1==null ?'yyyy/MM/dd':dateinput1}" th:value="${dateinput1}" ></label>
+				<button style="float: right" class="btn" type="submit" onclick="formon()">搜索</button>
+				<label style="float: right;margin-right: 200px;"><span>結束時間:&nbsp;</span><input name="dateinput2" style="margin: 0px;" id="zane-input2" type="text" class="input" th:placeholder="${dateinput2==null ?'yyyy/MM/dd':dateinput2}" th:value="${dateinput2}"></label>
+			</form>
+
+		</div>
+		<table id="capacitytab" style="width:80%;border-collapse: separate;border-spacing: 0px 8px;" class="table">
+			<tr style="box-shadow: #9E9E9E 2px 1px 7px 0px;border-radius: 5px;">
+				<td class="center facility_border">機種</td>
+				<td class="centers center facility_border" style="box-shadow: #9E9E9E 2px 1px 7px 0px;">線體</td>
+				<td class="center facility_border">TTL Q’ty</td>
+				<td class="center facility_border">投首漏掃描</td>
+				<td class="center facility_border">漏測</td>
+				<td class="center facility_border">混測</td>
+				<td class="center facility_border">確認模式異常</td>
+				<td class="center facility_border">SN掃描錯誤</td>
+				<td class="center facility_border">工號無權限</td>
+				<td class="center facility_border">機台號錯誤</td>
+
+			</tr>
+			<tr  th:each="OP : ${OPIssueList}" style="box-shadow: #9E9E9E 2px 1px 7px 0px;border-radius: 5px;">
+				<td class="center facility_border" th:text="${OP.getProduct()}"  th:style="${OP.getAreaint()==1 ? 'color:#999;':'color: black'}"></td>
+				<td width="20%"class="center facility_border" th:text="${OP.getLineName()}" th:style="${OP.getAreaint()==1 ? 'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;color:#999;':'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;'}">ARF01</td>
+				<td  th:style="${OP.getError_TypeTTL()>=2 ?'background-color: #d64c4c;':'display: none;'}"  th:onclick="Machineno([[${OP.getLineName()}]])" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal">
+					<span th:text="${OP.getError_TypeTTL()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td  th:style="${OP.getError_TypeTTL()>0 && OP.getError_TypeTTL()<2 ?'background-color: #f9d830;':'display: none;'}"  th:onclick="Machineno([[${OP.getLineName()}]])" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal">
+					<span th:text="${OP.getError_TypeTTL()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td  th:style="${OP.getError_TypeTTL()==0 ? '':'display: none;'}"  th:onclick="Machineno([[${OP.getLineName()}]])" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal">
+					<span th:text="${OP.getError_TypeTTL()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OP.getError_TypeNo2()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OP.getError_TypeNo3()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border" >
+					<span th:text="${OP.getError_TypeNo4()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border" >
+					<span th:text="${OP.getError_TypeNo5()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border" >
+					<span th:text="${OP.getError_TypeNo6()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OP.getError_TypeNo7()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OP.getError_TypeNo8()}" th:style="${OP.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+			</tr>
+		</table>
+		<table id="capacitytabMac" style="width:80%;border-collapse: separate;border-spacing: 0px 8px;" class="table">
+			<tr> <td colspan="12" style="padding: 0px"><hr style="height: 1px;border-top: 1px solid #9E9E9E;margin: 0;"/></td></tr>
+			<tr  th:each="OPMacan : ${OPIssueListMacan}" style="box-shadow: #9E9E9E 2px 1px 7px 0px;border-radius: 5px;">
+				<td class="center facility_border" th:text="${OPMacan.getProduct()}"  th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':'color: black'}"></td>
+				<td width="20%"class="center facility_border" th:text="${OPMacan.getLineName()}" th:style="${OPMacan.getAreaint()==1 ? 'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;color:#999;':'box-shadow: #9E9E9E 2px 1px 7px 0px;background-color: #a9b3e8;'}">ARF01</td>
+				<td  th:style="${OPMacan.getError_TypeTTL()>=2 ?'background-color: #d64c4c;':'display: none;'}"  th:onclick="Machineno([[${OPMacan.getLineName()}]])" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal">
+					<span th:text="${OPMacan.getError_TypeTTL()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td  th:style="${OPMacan.getError_TypeTTL()>0 && OPMacan.getError_TypeTTL()<2 ?'background-color: #f9d830;':'display: none;'}"  th:onclick="Machineno([[${OPMacan.getLineName()}]])" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal">
+					<span th:text="${OPMacan.getError_TypeTTL()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td  th:style="${OPMacan.getError_TypeTTL()==0 ? '':'display: none;'}"  th:onclick="Machineno([[${OPMacan.getLineName()}]])" width="9%" class="center facility_border" data-toggle="modal" data-target="#myModal">
+					<span th:text="${OPMacan.getError_TypeTTL()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OPMacan.getError_TypeNo2()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OPMacan.getError_TypeNo3()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border" >
+					<span th:text="${OPMacan.getError_TypeNo4()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border" >
+					<span th:text="${OPMacan.getError_TypeNo5()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border" >
+					<span th:text="${OPMacan.getError_TypeNo6()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OPMacan.getError_TypeNo7()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+				<td width="9%" class="center facility_border">
+					<span th:text="${OPMacan.getError_TypeNo8()}" th:style="${OPMacan.getAreaint()==1 ? 'color:#999;':''}">0</span>
+				</td>
+			</tr>
+
+			<tr style="box-shadow: #9E9E9E 2px 1px 7px 0px;border-radius: 5px;">
+				<td  colspan="2" class="centers center facility_border" style="box-shadow: #9E9E9E 2px 1px 7px 0px;">TTL</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL')}">0</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL2')}">0</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL3')}">0</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL4')}">0</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL5')}">0</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL6')}">0</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL7')}">0</td>
+				<td class="center facility_border" th:text="${error_TTLMap.get('errorTypeTTL8')}">0</td>
+
+			</tr>
+
+		</table>
+	</div>
+	</div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    (function () {
+        facilitybar();
+    })();
+    function facilitybar() {
+        var echartsShow1 = echarts.init(document.getElementById('facilitybar'));
+        var	option = {
+            legend: {},
+            tooltip:{
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    //dataView : {readOnly:false},
+                    //magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+				    //magicType : {show: true, type: [ 'tiled','stack']},
+                    //restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Sep','Oct-Week1','10/17','10/18'],
+            },
+            yAxis: {},
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default.
+            color:[
+                function(){
+                    var dates  = [[${error_TTLMap.get('errortypesum30day')}]];
+                    if(dates>0&&dates<=2){
+                        return "#f9d830";/* 黄 */
+                    }else if(dates>2){
+                        return "#c23531";/* 红 */
+                    }else if (dates<=0) {
+                        return '#2196F3';
+                    }
+                },
+                function(){
+                    var dates  = [[${error_TTLMap.get('errortypesum7day')}]];
+                    if(dates>0&&dates<=2){
+                        return "#f9d830";/* 黄 */
+                    }else if(dates>2){
+                        return "#c23531";/* 红 */
+                    }else if (dates<=0) {
+                        return '#2196F3';
+                    }
+                },
+                function(){
+                    var dates  = [[${error_TTLMap.get('errortypesumYesterday')}]];
+                    if(dates>0&&dates<=2){
+                        return "#f9d830";/* 黄 */
+                    }else if(dates>2){
+                        return "#c23531";/* 红 */
+                    }else if (dates<=0) {
+                        return '#2196F3';
+                    }
+                },
+                function(){
+                    var dates  = [[${error_TTLMap.get('errortypeOneDaysum')}]];
+                    if(dates>0&&dates<=2){
+                        return "#f9d830";/* 黄 */
+                    }else if(dates>2){
+                        return "#c23531";/* 红 */
+                    }else if (dates<=0) {
+                        return '#2196F3';
+                    }
+                }
+			],
+            series: [{
+                name: 'OP Issue',
+                type: 'bar',
+                data: [ [[${error_TTLMap.get('errortypesum30day')}]],[[${error_TTLMap.get('errortypesum7day')}]],[[${error_TTLMap.get('errortypesumYesterday')}]],[[${error_TTLMap.get('errortypeOneDaysum')}]] ],
+                label:{
+                    show: true,//开启显示
+                    position: 'top',
+                    textStyle: {
+                        //数值样式
+                        color: '#000',
+                        fontSize: 14
+                    }
+                }
+            }
+            ]
+        };
+
+        /* echartsShow1.showLoading();*/
+        echartsShow1.setOption(option);
+        tools.loopShowTooltip(echartsShow1,option,{loopSeries: true});
+    }
+</script>
+
+<!-- 柱状图 -->
+<script type="text/javascript">
+    $('#facilitytable').mouseover(function () {
+        $('#facilitytable').unbind('mouseover');
+    })
+   /* $.ajax({type:"get",url:"/Ajaxs/echartsshow",dataType:"json",data:{},
+        success:function (backData){
+            var xAdata = Array();
+            var yAdata = Array();
+            /!* for(var i=0;i<backData.length;i++){
+            xAdata=	backData.valueOf();
+
+            } *!/
+            $(backData).each(function(index){
+                xAdata.push($(this).attr("S_name"));
+                yAdata.push($(this).attr("S_id"));
+            })
+            echartsShow1.hideLoading();
+            echartsShow1.setOption ({
+                xAxis: {
+                    data:xAdata
+                },
+                yAxis:{
+
+                },
+                series:[{
+                    name:'id',
+                    data:yAdata
+                }
+                ]
+            })
+        },error:function (){
+
+            echartsShow1.setOption("...");
+        }
+    })*/
+</script>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+    zaneDate({
+        elem:'#zane-input1',
+        max: '2019-10-18',
+        min:'2019-10-11',
+        format:'yyyy-MM-dd',
+        //可选取时间最小范围 1900-10-01
+        //elem:'#zane-calendar',  控件的dom原生 注意：仅限制于id选择器（必填参，其他参数皆为可选参）
+		//type:'day',   			可选类型 day year month time doubleday doubleyear doublemonth doubletime
+		//lang:'cn',   			可选择语言类型 cn , en
+		//width:280,  			插件宽度配置   250 <= X <= 500
+		//height:300, 			插件高度配置   250 <= X <= 350
+		//behindTop:10,   		插件与输入框的距离
+		//format:'yyyy-MM-dd HH:mm:ss',  时间格式化
+		//begintime:'',  			开始时间  （单选择器默认选择此项）
+		//endtime:'',             结束时间  （double选择器需要）
+		//min:'',  				可选取时间最小范围 1900-10-01
+		//max: '',  				可选取时间最大范围 2099-12-31
+		//position:'fixed',  		定位方式  暂时只支持 fixed
+		//event:'click',   		事件方式 暂时只支持 click
+		//zindex:100,   			z-index值
+		//showtime:true,  		是否显示选择时间
+		//showclean:true,  		是否显示清除按钮
+		//shownow:true,  			是否显示当前按钮
+		//showsubmit:true, 		是否显示提交按钮
+		//haveBotBtns:true, 		是否有底部按钮列表
+		//mounted:()=>{}, 		插件加载完成之后调用
+		//change:(fulltime,begintime,endtime)=>{}, 时间变更之后调用
+		//done:(fulltime,begintime,endtime)=>{},   选择完成之后调用
+    })
+    zaneDate({
+        elem:'#zane-input2',
+        max: '2019-10-18',
+        min:'2019-10-11',
+        format:'yyyy-MM-dd',//可选取时间最小范围 1900-10-01
+    })
+    /*]]>*/
+    /* 标题导航栏jq */
+    $(function () {
+        $('[js-tab=3]').tab({
+            curDisplay: 1,/* 默认div第一位标题 */
+        });
+    });
+
+    function Machineno(a){
+        //var Floorname=document.getElementById('Floorname').innerText;
+        //var Linename=document.getElementById('Linename').innerText;
+        //var TimeDayFail= document.getElementById('TimeDayFail').innerText;
+        //var td= $(no).find("td");
+        var Linename_M =a;
+        //var pageaction=b;
+
+        var url ='/shopfloorcontrol/OPISSUEAjax';
+        $.ajax({
+            type:'Get',
+            data:{ Linename_M:Linename_M},
+            async:false,
+            url:url,
+            dataType:'json',
+            success:function (data) {
+                var  OpIssue=data;
+                var  OpIssueList= OpIssue.OPISSUESJson;
+                var  str="";
+                str+="<td colspan='4' style='font-size: 15px;'  class='centers center'>OP Issue分板"+"-"+Linename_M+"</td>"
+                document.getElementById("opissuetitle").innerHTML=str;
+
+                var  OpIssueListJsonbean= JSON.parse(OpIssueList);
+                var  OpIssueListJson=OpIssueListJsonbean.list;
+                var strs="";
+                for (var i = 0; i <OpIssueListJson.length; i++) {
+                    strs+="<tr class='bordertd' style='border-top: 0;'>"+
+                        "<td style='width:30%;border-right: 1px solid;' class='centers center'>"+OpIssueListJson[i].sn+"</td>"+
+                        "<td style='width:20%;border-right: 1px solid;' class='centers center'>"+OpIssueListJson[i].errordetailed+"</td>"+
+                        "<td style='width:30%;border-right: 1px solid;'  class='centers center'>"+new Date(parseInt(OpIssueListJson[i].inputDatetime)).toLocaleString()+"</td>"+
+                        "<td style='width:20%;' class='centers center'>"+OpIssueListJson[i].machineNo+"</td>"+
+                        "</tr>";
+                }
+                document.getElementById("opissuetab").innerHTML=strs;
+            }
+        })
+    }
+	function formon() {
+        var input1=$('#zane-input1').val();
+        var input2=$('#zane-input2').val();
+        if (input1==""&&input2==""){
+            alert("日期不能為空");
+            location.reload([bForceGet]);
+            //location.replace(document.referrer);
+		}
+
+
+    }
+
+
+</script>
+</html>

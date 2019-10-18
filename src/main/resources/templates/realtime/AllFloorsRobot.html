@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<title>Robot</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link th:href="@{/style/css/bootstrap.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap.min.css" />
+	<link th:href="@{/style/css/bootstrap-responsive.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap-responsive.min.css" />
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" />
+	<link th:href="@{/style/css/select2.css}"  rel="stylesheet" href="../../static/style/css/select2.css" />
+	<link th:href="@{/style/css/matrix-style.css}"  rel="stylesheet" href="../../static/style/css/matrix-style.css" />
+	<link th:href="@{/style/css/matrix-media.css}"  rel="stylesheet" href="../../static/style/css/matrix-media.css" />
+	<link th:href="@{/style/font-awesome/css/font-awesome.css}" href="../../static/style/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+	<link th:href="@{/css/tables2.css}" rel="stylesheet" href="../../static/css/tables2.css" type="text/css" />
+	<script th:src="@{/js/jquery-3.1.1.min.js}" src="../../static/js/jquery-3.1.1.min.js" type="text/javascript" ></script>
+	<script th:src="@{/style/js/jquery-1.4.4.min.js}" src="../../static/style/js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/style/js/jquery.dataTables.min.js}"  src="../../static/style/js/jquery.dataTables.min.js"></script>
+	<script th:src="@{/style/js/jquery.min.js}"  src="../../static/style/js/jquery.min.js"></script>
+	<script th:src="@{/style/js/jquery.ui.custom.js}"  src="../../static/style/js/jquery.ui.custom.js"></script>
+	<script th:src="@{/style/js/jquery.uniform.js}"  src="../../static/style/js/jquery.uniform.js"></script>
+	<script th:src="@{/style/js/bootstrap.min.js}"  src="../../static/style/js/bootstrap.min.js"></script>
+	<script th:src="@{/style/js/select2.min.js}"  src="../../static/style/js/select2.min.js"></script>
+	<script th:src="@{/style/js/matrix.js}"  src="../../static/style/js/matrix.js"></script>
+	<script th:src="@{/js/matrix.tables.js}"  src="../../static/style/js/matrix.tables.js"></script>
+	<script th:src="@{/js/mt-tabpage.js}"  type="text/javascript" src="../../static/js/mt-tabpage.js"></script>
+	<script th:src="@{/js/tables2.js}" src="../../static/js/tables2.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<!-- 顶部  -->
+<div id="header">
+	<ul>
+		<li style="float: left;">
+			<div id="">
+				<span class="top_title">Thales&nbsp;&nbsp;CN/ZZ/D/<span id="Floorname" th:text="${FloorName}">D07-3F</span></span>
+			</div>
+		</li>
+		<li  style="float:right;">
+			<div class="top_div">
+				<img th:src="@{/static/img/shijian.png}"   style="height: 20px;width: 20px;float: left;margin-top: 5px;margin-right: -20px;">
+				<span class="top_span top_title" id="datespan"></span>
+			</div>
+
+		</li>
+	</ul>
+</div>
+<!-- 左侧导航栏 -->
+<div id="sidebar">
+	<div style="height:80px;width: 30px;">
+		<i id="shrink" class="icon-arrow-left ulshrink"   onclick="ulshrink()"></i>
+		<i id="unfold" class="icon-th-list ulunfold" onclick="ulunfold()"></i>
+	</div>
+	<ul id="left-ul" style="margin-left: -150px;">
+		<li  class="submenu licontent open">
+			<a href="#"><img  th:src="@{/static/img/dingwei_1.png}"    style="width: 18px; height: 18px;margin-right: 8px"><span></span>實時總覽<span class="label label-important"></span></a>
+			<ul style="border-top: 2px solid #478CB1">
+                <li><a th:href="@{/Allfloordata}" style="color: #65A5E2;">樓層健康状况</a></li>
+                <li><a th:href="@{/AllFloorsFacilityFitness}">樓層健康可視化</a></li>
+				<!--<li><a href="javascript:" class="">產能狀況</a></li>
+				<li><a href="javascript:" class="">測試機臺</a></li>
+				<li><a href="javascript:" class="">Robot</a></li>
+				<li><a href="javascript:" class="">PD設備</a></li>-->
+			</ul>
+		</li>
+		<li class="submenu licontent">
+			<a><i class="icon-search"></i><span>智能盤點</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10002'}" class="">主板盤點</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent"><a>
+			<i class="icon-group"></i><span>人員管理</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a  th:href="@{'/AllfloorOPissue'}" >OP ISSUE</a></li>
+			</ul>
+		</li>
+
+		<li class="licontent"><a> <i class="icon-glass"></i><span>品質管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-briefcase"></i><span>成本管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-bell"></i><span>報警中心</span></a></li>
+		<li class="submenu licontent">
+			<a href="#"><i class="icon-cog"></i> <span></span>設置<span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10061'}" class="">資料維護</a></li>
+				<li><a th:href="@{'http://10.210.57.13:10001'}" class="">自動化Cell實時數據</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- 右侧数据列表 -->
+<div id="content" style="margin-left: 40px;">
+	<div style="height: 30px;width:95%;padding-top: 10px;">
+			<h4 style="text-align: center;margin-top: 10px;"><img th:src="@{/static/img/dingwei_1.png}" style="width: 24px; height: 24px;margin-right: 10px;">Robot</h4></span></h4>
+		<!-- 分类 -->
+		<div>
+			<ul class="tabul" style="float: left;margin-top: -12px;">
+				<li style="color: #02a4ec;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+				<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+				<li></li>
+			</ul>
+
+		<!-- 表切换导航-->
+		<ul style="margin-top: -20px;float: right;width: 12%;margin-bottom: 20px;">
+		</ul>
+		</div>
+	</div>
+
+	<!-- 表切换导航-->
+	<div style="margin-top:40px;overflow: scroll;width: 1280px;;padding: 0 0px 0 20px;overflow-y: hidden;">
+		<table id="capacitytab" style="width:  1800px;;float: left;margin: 0px;border-bottom: 1px solid #2e363f26;" class="table table-striped">
+			<tr></tr>
+			<tr class="tabtitle1" style=" background:#FDEE68;font-family: fantasy;font-size: 14px;">
+				<td class="center border_right" style="width: 130px;">線體</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">TTL</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">AP Cell</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">S1 Cell-1</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">S1 Cell-2</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">S1 Cell-3</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">WF Cell-1</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">WF Cell-2</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">WF Cell-3</td>
+				<td class="center border_right" style="width: 170px;" colspan="3">WF Cell-4</td>
+			</tr>
+			<tr></tr>
+			<tr class="tabtitle2 actives" style="color: #333;background:#CBF7E4;border-bottom: 1px solid #ddd;">
+				<td class="center border_right" >偏位</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center border_right" >待板率</td>
+				<td class="center" >偏位次數</td>
+				<td class="center" >偏位機故率</td>
+				<td class="center" >待板率</td>
+			</tr>
+
+			<!--DFU-->
+			<tr class="">
+				<td class="center border_right" >TTL</td>
+				<td class="center" th:text="${TTLMap.get('TTLLinenameNoNormalSum')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLLinenameNoNormalRate')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLLinenamePlateRate')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumA')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateA')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateA')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumB')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateB')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateB')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumC')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateC')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateC')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumD')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateD')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateD')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumE')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateE')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateE')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumF')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateF')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateF')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumG')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateG')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center border_right" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateG')*100,1,2)}+'%'">待板率</td>
+
+				<td class="center" th:text="${TTLMap.get('TTLAnonormalsumH')}">偏位次數</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLANoNormalRateH')*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:text="${#numbers.formatDecimal(TTLMap.get('TTLAPlateRateH')*100,1,2)}+'%'">待板率</td>
+			</tr>
+			<!--FCT-->
+			<tr class="" th:each="wait : ${AutoFloor_Wait_TimeList}">
+				<td class="center border_right" th:text="${wait.getLine_name()}"></td>
+				<td class="center" th:text="${wait.getLineNoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getLineNoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}"
+					th:style="${wait.getLineNoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}"
+					th:text="${ wait.getLineNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getLineNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getLineNoNormalRate()-0.02) > 0 && wait.getLineNoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}"
+					th:style="${wait.getLineNoNormalRate()-0.02 > 0 && wait.getLineNoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}"
+					th:text="${ wait.getLineNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getLineNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getLineNoNormalRate()-0.02) <= 0 ? 'center':'span_none'}"
+					th:text="${ wait.getLineNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getLineNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getLinePlateRate()==null  ? '0.00':#numbers.formatDecimal(wait.getLinePlateRate()*100,1,2)}+'%'">待板率</td>
+				<td class="center"  th:text="${wait.getANoNormalSum()==null ? '0':wait.getANoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getANoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getANoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getANoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getANoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getANoNormalRate()-0.02) > 0 && wait.getANoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getANoNormalRate()-0.02 > 0 && wait.getANoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getANoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getANoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getANoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getANoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getANoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getAPlateRate() ==null ? '0.00':#numbers.formatDecimal(wait.getAPlateRate()*100,1,2)}+'%'">待板率</td>
+
+				<td class="center"  th:text="${wait.getBNoNormalSum()==null ? '0':wait.getBNoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getBNoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getBNoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getBNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getBNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getBNoNormalRate()-0.02) > 0 && wait.getBNoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getBNoNormalRate()-0.02 > 0 && wait.getBNoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getBNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getBNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getBNoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getBNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getBNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getBPlateRate()==null ? '0.00':#numbers.formatDecimal(wait.getBPlateRate()*100,1,2)}+'%'">待板率</td>
+
+				<td class="center"  th:text="${wait.getCNoNormalSum()==null ? '0':wait.getCNoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getCNoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getCNoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getCNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getCNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getCNoNormalRate()-0.02) > 0 && wait.getCNoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getCNoNormalRate()-0.02 > 0 && wait.getCNoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getCNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getCNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getCNoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getCNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getCNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getCPlateRate()==null ? '0.00':#numbers.formatDecimal(wait.getCPlateRate()*100,1,2)}+'%'">待板率</td>
+
+				<td class="center"  th:text="${wait.getDNoNormalSum()==null ? '0':wait.getDNoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getDNoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getDNoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getDNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getDNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getDNoNormalRate()-0.02) > 0 && wait.getDNoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getDNoNormalRate()-0.02 > 0 && wait.getDNoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getDNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getDNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getDNoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getDNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getDNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getDPlateRate()==null ? '0.00':#numbers.formatDecimal(wait.getDPlateRate()*100,1,2)}+'%'">待板率</td>
+
+				<td class="center"  th:text="${wait.getENoNormalSum()==null ? '0':wait.getENoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getENoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getENoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getENoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getENoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getENoNormalRate()-0.02) > 0 && wait.getENoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getENoNormalRate()-0.02 > 0 && wait.getENoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getENoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getENoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getENoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getENoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getENoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getEPlateRate()==null ? '0.00':#numbers.formatDecimal(wait.getEPlateRate()*100,1,2)}+'%'">待板率</td>
+
+				<td class="center"  th:text="${wait.getFNoNormalSum()==null ? '0':wait.getFNoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getFNoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getFNoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getFNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getFNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getFNoNormalRate()-0.02) > 0 && wait.getFNoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getFNoNormalRate()-0.02 > 0 && wait.getFNoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getFNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getFNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getFNoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getFNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getFNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getFPlateRate()==null ? '0.00':#numbers.formatDecimal(wait.getFPlateRate()*100,1,2)}+'%'">待板率</td>
+
+				<td class="center"  th:text="${wait.getGNoNormalSum()==null ? '0':wait.getGNoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getGNoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getGNoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getGNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getGNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getGNoNormalRate()-0.02) > 0 && wait.getGNoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getGNoNormalRate()-0.02 > 0 && wait.getGNoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getGNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getGNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getGNoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getGNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getGNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center border_right" th:text="${wait.getGPlateRate()==null ? '0.00':#numbers.formatDecimal(wait.getGPlateRate()*100,1,2)}+'%'">待板率</td>
+
+				<td class="center"  th:text="${wait.getHNoNormalSum()==null ? '0':wait.getHNoNormalSum()}">偏位次數</td>
+
+				<td class="center" th:class="${(wait.getHNoNormalRate()-0.02) > 0.01 ? 'center':'span_none'}" th:style="${wait.getHNoNormalRate()-0.02 > 0.01 ? 'background-color: #d64c4c':''}" th:text="${ wait.getHNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getHNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getHNoNormalRate()-0.02) > 0 && wait.getHNoNormalRate()-0.02 < 0.01 ? 'center':'span_none'}" th:style="${wait.getHNoNormalRate()-0.02 > 0 && wait.getHNoNormalRate()-0.02 < 0.01 ? 'background-color: #f9d830':''}" th:text="${ wait.getHNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getHNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+				<td class="center" th:class="${(wait.getHNoNormalRate()-0.02) <= 0 ? 'center':'span_none'}" th:text="${ wait.getHNoNormalRate()==null  ? '0.00':#numbers.formatDecimal(wait.getHNoNormalRate()*100,1,2)}+'%'">偏位機故率</td>
+
+				<td class="center" th:text="${wait.getHPlateRate()==null ? '0.00':#numbers.formatDecimal(wait.getHPlateRate()*100,1,2)}+'%'">待板率</td>
+
+			</tr>
+
+		</table>
+
+</div>
+	<div style="padding: 0 0px 0 20px;">
+	<table class="FPYTable"  style="float: none;">
+		<tr class="bordertd" style="background:#FDEE68;height: 39px;"><th colspan="5"><span ></span>偏位機故率高By Cell TOP  5 分析</th></tr>
+		<tr class="bordertd" style="height: 39px;">
+			<td width="10%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">Cell</td>
+			<td width="8%" class="target_td" style="border-right: 1px solid;">偏位次數</td>
+			<td width="8%" class="target_td"style="border-right: 1px solid;">偏位機故率</td>
+			<td width="74%" class="target_td"style="border-right: 1px solid;">位置說明</td>
+
+		</tr>
+		<tr class="bordertd" th:each="top5 : ${RobotTop5List}">
+			<td th:text="${top5.getLine_name()}" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;"></td>
+			<td class="target_td" style="border-right: 1px solid;" th:text="${top5.getAwaitNoNormalSum()}" >0</td>
+			<td class="target_td" style="border-right: 1px solid;" th:text="${#numbers.formatDecimal(top5.getAwaitNoNormalRate()*100,1,2)}+'%'">0.00%</td>
+			<td class="target_td" style="border-right: 1px solid;white-space: nowrap;" th:text="${top5.getSlant_Local()}">0</td>
+		</tr>
+		<!--<tr class="bordertd" th:if=" < '1'">
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="bordertd" th:if="< '2'">
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+        </tr>
+        <tr class="bordertd"  th:if="< '3'">
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="bordertd"  th:if=" < '4'" >
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="bordertd"  th:if=" < '5'" >
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>-->
+	</table>
+	</div>
+</div>
+
+</body>
+
+
+
+<script type="text/javascript">
+
+    /* 标题导航栏jq */
+    $(function () {
+        $('[js-tab=3]').tab({
+            curDisplay: 1,/* 默认div第一位标题 */
+        });
+    });
+
+ 	/*$(document).on('click','.FailQ',function () {
+		alert("js原生");
+    })*/
+    /* MACHINENO*/
+</script>
+</html>

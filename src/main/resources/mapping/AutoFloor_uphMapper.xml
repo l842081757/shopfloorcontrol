@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shop.dao.AutoFloor_uphMapper">
+  <resultMap id="BaseResultMap" type="com.shop.model.AutoFloor_uph">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="FLOOR" jdbcType="VARCHAR" property="floor" />
+    <result column="LINE_NAME" jdbcType="VARCHAR" property="lineName" />
+    <result column="PRODUCT" jdbcType="VARCHAR" property="product" />
+    <result column="STATION_NAME" jdbcType="VARCHAR" property="stationName" />
+    <result column="UPH" jdbcType="DECIMAL" property="uph" />
+    <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="END_TIME" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, TARGET_DATE, T_CLASS, T_FLOOR, LINE_NAME, T_PRODUCT, INPUT_TIME, D_TARGET, WORKING_HOURS,
+    H_TARGET, TYPE_TARGET, T_AREA, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10
+  </sql>
+
+<!-- 某個線體，每個工站的小時產能 （變量：樓層，機種，線體）-->
+<select id="WorkstationOut" resultType="com.shop.model.AutoFloorUphS">
+     <![CDATA[
+    select time_slot,station_name,sum(UPH)UPHS from autofloor_uph where
+    start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time < to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+    and line_name like #{linename}||'%'
+    group by time_slot,station_name  order by time_slot
+    ]]>
+</select>
+  <!-- TTL，每個工站的小時產能 （變量：樓層，機種，線體）-->
+  <select id="TTLWorkstationOut" resultType="com.shop.model.AutoFloorUphS">
+     <![CDATA[
+    select time_slot,station_name,sum(UPH)UPHS from autofloor_uph where
+    start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time < to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+    group by time_slot,station_name  order by time_slot
+    ]]>
+</select>
+<!-- 某個線體，每個工站的小時產能 （變量：樓層，機種，線體）夜班-->
+<select id="WorkstationOutNight" resultType="com.shop.model.AutoFloorUphS">
+    <![CDATA[
+    select time_slot,station_name,sum(UPH)UPHS from autofloor_uph where
+    start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+    and line_name like #{linename}||'%'
+    group by time_slot,station_name  order by time_slot
+    ]]>
+</select>
+<!-- 某個線體，每個工站的小時產能 （變量：樓層，機種，線體）昨日-->
+  <select id="WorkstationOutYesterDay" resultType="com.shop.model.AutoFloorUphS">
+    <![CDATA[
+    select time_slot,station_name,sum(UPH)UPHS from autofloor_uph where
+    start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+    and line_name like #{linename}||'%'
+    group by time_slot,station_name  order by time_slot
+    ]]>
+</select>
+  <!-- TTL，每個工站的小時產能 （變量：樓層，機種，線體）夜班-->
+  <select id="TTLWorkstationOutNight" resultType="com.shop.model.AutoFloorUphS">
+    <![CDATA[
+    select time_slot,station_name,sum(UPH)UPHS from autofloor_uph where
+    start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+
+    group by time_slot,station_name  order by time_slot
+    ]]>
+</select>
+
+<!--  !暂不使用 wip某個線體，每個工站的小時產能 （變量：樓層，機種，線體）-->
+
+    <!--<select id="WorkstationOut_wip" resultType="com.shop.model.WorkstationOut_Wip">
+        select station_name,count(*)station_Uph from autofloor_wip where out_station_time between to_date('${startdate}','YYYY/MM/DD HH24:MI:SS')
+        and to_timestamp('${enddate}','YYYY-MM-DD HH24:MI:SS.ff')
+        and floor='D073F'
+        and product ='Lotus'
+        and line_name like '%'||#{linename}||'%' group by station_name
+    </select>
+    -->
+<!-- !暂不使用 某個線體，每個工站的小時產能 （變量：樓層，機種，線體）表格排列-->
+
+    <!-- <select id="WorkstationOuttext" resultType="com.shop.model.STATION_UPH">
+       select
+          TIME_SLOT,
+          SUM(DECODE(station_name,'DFU',uph))DFU,
+          SUM(DECODE(station_name,'FCT',uph))FCT,
+          SUM(DECODE(station_name,'CELL_S1',uph))CELL_S1,
+          SUM(DECODE(station_name,'CELL_S2',uph))CELL_S2,
+          SUM(DECODE(station_name,'CELL_S3',uph))CELL_S3,
+          SUM(DECODE(station_name,'CCT_COMBO',uph))CCT_COMBO,
+          SUM(DECODE(station_name,'WIFI/BT_W1',uph))WIFIBT_W1,
+          SUM(DECODE(station_name,'WIFI/BT_W2',uph))WIFIBT_W2,
+          SUM(DECODE(station_name,'UWB',uph))UWB,
+          SUM(DECODE(station_name,'SCOND',uph))SCOND
+          from (select time_slot,station_name,sum(UPH)as uph from autofloor_uph where start_time between to_date
+       ('${startdata} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+       and to_date('${startdata} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+       and floor='D073F'
+       and product ='Lotus'
+       and line_name like '%'||#{linename}||'%'
+       group by time_slot,station_name  order by time_slot) test
+       group by TIME_SLOT
+     </select>
+    -->
+
+<!--  某個線體的工站的機台數量( 變量：樓層，機種，線體，工站)-->
+<select  id="Workstationamount" resultType="int">
+  select  count(*) from
+  (select  Line_name, machine_no ,count(*) from AUTOFLOOR_MACHINE_DETAIL where
+  T_floor=#{Floorname}
+  and LINE_NAME like #{linename}||'%'
+  and station_name = #{statio_name}
+  group by Line_name, machine_no)
+</select>
+<!-- 统计现机台工作数量 -->
+<select id="MachinaeActionSum" resultType="int">
+  <![CDATA[
+select count(*) from
+  (select  Line_Name, machine_no,count(*) from autofloor_uph_machine where
+  start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time <to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor}
+  and LINE_NAME like #{linename}||'%'
+  and station_name = #{statio_name}
+  group by Line_Name, machine_no)
+
+    ]]>
+</select>
+  <!-- 统计夜班机台工作数量 -->
+  <select id="MachinaeActionSumNight" resultType="int">
+  <![CDATA[
+select count(*) from
+  (select  Line_Name, machine_no,count(*) from autofloor_uph_machine where
+  start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time <to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor}
+  and LINE_NAME like #{linename}||'%'
+  and station_name =#{statio_name}
+  group by Line_Name, machine_no)
+    ]]>
+</select>
+<!-- 统计昨日机台工作数量 -->
+  <select id="MachinaeActionSumYesterday" resultType="int">
+  <![CDATA[
+select count(*) from
+  (select  Line_Name, machine_no,count(*) from autofloor_uph_machine where
+  start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time <to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor}
+  and LINE_NAME like #{linename}||'%'
+  and station_name =#{statio_name}
+  group by Line_Name, machine_no)
+    ]]>
+</select>
+
+<!-- Lot某個時間段內，某個工站 所有幾台的產能  (變量：時間， 樓層，機種，線體，時間段，工站）-->
+<select id="MachinaeUPH" resultType="com.shop.model.AmountsUPH">
+  <![CDATA[ select * from
+    (
+    select sum(UPH)Amountuph,machine_no ,LINE_NAME from autofloor_uph_machine where
+    start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time <to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+    and LINE_NAME like #{line_name}||'%'
+    and station_name =#{statio_name}
+    group by LINE_NAME ,machine_no  order by sum(UPH)
+    )where  ROWNUM<=3
+    ]]>
+</select>
+<!-- 夜班某個時間段內，某個工站 所有幾台的產能  (變量：時間， 樓層，機種，線體，時間段，工站）-->
+<select id="MachinaeUPHNight" resultType="com.shop.model.AmountsUPH">
+  <![CDATA[ select * from
+    (select sum(UPH)Amountuph,machine_no,LINE_NAME from autofloor_uph_machine where
+     start_time >=to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+    and LINE_NAME like #{line_name}||'%'
+    and station_name =#{statio_name}
+    group by LINE_NAME ,machine_no   order by sum(UPH)
+   ) where  ROWNUM<=3
+  ]]>
+</select>
+<!-- 夜班某個時間段內，某個工站 所有幾台的產能  (變量：時間， 樓層，機種，線體，時間段，工站）-->
+  <select id="MachinaeUPHYesterday" resultType="com.shop.model.AmountsUPH">
+  <![CDATA[ select * from
+    (select sum(UPH)Amountuph,machine_no,LINE_NAME from autofloor_uph_machine where
+     start_time >=to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and start_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+    and floor=#{floor_name}
+    and LINE_NAME like #{line_name}||'%'
+    and station_name =#{statio_name}
+    group by LINE_NAME ,machine_no   order by sum(UPH)
+   ) where  ROWNUM<=3
+  ]]>
+</select>
+  <!-- 統計沒有产出的幾台的詳細 白班内，某個工站  (變量：時間， 樓層，機種，線體，時間段，工站）-->
+  <select id="MachinaeDetailDay" resultType="com.shop.model.AmountsUPH">
+<![CDATA[
+select * from(
+select  Line_name, machine_no from AUTOFLOOR_MACHINE_DETAIL where
+T_floor=#{floor_name}
+and LINE_NAME like #{line_name}||'%'
+and STATION_NAME =#{statio_name}
+minus
+select DISTINCT Line_Name, machine_no from autofloor_uph_machine where
+start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time <to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and floor=#{floor_name}
+and LINE_NAME like #{line_name}||'%'
+and STATION_NAME =#{statio_name}
+) where  ROWNUM<=3
+]]>
+</select>
+<!-- 統計沒有产出的幾台的詳細 夜班內，某個工站  (變量：時間， 樓層，機種，線體，時間段，工站）-->
+<select id="MachinaeDetailNight" resultType="com.shop.model.AmountsUPH">
+<![CDATA[
+select * from(
+select  Line_name, machine_no from AUTOFLOOR_MACHINE_DETAIL where
+T_floor=#{floor_name}
+and LINE_NAME like #{line_name}||'%'
+and STATION_NAME =#{statio_name}
+minus
+select DISTINCT Line_Name, machine_no from autofloor_uph_machine where
+start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time <to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and floor=#{floor_name}
+and LINE_NAME like #{line_name}||'%'
+and STATION_NAME =#{statio_name}
+) where  ROWNUM<=3
+]]>
+</select>
+<!-- 統計沒有产出的幾台的詳細 昨日，某個工站  (變量：時間， 樓層，機種，線體，時間段，工站）-->
+  <select id="MachinaeDetailYesterday" resultType="com.shop.model.AmountsUPH">
+<![CDATA[
+select * from(
+select  Line_name, machine_no from AUTOFLOOR_MACHINE_DETAIL where
+T_floor=#{floor_name}
+and LINE_NAME like #{line_name}||'%'
+and STATION_NAME =#{statio_name}
+minus
+select DISTINCT Line_Name, machine_no from autofloor_uph_machine where
+start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+and start_time <to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and floor=#{floor_name}
+and LINE_NAME like #{line_name}||'%'
+and STATION_NAME =#{statio_name}
+) where  ROWNUM<=3
+]]>
+</select>
+
+
+
+<!--白班 机台top3直通率产能状况-->
+  <select id="MachinaeUPHFPYTop3Day" resultType="com.shop.model.AmountsUPH">
+   <![CDATA[
+  select * from
+  (select machine_no,sum(fail_count) as Fail_Q,
+  (case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) -
+  (case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as FPY,
+  case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+  case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet
+  from autofloor_rate_machine
+  where  start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and machine_no=#{statio_name}  group by machine_no ORDER BY Fail_Q desc) t
+    ]]>
+  </select>
+  <!--夜班 机台top3直通率产能状况-->
+  <select id="MachinaeUPHFPYTop3Night" resultType="com.shop.model.AmountsUPH">
+   <![CDATA[
+  select * from
+  (select machine_no,sum(fail_count) as Fail_Q,
+  (case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) -
+  (case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as FPY,
+  case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+  case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet
+  from autofloor_rate_machine
+  where  start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and machine_no=#{statio_name}  group by machine_no ORDER BY Fail_Q desc) t
+    ]]>
+  </select>
+  <!--夜班 机台top3直通率产能状况-->
+  <select id="MachinaeUPHFPYTop3Yesterday" resultType="com.shop.model.AmountsUPH">
+   <![CDATA[
+  select * from
+  (select machine_no,sum(fail_count) as Fail_Q,
+  (case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4)end) -
+  (case(sum(input)) when 0 then 0.00 else round(sum(retest)/sum(input),4)end) as FPY,
+  case(sum(input)) when 0 then 0.00 else round(sum(pass)/sum(input),4) end as Yield,
+  case(sum(input)) when 0 then 0.00 else round(sum(Retest)/sum(input),4) end as Misdetet
+  from autofloor_rate_machine
+  where  start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and start_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and floor=#{floor_name}
+  and line_name like #{line_name}||'%'
+  and machine_no=#{statio_name}  group by machine_no ORDER BY Fail_Q desc) t
+    ]]>
+  </select>
+
+
+
+
+</mapper>

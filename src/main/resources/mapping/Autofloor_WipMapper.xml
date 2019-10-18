@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shop.dao.Autofloor_WipMapper" >
+  <resultMap id="BaseResultMap" type="com.shop.model.Autofloor_Wip" >
+    <result column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="FLOOR" property="floor" jdbcType="VARCHAR" />
+    <result column="LINE_NAME" property="lineName" jdbcType="VARCHAR" />
+    <result column="PRODUCT" property="product" jdbcType="VARCHAR" />
+    <result column="SN" property="sn" jdbcType="VARCHAR" />
+    <result column="STATION_NAME" property="stationName" jdbcType="VARCHAR" />
+    <result column="TEST_RESULT" property="testResult" jdbcType="DECIMAL" />
+    <result column="FAIL_ITEM" property="failItem" jdbcType="VARCHAR" />
+    <result column="MACHINE_NO" property="machineNo" jdbcType="VARCHAR" />
+    <result column="OUT_STATION_TIME" property="outStationTime" jdbcType="TIMESTAMP" />
+    <result column="EMP_NO" property="empNo" jdbcType="VARCHAR" />
+    <result column="P1" property="p1" jdbcType="VARCHAR" />
+    <result column="P2" property="p2" jdbcType="VARCHAR" />
+    <result column="P3" property="p3" jdbcType="VARCHAR" />
+    <result column="P4" property="p4" jdbcType="VARCHAR" />
+    <result column="P5" property="p5" jdbcType="VARCHAR" />
+    <result column="P6" property="p6" jdbcType="VARCHAR" />
+    <result column="P7" property="p7" jdbcType="VARCHAR" />
+    <result column="P8" property="p8" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.shop.model.Autofloor_Wip" >
+    insert into AUTOFLOOR_WIP (ID, FLOOR, LINE_NAME, 
+      PRODUCT, SN, STATION_NAME, 
+      TEST_RESULT, FAIL_ITEM, MACHINE_NO, 
+      OUT_STATION_TIME, EMP_NO, P1, 
+      P2, P3, P4, P5, 
+      P6, P7, P8)
+    values (#{id,jdbcType=DECIMAL}, #{floor,jdbcType=VARCHAR}, #{lineName,jdbcType=VARCHAR}, 
+      #{product,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{stationName,jdbcType=VARCHAR}, 
+      #{testResult,jdbcType=DECIMAL}, #{failItem,jdbcType=VARCHAR}, #{machineNo,jdbcType=VARCHAR}, 
+      #{outStationTime,jdbcType=TIMESTAMP}, #{empNo,jdbcType=VARCHAR}, #{p1,jdbcType=VARCHAR}, 
+      #{p2,jdbcType=VARCHAR}, #{p3,jdbcType=VARCHAR}, #{p4,jdbcType=VARCHAR}, #{p5,jdbcType=VARCHAR}, 
+      #{p6,jdbcType=VARCHAR}, #{p7,jdbcType=VARCHAR}, #{p8,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shop.model.Autofloor_Wip" >
+    insert into AUTOFLOOR_WIP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="floor != null" >
+        FLOOR,
+      </if>
+      <if test="lineName != null" >
+        LINE_NAME,
+      </if>
+      <if test="product != null" >
+        PRODUCT,
+      </if>
+      <if test="sn != null" >
+        SN,
+      </if>
+      <if test="stationName != null" >
+        STATION_NAME,
+      </if>
+      <if test="testResult != null" >
+        TEST_RESULT,
+      </if>
+      <if test="failItem != null" >
+        FAIL_ITEM,
+      </if>
+      <if test="machineNo != null" >
+        MACHINE_NO,
+      </if>
+      <if test="outStationTime != null" >
+        OUT_STATION_TIME,
+      </if>
+      <if test="empNo != null" >
+        EMP_NO,
+      </if>
+      <if test="p1 != null" >
+        P1,
+      </if>
+      <if test="p2 != null" >
+        P2,
+      </if>
+      <if test="p3 != null" >
+        P3,
+      </if>
+      <if test="p4 != null" >
+        P4,
+      </if>
+      <if test="p5 != null" >
+        P5,
+      </if>
+      <if test="p6 != null" >
+        P6,
+      </if>
+      <if test="p7 != null" >
+        P7,
+      </if>
+      <if test="p8 != null" >
+        P8,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="floor != null" >
+        #{floor,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null" >
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="product != null" >
+        #{product,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null" >
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="testResult != null" >
+        #{testResult,jdbcType=DECIMAL},
+      </if>
+      <if test="failItem != null" >
+        #{failItem,jdbcType=VARCHAR},
+      </if>
+      <if test="machineNo != null" >
+        #{machineNo,jdbcType=VARCHAR},
+      </if>
+      <if test="outStationTime != null" >
+        #{outStationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="empNo != null" >
+        #{empNo,jdbcType=VARCHAR},
+      </if>
+      <if test="p1 != null" >
+        #{p1,jdbcType=VARCHAR},
+      </if>
+      <if test="p2 != null" >
+        #{p2,jdbcType=VARCHAR},
+      </if>
+      <if test="p3 != null" >
+        #{p3,jdbcType=VARCHAR},
+      </if>
+      <if test="p4 != null" >
+        #{p4,jdbcType=VARCHAR},
+      </if>
+      <if test="p5 != null" >
+        #{p5,jdbcType=VARCHAR},
+      </if>
+      <if test="p6 != null" >
+        #{p6,jdbcType=VARCHAR},
+      </if>
+      <if test="p7 != null" >
+        #{p7,jdbcType=VARCHAR},
+      </if>
+      <if test="p8 != null" >
+        #{p8,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

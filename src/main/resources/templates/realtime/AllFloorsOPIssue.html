@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<title>OP issue</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link th:href="@{/style/css/bootstrap.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap.min.css" />
+	<link th:href="@{/style/css/bootstrap-responsive.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap-responsive.min.css" />
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" />
+	<link th:href="@{/style/css/select2.css}"  rel="stylesheet" href="../../static/style/css/select2.css" />
+	<link th:href="@{/style/css/matrix-style.css}"  rel="stylesheet" href="../../static/style/css/matrix-style.css" />
+	<link th:href="@{/style/css/matrix-media.css}"  rel="stylesheet" href="../../static/style/css/matrix-media.css" />
+	<link th:href="@{/style/font-awesome/css/font-awesome.css}" href="../../static/style/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+	<link th:href="@{/css/tables2.css}" rel="stylesheet" href="../../static/css/tables2.css" type="text/css" />
+	<script th:src="@{/js/jquery-3.1.1.min.js}" src="../../static/js/jquery-3.1.1.min.js" type="text/javascript" ></script>
+	<script th:src="@{/style/js/jquery-1.4.4.min.js}" src="../../static/style/js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/style/js/jquery.dataTables.min.js}"  src="../../static/style/js/jquery.dataTables.min.js"></script>
+	<script th:src="@{/style/js/jquery.min.js}"  src="../../static/style/js/jquery.min.js"></script>
+	<script th:src="@{/style/js/jquery.ui.custom.js}"  src="../../static/style/js/jquery.ui.custom.js"></script>
+	<script th:src="@{/style/js/jquery.uniform.js}"  src="../../static/style/js/jquery.uniform.js"></script>
+	<script th:src="@{/style/js/bootstrap.min.js}"  src="../../static/style/js/bootstrap.min.js"></script>
+	<script th:src="@{/style/js/select2.min.js}"  src="../../static/style/js/select2.min.js"></script>
+	<script th:src="@{/style/js/matrix.js}"  src="../../static/style/js/matrix.js"></script>
+	<script th:src="@{/js/matrix.tables.js}"  src="../../static/style/js/matrix.tables.js"></script>
+	<script th:src="@{/js/mt-tabpage.js}"  type="text/javascript" src="../../static/js/mt-tabpage.js"></script>
+	<script th:src="@{/js/tables2.js}" src="../../static/js/tables2.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<!-- 顶部  -->
+<div id="header">
+	<ul>
+		<li style="float: left;">
+			<div id="">
+				<span class="top_title">Thales&nbsp;&nbsp;CN/ZZ/D/<span id="Floorname" th:text="${Floorname}">D07-3F</span></span>
+			</div>
+		</li>
+		<li  style="float:right;">
+			<div class="top_div">
+				<img th:src="@{/static/img/shijian.png}"   style="height: 20px;width: 20px;float: left;margin-top: 5px;margin-right: -20px;">
+				<span class="top_span top_title" id="datespan"></span>
+			</div>
+
+		</li>
+	</ul>
+</div>
+<!-- 左侧导航栏 -->
+<div id="sidebar">
+	<div style="height:80px;width: 30px;">
+		<i id="shrink" class="icon-arrow-left ulshrink"   onclick="ulshrink()"></i>
+		<i id="unfold" class="icon-th-list ulunfold" onclick="ulunfold()"></i>
+	</div>
+	<ul id="left-ul" style="margin-left: -150px;">
+		<li class="submenu licontent" style="display: none">
+		</li>
+		<li  class="submenu licontent">
+			<a href="#"><img  th:src="@{/static/img/dingwei_1.png}"    style="width: 18px; height: 18px;margin-right: 8px"><span>實時總覽</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{/Allfloordata}">樓層健康状况</a></li>
+				<li><a th:href="@{/AllFloorsFacilityFitness}">樓層健康可視化</a></li>
+				<!--<li><a href="javascript:" class="">產能狀況</a></li>
+				<li><a href="javascript:" class="">測試機臺</a></li>
+				<li><a href="javascript:" class="">Robot</a></li>
+				<li><a href="javascript:" class="">PD設備</a></li>-->
+			</ul>
+		</li>
+		<li class="submenu licontent">
+			<a><i class="icon-search"></i><span>智能盤點</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10002'}" class="">主板盤點</a></li>
+			</ul>
+		</li>
+		<li class="active submenu licontent open"><a>
+			<i class="icon-group"></i><span>人員管理</span><span class="label label-important"></span></a>
+			<ul style="border-top: 2px solid #478CB1">
+				<li><a class="" th:href="@{'/AllfloorOPissue'}" style="color: #65A5E2;">OP ISSUE</a></li>
+			</ul>
+		</li>
+
+		<li class="licontent"><a> <i class="icon-glass"></i><span>品質管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-briefcase"></i><span>成本管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-bell"></i><span>報警中心</span></a></li>
+		<li class="submenu licontent">
+			<a href="#"><i class="icon-cog"></i> <span>設置</span><span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10061'}" class="">資料維護</a></li>
+				<li><a th:href="@{'http://10.210.57.13:10001'}" class="">自動化Cell實時數據</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- 右侧数据列表 -->
+<div id="content" style="margin-left: 40px;">
+	<div style="height: 30px;width:95%;padding-top: 10px;">
+			<h4 style="text-align: center;margin-top: 10px;"><img th:src="@{/static/img/dingwei_1.png}" style="width: 24px; height: 24px;margin-right: 10px;">OP issue</h4></span></h4>
+		<!-- 分类 -->
+		<div>
+			<ul class="tabul" style="float: left;margin-top: -12px;">
+				<li style="color: #02a4ec;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+				<li>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+				<li></li>
+			</ul>
+
+		<!-- 表切换导航-->
+		<ul style="margin-top: -20px;float: right;width: 12%;margin-bottom: 20px;">
+		</ul>
+		</div>
+	</div>
+
+	<!-- 表切换导航-->
+	<div style="margin-top:40px;overflow: scroll;width:100%;padding: 0 0px 0 20px;overflow-y: hidden;">
+		<h5 style="width: 100%;float: left;">Lotus OP issue By Line統計</h5>
+		<table  id="capacitytab" style="width:  78%;;float: left;margin: 0px;border-bottom: 1px solid #2e363f26;" class="table table-striped">
+			<tr></tr>
+			<tr class="tabtitle1" style=" background:#FDEE68;font-family: fantasy;font-size: 14px;">
+				<td class="center border_right" style="width: 130px;">線體</td>
+				<td class="center border_right" style="width: 170px;">OP issue Q'ty</td>
+				<td class="center border_right" style="width: 170px;">投首漏掃描</td>
+				<td class="center border_right" style="width: 170px;">漏測</td>
+				<td class="center border_right" style="width: 170px;">混測</td>
+				<td class="center border_right" style="width: 170px;">確認模式異常</td>
+				<td class="center border_right" style="width: 170px;">SN掃描錯誤</td>
+			</tr>
+			<tr></tr>
+
+			<!--DFU-->
+			<tr class="">
+				<td class="center border_right" >TTL</td>
+				<td class="center border_right" >1</td>
+				<td class="center border_right" >3</td>
+				<td class="center border_right" >5</td>
+				<td class="center border_right" >6</td>
+				<td class="center border_right" >5</td>
+				<td class="center border_right" >1</td>
+			</tr>
+			<tr class="">
+				<td class="center border_right" >T01</td>
+				<td class="center border_right" >1</td>
+				<td class="center border_right" >3</td>
+				<td class="center border_right" >5</td>
+				<td class="center border_right" >6</td>
+				<td class="center border_right" >5</td>
+				<td class="center border_right" >1</td>
+			</tr>
+
+		</table>
+		<h5 style="width: 100%;float: left;">Mac OP issue By Line統計</h5>
+		<table  style="width:  78%;;float: left;margin: 0px;border-bottom: 1px solid #2e363f26;" class="table table-striped">
+			<tr></tr>
+			<tr class="tabtitle1" style=" background:#FDEE68;font-family: fantasy;font-size: 14px;">
+				<td class="center border_right" style="width: 130px;">線體</td>
+				<td class="center border_right" style="width: 170px;">OP issue Q'ty</td>
+				<td class="center border_right" style="width: 170px;">投首漏掃描</td>
+				<td class="center border_right" style="width: 170px;">漏測</td>
+				<td class="center border_right" style="width: 170px;">混測</td>
+				<td class="center border_right" style="width: 170px;">確認模式異常</td>
+				<td class="center border_right" style="width: 170px;">SN掃描錯誤</td>
+			</tr>
+			<tr></tr>
+
+			<!--DFU-->
+			<tr class="">
+				<td class="center border_right" >TTL</td>
+				<td class="center border_right" >2</td>
+				<td class="center border_right" >3</td>
+				<td class="center border_right" >2</td>
+				<td class="center border_right" >5</td>
+				<td class="center border_right" >7</td>
+				<td class="center border_right" >3</td>
+			</tr>
+			<tr class="">
+				<td class="center border_right" >T01</td>
+				<td class="center border_right" >2</td>
+				<td class="center border_right" >3</td>
+				<td class="center border_right" >2</td>
+				<td class="center border_right" >5</td>
+				<td class="center border_right" >7</td>
+				<td class="center border_right" >3</td>
+			</tr>
+
+		</table>
+
+
+		<h5 style="width:100%;float: left;">Mac OP issue By Line統計</h5>
+		<table  style="width:  50%;;float: left;margin: 0px;border-bottom: 1px solid #2e363f26;" >
+			<tr></tr>
+			<tr class="tabtitle1" style=" background:#FDEE68;font-family: fantasy;font-size: 14px;">
+				<td width="15%" class="center"  >類別</td>
+				<td width="85%" class="center">
+					<table style="width: 100%">
+						<tr class="bordertd">
+							<td width="30%">TOP Line</td>
+							<td width="30%">Q'ty</td>
+							<td width="40%">集中機臺</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr></tr>
+
+			<tr class="bordertd">
+				<td class="center " style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;border-top: 1px solid;" >投首漏掃描</td>
+				<td class="center" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">
+					<table style="width: 100%">
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T06</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">5</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="bordertd">
+				<td class="center " style="border-right: 1px solid;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">漏測</td>
+				<td class="center">
+					<table style="width: 100%" >
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T06</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">2</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="bordertd">
+				<td class="center" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">混測</td>
+				<td class="center">
+					<table style="width: 100%" >
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T06</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T05</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="bordertd">
+				<td class="center" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">確認模式異常</td>
+				<td class="center">
+					<table style="width: 100%" >
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T06</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T05</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="bordertd">
+				<td class="center" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">工號無權限</td>
+				<td class="center">
+					<table style="width: 100%" >
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T06</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T05</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="bordertd">
+				<td class="center" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">機台號錯誤</td>
+				<td class="center">
+					<table style="width: 100%" >
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T06</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T05</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="bordertd">
+				<td class="center" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">SN掃描錯誤</td>
+				<td class="center">
+					<table style="width: 100%" >
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T06</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+						<tr class="bordertd">
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">T05</td>
+							<td style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;" width="30%">3</td>
+							<td width="40%" style="border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;">/</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+		</table>
+
+</div>
+</div>
+
+</body>
+
+
+
+<script type="text/javascript">
+
+    /* 标题导航栏jq */
+    $(function () {
+        $('[js-tab=3]').tab({
+            curDisplay: 3,/* 默认div第一位标题 */
+        });
+    });
+
+ 	/*$(document).on('click','.FailQ',function () {
+		alert("js原生");
+    })*/
+    /* MACHINENO*/
+</script>
+</html>

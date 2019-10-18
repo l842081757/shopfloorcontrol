@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+	<title>產能狀況</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link th:href="@{/style/css/bootstrap.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap.min.css" />
+	<link th:href="@{/style/css/bootstrap-responsive.min.css}" rel="stylesheet" href="../../static/style/css/bootstrap-responsive.min.css" />
+	<link th:href="@{/style/css/uniform.css}" rel="stylesheet" href="../../static/style/css/uniform.css" />
+	<link th:href="@{/style/css/select2.css}"  rel="stylesheet" href="../../static/style/css/select2.css" />
+	<link th:href="@{/style/css/matrix-style.css}"  rel="stylesheet" href="../../static/style/css/matrix-style.css" />
+	<link th:href="@{/style/css/matrix-media.css}"  rel="stylesheet" href="../../static/style/css/matrix-media.css" />
+	<link th:href="@{/style/font-awesome/css/font-awesome.css}" href="../../static/style/font-awesome/css/font-awesome.css" rel="stylesheet" />
+	<link th:href="@{/css/style.css}" rel="stylesheet" href="../../static/css/style.css" type="text/css" />
+	<link th:href="@{/css/tables2.css}" rel="stylesheet" href="../../static/css/tables2.css" type="text/css" />
+	<script th:src="@{/js/jquery-3.1.1.min.js}" src="../../static/js/jquery-3.1.1.min.js" type="text/javascript" ></script>
+	<script th:src="@{/style/js/jquery-1.4.4.min.js}" src="../../static/style/js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/style/js/jquery.dataTables.min.js}"  src="../../static/style/js/jquery.dataTables.min.js"></script>
+	<script th:src="@{/style/js/jquery.min.js}"  src="../../static/style/js/jquery.min.js"></script>
+	<script th:src="@{/style/js/jquery.ui.custom.js}"  src="../../static/style/js/jquery.ui.custom.js"></script>
+	<script th:src="@{/style/js/jquery.uniform.js}"  src="../../static/style/js/jquery.uniform.js"></script>
+	<script th:src="@{/style/js/bootstrap.min.js}"  src="../../static/style/js/bootstrap.min.js"></script>
+	<script th:src="@{/style/js/select2.min.js}"  src="../../static/style/js/select2.min.js"></script>
+	<script th:src="@{/style/js/matrix.js}"  src="../../static/style/js/matrix.js"></script>
+	<script th:src="@{/js/matrix.tables.js}"  src="../../static/style/js/matrix.tables.js"></script>
+	<script th:src="@{/js/mt-tabpage.js}"  type="text/javascript" src="../../static/js/mt-tabpage.js"></script>
+	<script th:src="@{/js/tables2.js}" src="../../static/js/tables2.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<!-- 顶部  -->
+<div id="header">
+	<ul>
+		<li style="float: left;">
+			<div id="">
+				<span class="top_title">Thales&nbsp;&nbsp;CN/ZZ/D/<span th:text="${FloorName}"></span></span>
+			</div>
+		</li>
+		<li  style="float:right;">
+			<div class="top_div">
+				<img th:src="@{/static/img/shijian.png}"   style="height: 20px;width: 20px;float: left;margin-top: 5px;margin-right: -20px;">
+				<span class="top_span top_title" id="datespan"></span>
+			</div>
+		</li>
+	</ul>
+</div>
+<!-- 左侧导航栏 -->
+<div id="sidebar">
+	<div style="height:80px;width: 30px;">
+		<i id="shrink" class="icon-arrow-left ulshrink"   onclick="ulshrink()"></i>
+		<i id="unfold" class="icon-th-list ulunfold" onclick="ulunfold()"></i>
+	</div>
+	<ul id="left-ul" style="margin-left: -150px;">
+		<li  class="submenu licontent open">
+			<a href="#"><img  th:src="@{/static/img/dingwei_1.png}"    style="width: 18px; height: 18px;margin-right: 8px"><span></span>實時總覽<span class="label label-important"></span></a>
+			<ul style="border-top: 2px solid #478CB1">
+				<li><a th:href="@{/Allfloordata}" style="color: #65A5E2;">樓層健康状况</a></li>
+				<li><a th:href="@{/AllFloorsFacilityFitness}">樓層健康可視化</a></li>
+				<!--<li><a href="javascript:" class="">產能狀況</a></li>
+				<li><a href="javascript:" class="">測試機臺</a></li>
+				<li><a href="javascript:" class="">Robot</a></li>
+				<li><a href="javascript:" class="">PD設備</a></li>-->
+			</ul>
+		</li>
+		<li class="submenu licontent">
+			<a><i class="icon-search"></i><span>智能盤點</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10002'}" class="">主板盤點</a></li>
+			</ul>
+		</li>
+		<li class="submenu licontent"><a>
+			<i class="icon-group"></i><span>人員管理</span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a class="" th:href="@{'/AllfloorOPissue'}" >OP ISSUE</a></li>
+			</ul>
+		</li>
+
+		<li class="licontent"><a> <i class="icon-glass"></i><span>品質管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-briefcase"></i><span>成本管理</span></a> </li>
+		<li class="licontent"><a> <i class="icon-bell"></i><span>報警中心</span></a></li>
+		<li class="submenu licontent">
+			<a href="#"><i class="icon-cog"></i> <span></span>設置<span class="label label-important"></span></a>
+			<ul style="display: none;border-top: 2px solid #478CB1">
+				<li><a th:href="@{'http://10.210.57.13:10061'}" class="">資料維護</a></li>
+				<li><a th:href="@{'http://10.210.57.13:10001'}" class="">自動化Cell實時數據</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<!-- 右侧数据列表 -->
+<div id="content" style="margin-left: 40px;">
+
+	<div style="height: 30px;width:95%;padding-top: 10px;">
+		<h4 style="text-align: center;margin-top: 10px;"><img th:src="@{/static/img/dingwei_1.png}" style="width: 24px; height: 24px;margin-right: 10px;">產能狀況-<span >[[${AllUph.get('Linename')}]]</span></h4>
+	</div>
+
+	<!-- 表切换导航-->
+	<div style="margin-top:40px;overflow: scroll;width: 98%;padding: 0 0px 0 20px;overflow-y: hidden;overflow-x: hidden;">
+
+
+		<!-- 表格标题-->
+		<table id="capacitytab" style="width:1000px;float: left;margin: 0px;margin-top: 10px;border-bottom: 1px solid #2e363f26;" class="table table-striped">
+			<tr></tr>
+			<tr class="tabtitle1" style=" background:#FDEE68;font-family: fantasy;font-size: 14px;">
+				<td class="center" style="width: 12%">工站</td>
+				<td class="center" style="width: 8%">Target</td>
+				<!--<td class="center"></td>-->
+				<!--<td></td>-->
+				<td class="center" style="width: 8%">DFU</td>
+				<td class="center" style="width: 8%">FCT</td>
+				<td class="center" style="width: 8%">S1</td>
+				<td class="center" style="width: 8%">S2</td>
+				<td class="center" style="width: 8%">S3</td>
+				<td class="center" style="width: 8%">CCT</td>
+				<td class="center" style="width: 8%">W1</td>
+				<td class="center" style="width: 8%">W2</td>
+				<td class="center" style="width: 8%">UWB</td>
+				<td class="center td_border" style="border-top: 2px solid #3F51B5 !important;border-left: 2px solid #3F51B5;border-right: 2px solid #3F51B5">SCOND</td>
+			</tr>
+			<tr></tr>
+			<!-- DFU -->
+			<!-- 2030_2130 -->
+			<tr class="tabtitle2" >
+				<td class="centers center" >20:30-21:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH2030_2130()}" ></td>-->
+				<!--<td class="center">pcs</td>-->
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${HTarget/2}"></td>
+				<td class="center"  colspan="1"  th:text="${AllUph.get('20:30~21:30DFU') != null ? AllUph.get('20:30~21:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('20:30~21:30FTC')!= null ? AllUph.get('20:30~21:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('20:30~21:30S1')!= null ? AllUph.get('20:30~21:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('20:30~21:30S2')!= null ? AllUph.get('20:30~21:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('20:30~21:30S3')!= null ? AllUph.get('20:30~21:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('20:30~21:30CCT')!= null ? AllUph.get('20:30~21:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('20:30~21:30W1')!= null ? AllUph.get('20:30~21:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('20:30~21:30W2')!= null ? AllUph.get('20:30~21:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('20:30~21:30UWB')!= null ? AllUph.get('20:30~21:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"     th:text="${AllUph.get('20:30~21:30SCOND')!= null ? AllUph.get('20:30~21:30SCOND'):'0'}">560</td>
+			</tr>
+
+			<!-- 21:30-22:30 -->
+			<tr >
+				<td class="centers center" >21:30-22:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH2130_2230()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${HTarget}"></td>
+
+				<td class="center" colspan="1"  th:text="${AllUph.get('21:30~22:30DFU') != null ? AllUph.get('21:30~22:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('21:30~22:30FTC')!= null ? AllUph.get('21:30~22:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('21:30~22:30S1')!= null ? AllUph.get('21:30~22:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('21:30~22:30S2')!= null ? AllUph.get('21:30~22:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('21:30~22:30S3')!= null ? AllUph.get('21:30~22:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('21:30~22:30CCT')!= null ? AllUph.get('21:30~22:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('21:30~22:30W1')!= null ? AllUph.get('21:30~22:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('21:30~22:30W2')!= null ? AllUph.get('21:30~22:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('21:30~22:30UWB')!= null ? AllUph.get('21:30~22:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"     th:text="${AllUph.get('21:30~22:30SCOND')!= null ? AllUph.get('21:30~22:30SCOND'):'0'}">560</td>
+			</tr>
+			<!-- 22:30-23:30 -->
+
+			<tr >
+				<td class="centers" >22:30-23:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH2230_2330()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${HTarget}"></td>
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('22:30~23:30DFU') != null ? AllUph.get('22:30~23:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('22:30~23:30FTC')!= null ? AllUph.get('22:30~23:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('22:30~23:30S1')!= null ? AllUph.get('22:30~23:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('22:30~23:30S2')!= null ? AllUph.get('22:30~23:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('22:30~23:30S3')!= null ? AllUph.get('22:30~23:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('22:30~23:30CCT')!= null ? AllUph.get('22:30~23:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('22:30~23:30W1')!= null ? AllUph.get('22:30~23:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('22:30~23:30W2')!= null ? AllUph.get('22:30~23:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('22:30~23:30UWB')!= null ? AllUph.get('22:30~23:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"     th:text="${AllUph.get('22:30~23:30SCOND')!= null ? AllUph.get('22:30~23:30SCOND'):'0'}">560</td>
+
+
+			</tr>
+			<!-- 23:30-00:30 -->
+			<tr>
+				<td class="centers center" >23:30-00:30</td>
+				<!--th:text="${sumNumber.getH2330_0030()}"-->
+				<!--<td class="center" ></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1" >0</td>
+				<!--DFU-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30DFU') != null ? AllUph.get('23:30~0:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30FTC')!= null ? AllUph.get('23:30~0:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30S1')!= null ? AllUph.get('23:30~0:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30S2')!= null ? AllUph.get('23:30~0:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30S3')!= null ? AllUph.get('23:30~0:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30CCT')!= null ? AllUph.get('23:30~0:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30W1')!= null ? AllUph.get('23:30~0:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30W2')!= null ? AllUph.get('23:30~0:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('23:30~0:30UWB')!= null ? AllUph.get('23:30~0:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"    th:text="${AllUph.get('23:30~0:30SCOND')!= null ? AllUph.get('23:30~0:30SCOND'):'0'}">560</td>
+
+
+
+			</tr>
+			<!-- 00:30-01:30 -->
+			<tr >
+				<td class="centers center" >00:30-01:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0030_0130()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${HTarget}"></td>
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('0:30~1:30DFU') != null ? AllUph.get('0:30~1:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('0:30~1:30FTC')!= null ? AllUph.get('0:30~1:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('0:30~1:30S1')!= null ? AllUph.get('0:30~1:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('0:30~1:30S2')!= null ? AllUph.get('0:30~1:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('0:30~1:30S3')!= null ? AllUph.get('0:30~1:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('0:30~1:30CCT')!= null ? AllUph.get('0:30~1:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('0:30~1:30W1')!= null ? AllUph.get('0:30~1:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('0:30~1:30W2')!= null ? AllUph.get('0:30~1:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('0:30~1:30UWB')!= null ? AllUph.get('0:30~1:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"     th:text="${AllUph.get('0:30~1:30SCOND')!= null ? AllUph.get('0:30~1:30SCOND'):'0'}">560</td>
+
+
+			</tr>
+			<!-- 01:30-02:30 -->
+
+			<tr >
+				<td class="centers center" >01:30-02:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0130_0230()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${HTarget}"></td>
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('1:30~2:30DFU') != null ? AllUph.get('1:30~2:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('1:30~2:30FTC')!= null ? AllUph.get('1:30~2:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('1:30~2:30S1')!= null ? AllUph.get('1:30~2:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('1:30~2:30S2')!= null ? AllUph.get('1:30~2:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('1:30~2:30S3')!= null ? AllUph.get('1:30~2:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('1:30~2:30CCT')!= null ? AllUph.get('1:30~2:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('1:30~2:30W1')!= null ? AllUph.get('1:30~2:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('1:30~2:30W2')!= null ? AllUph.get('1:30~2:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('1:30~2:30UWB')!= null ? AllUph.get('1:30~2:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"     th:text="${AllUph.get('1:30~2:30SCOND')!= null ? AllUph.get('1:30~2:30SCOND'):'0'}">560</td>
+
+
+			</tr>
+			<!--02:30-03:30-->
+
+			<tr>
+				<td class="centers center">02:30-03:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0230_0330()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${HTarget}"></td>
+				<!--DFU-->
+				<td class="center"  colspan="1" th:text="${AllUph.get('2:30~3:30DFU') != null ? AllUph.get('2:30~3:30DFU') :'0'}">560</td>
+				<!--FTC-->
+				<td class="center"  colspan="1" th:text="${AllUph.get('2:30~3:30FTC') != null ? AllUph.get('2:30~3:30FTC') :'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1" th:text="${AllUph.get('2:30~3:30S1')  != null ? AllUph.get('2:30~3:30S1')  :'0'}">560</td>
+				<!--S2-->
+				<td class="center"  colspan="1" th:text="${AllUph.get('2:30~3:30S2')  != null ? AllUph.get('2:30~3:30S2')  :'0'}">560</td>
+				<!--S3-->
+				<td class="center"  colspan="1" th:text="${AllUph.get('2:30~3:30S3')  != null ? AllUph.get('2:30~3:30S3')  :'0'}">560</td>
+				<!--CCT-->
+				<td class="center"   colspan="1" th:text="${AllUph.get('2:30~3:30CCT') != null ? AllUph.get('2:30~3:30CCT') :'0'}">560</td>
+				<!--W1-->
+				<td class="center"  colspan="1" th:text="${AllUph.get('2:30~3:30W1')  != null ? AllUph.get('2:30~3:30W1')  :'0'}">560</td>
+				<!--W2-->
+				<td class="center"  colspan="1" th:text="${AllUph.get('2:30~3:30W2')  != null ? AllUph.get('2:30~3:30W2')  :'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1" 	th:text="${AllUph.get('2:30~3:30UWB')   != null ? AllUph.get('2:30~3:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"  th:text="${AllUph.get('2:30~3:30SCOND')      != null ? AllUph.get('2:30~3:30SCOND') :'0'}">560</td>
+			</tr>
+			<!-- 03:30-04:30 -->
+
+			<tr >
+				<td class="centers" >03:30-04:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0330_0430()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${HTarget}"></td>
+				<!--DFU-->
+				<td class="center" colspan="1" th:text="${AllUph.get('3:30~4:30DFU') != null ? AllUph.get('3:30~4:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('3:30~4:30FTC') != null ? AllUph.get('3:30~4:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1" th:text="${AllUph.get('3:30~4:30S1')  != null ? AllUph.get('3:30~4:30S1') :'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1" th:text="${AllUph.get('3:30~4:30S2')  != null ? AllUph.get('3:30~4:30S2') :'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1" th:text="${AllUph.get('3:30~4:30S3')  != null ? AllUph.get('3:30~4:30S3') :'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('3:30~4:30CCT') != null ? AllUph.get('3:30~4:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1" th:text="${AllUph.get('3:30~4:30W1')  != null ? AllUph.get('3:30~4:30W1') :'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1" th:text="${AllUph.get('3:30~4:30W2')  != null ? AllUph.get('3:30~4:30W2') :'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('3:30~4:30UWB') != null ? AllUph.get('3:30~4:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"    th:text="${AllUph.get('3:30~4:30SCOND')   != null ? AllUph.get('3:30~4:30SCOND')  :'0'}">560</td>
+
+			</tr>
+			<!-- 04:30-05:30 -->
+
+			<tr >
+				<td class="centers center" >04:30-05:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0430_0530()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${TargetH8!=0||TargetH9!=0||TargetH10!=0 ? HTarget:'0'}"></td>
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('4:30~5:30DFU')   != null ? AllUph.get('4:30~5:30DFU'):'0'}"  >560</td><!---->
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('4:30~5:30FTC')   != null ? AllUph.get('4:30~5:30FTC'):'0'}"  >560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('4:30~5:30S1')    != null ?  AllUph.get('4:30~5:30S1') :'0'}" >560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('4:30~5:30S2')    != null ?  AllUph.get('4:30~5:30S2') :'0'}" >560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('4:30~5:30S3')    != null ?  AllUph.get('4:30~5:30S3') :'0'}" >560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('4:30~5:30CCT')   != null ? AllUph.get('4:30~5:30CCT'):'0'}"  >560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('4:30~5:30W1')        != null ?  AllUph.get('4:30~5:30W1') :'0'}" >560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('4:30~5:30W2')        != null ?  AllUph.get('4:30~5:30W2') :'0'}" >534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('4:30~5:30UWB') != null ? AllUph.get('4:30~5:30UWB'):'0'}" >560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"   th:text="${AllUph.get('4:30~5:30SCOND')   != null ?   AllUph.get('4:30~5:30SCOND') :'0'}">560</td>
+			</tr>
+
+			<!-- 05:30-06:30 -->
+
+			<tr >
+				<td class="centers center" >05:30-06:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0530_0630()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${TargetH9!=0||TargetH10!=0 ? HTarget:'0'}"></td>
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('5:30~6:30DFU')  != null ?  AllUph.get('5:30~6:30DFU'):'0' }"    >560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('5:30~6:30FTC') != null ?  AllUph.get('5:30~6:30FTC'):'0' }"    >560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('5:30~6:30S1')  != null ?  AllUph.get('5:30~6:30S1') :'0' }"    >560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('5:30~6:30S2')  != null ?  AllUph.get('5:30~6:30S2') :'0' }"    >560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('5:30~6:30S3') != null ?  AllUph.get('5:30~6:30S3') :'0' }"	>560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('5:30~6:30CCT')  != null ?  AllUph.get('5:30~6:30CCT'):'0' }"	>560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('5:30~6:30W1')   != null ?  AllUph.get('5:30~6:30W1') :'0' }"	>560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('5:30~6:30W2')   != null ?  AllUph.get('5:30~6:30W2') :'0'}"	>534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('5:30~6:30UWB') != null ?  AllUph.get('5:30~6:30UWB'):'0'}	">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"    th:text="${AllUph.get('5:30~6:30SCOND')!= null ?  AllUph.get('5:30~6:30SCOND'):'0'}"	>560</td>
+
+			</tr>
+			<!--06:30-07:30-->
+
+			<tr >
+				<td class="centers center">06:30-07:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0630_0730()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  th:text="${TargetH10!=0 ? HTarget:'0'}"></td>
+				<!--DFU-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('6:30~7:30DFU') != null ? AllUph.get('6:30~7:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('6:30~7:30FTC')!= null ? AllUph.get('6:30~7:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('6:30~7:30S1')!= null ? AllUph.get('6:30~7:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('6:30~7:30S2')!= null ? AllUph.get('6:30~7:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('6:30~7:30S3')!= null ? AllUph.get('6:30~7:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('6:30~7:30CCT')!= null ? AllUph.get('6:30~7:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('6:30~7:30W1')!= null ? AllUph.get('6:30~7:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:text="${AllUph.get('6:30~7:30W2')!= null ? AllUph.get('6:30~7:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('6:30~7:30UWB')!= null ? AllUph.get('6:30~7:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border" colspan="1"     th:text="${AllUph.get('6:30~7:30SCOND')!= null ? AllUph.get('6:30~7:30SCOND'):'0'}">560</td>
+
+			</tr>
+			<!--07:30-08:30-->
+
+			<tr >
+				<td class="centers center" >07:30-08:30</td>
+				<!--<td class="center" th:text="${sumNumber.getH0730_0830()}"></td>-->
+				<!--<td class="center">pcs</td>-->
+				<td class="center" colspan="1"  >0</td>
+				<!--DFU-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('7:30~8:30DFU') != null ? AllUph.get('7:30~8:30DFU'):'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('7:30~8:30FTC') != null ? AllUph.get('7:30~8:30FTC'):'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('7:30~8:30S1') != null ? AllUph.get('7:30~8:30S1'):'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('7:30~8:30S2') != null ? AllUph.get('7:30~8:30S2'):'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('7:30~8:30S3') != null ? AllUph.get('7:30~8:30S3'):'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('7:30~8:30CCT') != null ? AllUph.get('7:30~8:30CCT'):'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('7:30~8:30W1') != null ? AllUph.get('7:30~8:30W1'):'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"   th:text="${AllUph.get('7:30~8:30W2') != null ? AllUph.get('7:30~8:30W2'):'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"    th:text="${AllUph.get('7:30~8:30UWB') != null ? AllUph.get('7:30~8:30UWB'):'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border_SCOND" colspan="1"      th:text="${AllUph.get('7:30~8:30SCOND') != null ? AllUph.get('7:30~8:30SCOND'):'0'}">560</td>
+			</tr>
+			<tr>
+				<td class="centers center" >累計產出</td>
+				<td class="center" colspan="1"    th:text="${SumUphTarget != null ? DTarget+'('+SumUphTarget+')':DTarget+'(0)'}" ></td>
+				<!--DFU-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getDFUsum()>200  ? 'background-color: #d64c4c; color: black;border-right: 1px solid  #fff;':''}"  th:text="${sumNumber.getDFUsum() != null ? sumNumber.getDFUsum():'0'}">560</td>
+				<!--FTC-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getFCTsum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid  #fff;':''}"  th:text="${sumNumber.getFCTsum() != null ? sumNumber.getFCTsum():'0'}">560</td>
+				<!--S1-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getS1sum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid  #fff;':''}"  th:text="${sumNumber.getS1sum() != null ? sumNumber.getS1sum():'0'}">560</td>
+				<!--S2-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getS2sum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid  #fff;':''}"  th:text="${sumNumber.getS2sum() != null ? sumNumber.getS2sum():'0'}">560</td>
+				<!--S3-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getS3sum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid #fff;':''}"  th:text="${sumNumber.getS3sum()!= null ? sumNumber.getS3sum():'0'}">560</td>
+				<!--CCT-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getCCTsum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid #fff;':''}"  th:text="${sumNumber.getCCTsum() != null ? sumNumber.getCCTsum():'0'}">560</td>
+				<!--W1-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getW1sum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid #fff;':''}"  th:text="${sumNumber.getW1sum() != null ? sumNumber.getW1sum():'0'}">560</td>
+				<!--W2-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getW2sum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid #fff;':''}"  th:text="${sumNumber.getW2sum() != null ? sumNumber.getW2sum():'0'}">534</td>
+				<!--UWB-->
+				<td class="center" colspan="1"  th:style="${SumUphTarget - sumNumber.getUWBsum()>200 ? 'background-color: #d64c4c; color: black;border-right: 1px solid #fff;':''}" th:text="${sumNumber.getUWBsum() != null ? sumNumber.getUWBsum():'0'}">560</td>
+				<!--SCOND-->
+				<td class="center td_border_SCOND"  colspan="1"  th:style="${SumUphTarget - sumNumber.getSCONDsum()>200 ? 'background-color: #d64c4c; color: black;':''}"  th:text="${sumNumber.getSCONDsum() != null ? sumNumber.getSCONDsum():'0'}">560</td>
+			</tr>
+		</table>
+	</div>
+	<!--
+	<div style=" width: 98%;height: 110px;margin-top: 10px;float: left;">
+		<table style="border: 1px solid;margin: 10px 0 20px 20px;font-size: 14px;">
+			<tr style="color: #333;">
+				<td class="center"  width="140px" style="background:#ffa3a3;max-width: 130px;">UPH 不達標時段</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getDFUsum()==-1 or sumNumber.getDFUsum()==0 ? 'display: none':''}"   >DFU</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getFCTsum()==-1 or sumNumber.getFCTsum()==0 ? 'display: none':''}"   >FCT</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getS1sum()==-1 or sumNumber.getS1sum()==0 ? 'display: none':''}"    >S1</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getS2sum()==-1 or sumNumber.getS2sum()==0 ? 'display: none':''}" 	>S2</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getS3sum()==-1 or sumNumber.getS3sum()==0 ? 'display: none':''}" 	>S3</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getCCTsum()==-1 or sumNumber.getCCTsum()==0 ? 'display: none':''}" 	>CCT</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getW1sum()==-1 or sumNumber.getW1sum()==0 ? 'display: none':''}" 	>W1</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getW2sum()==-1 or sumNumber.getW2sum()==0 ? 'display: none':''}"  	>W2</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getUWBsum()==-1 or sumNumber.getUWBsum()==0 ? 'display: none':''}" 	>UWB</td>
+				<td class="center"  width="80px" th:style="${sumNumber.getSCONDsum()==-1 or  sumNumber.getSCONDsum()==0 ? 'display: none':''}" >SCOND</td>
+			</tr>
+			<tr>
+				<td class="center" style="background:#ffa3a3;" th:text="${sumNumber.getUPHTimesum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getDFUsum()==-1 or sumNumber.getDFUsum()==0 ? 'display: none':''}"  th:text="${sumNumber.getDFUsum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getFCTsum()==-1 or sumNumber.getFCTsum()==0 ? 'display: none':''}"  th:text="${sumNumber.getFCTsum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getS1sum()==-1 or sumNumber.getS1sum()==0 ? 'display: none':''}" th:text="${sumNumber.getS1sum()}"></td>
+				<td  class="center"		th:style="${sumNumber.getS2sum()==-1 or sumNumber.getS2sum()==0 ? 'display: none':''}" th:text="${sumNumber.getS2sum()}"></td>
+				<td  class="center"		th:style="${sumNumber.getS3sum()==-1 or sumNumber.getS3sum()==0 ? 'display: none':''}" th:text="${sumNumber.getS3sum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getCCTsum()==-1 or sumNumber.getCCTsum()==0 ? 'display: none':''}" th:text="${sumNumber.getCCTsum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getW1sum()==-1 or sumNumber.getW1sum()==0 ? 'display: none':''}" th:text="${sumNumber.getW1sum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getW2sum()==-1 or sumNumber.getW2sum()==0 ? 'display: none':''}" th:text="${sumNumber.getW2sum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getUWBsum()==-1 or sumNumber.getUWBsum()==0 ? 'display: none':''}" th:text="${sumNumber.getUWBsum()}"></td>
+				<td class="center" 		th:style="${sumNumber.getSCONDsum()==-1 or  sumNumber.getSCONDsum()==0 ? 'display: none':''}" th:text="${sumNumber.getSCONDsum()}"></td>
+
+			</tr>
+
+		</table>
+
+		<table style="float: right;width:300px;line-height: 38px; margin: 17px -15px 0px 0px;">
+			<tr class="bordertd" style="background:#FDEE68;"><th colspan="4">TOP&nbsp;5&nbsp;GAP&nbsp;分析</th></tr>
+			<tr class="bordertd">
+				<td>1</td>
+				<td>機台利用率低</td>
+				<td>14</td>
+				<td>70%</td>
+			</tr>
+			<tr class="bordertd">
+				<td>2</td>
+				<td>FACT_B</td>
+				<td>3</td>
+				<td>6%</td>
+			</tr>
+			<tr class="bordertd">
+				<td>3</td>
+				<td>FACT_C</td>
+				<td>1</td>
+				<td>1%</td>
+			</tr>
+			<tr class="bordertd">
+				<td>4</td>
+				<td>FACT_D</td>
+				<td>1</td>
+				<td>1%</td>
+			</tr>
+			<tr class="bordertd">
+				<td>5</td>
+				<td>FACT_E</td>
+				<td>1</td>
+				<td>1%</td>
+			</tr>
+		</table>
+		<table style="float: right;width:300px;line-height: 39px;margin:262px -300px 0px 0px;">
+			<tr class="bordertd" style="background:#FDEE68;"><th colspan="3">處理平均效能</th></tr>
+			<tr class="bordertd">
+				<td>通知頻繁度</td>
+				<td>次</td>
+				<td>2.5</td>
+			</tr>
+			<tr class="bordertd">
+				<td>確認通知時間</td>
+				<td>_</td>
+				<td>34分42秒</td>
+			</tr>
+			<tr class="bordertd">
+				<td>傳播接受度</td>
+				<td>%</td>
+				<td>86.2</td>
+			</tr>
+		</table>
+
+	</div>-->
+
+
+	<div style=" margin-top: 40px;overflow: scroll;width: 98%;padding: 0 0px 0 20px;overflow-y: hidden;overflow-x: hidden;">
+		<h5 style="font-size: 16px">UPH不達標工站分析(Worst&nbsp;Top&nbsp;3&nbsp;station)</h5>
+		<table style="width:1000px;background: #f5f5f5;">
+			<tr  style="background: #FFEF5B;" class="target_td">
+				<td  style="width: 8%;">工站名稱</td>
+				<td  style="width: 10%;">單台累計產出目標</td>
+				<td id="UphtdTable">
+					<table  style="width: 100%;height: 40px;">
+						<tr>
+							<td  style="width:14%;">線體名稱</td>
+							<td  style="width:18%;" >機台編號</td>
+							<td  style="width:5%;" >產出</td>
+							<td  style="width:5%;" >FailQ'ty</td>
+							<td  style="width:9%;" >直通率</td>
+							<td  style="width:9%;" >良率</td>
+							<td  style="width:9%;" >誤測</td>
+							<td  style="width:30%;">異常預判</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr  th:if="${DFUAmountsList.size()}!=0">
+				<td  style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center"  th:title="'產出為0的機台數量：'+${UnusualDFUMachinae}+' 台'">DFU</td>
+				<td   class="target_td" style="width: 10%;" th:text="${sumNumber.getActionDFUsum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;"border="1">
+						<tr  class="bordertd" style="border-top: 1px" th:each="amount : ${DFUAmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${FCTAmountsList.size()}!=0">
+				<td  style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualFCTMachinae}+' 台'">FCT</td>
+				<td   class="target_td" th:text="${sumNumber.getActionFCTsum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;"border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${FCTAmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${S1AmountsList.size()}!=0"  >
+				<td style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualS1Machinae}+' 台'">S1</td>
+				<td   class="target_td" style="width: 10%;" th:text="${sumNumber.getActionS1sum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;" border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${S1AmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${S2AmountsList.size()}!=0">
+				<td  style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualS2Machinae}+' 台'">S2</td>
+				<td   class="target_td" style="width: 10%;" th:text="${sumNumber.getActionS2sum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;"border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${S2AmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${S3AmountsList.size()}!=0">
+				<td style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualS3Machinae}+' 台'">S3</td>
+				<td class="target_td" style="width: 10%;" th:text="${sumNumber.getActionS3sum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;"border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${S3AmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${CCTAmountsList.size()}!=0">
+				<td style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualCCTMachinae}+' 台'">CCT</td>
+				<td class="target_td" style="width: 10%;" th:text="${sumNumber.getActionCCTsum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;"border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${CCTAmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${W1AmountsList.size()}!=0">
+				<td style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualW1Machinae}+' 台'">W1</td>
+				<td class="target_td" style="width: 10%;" th:text="${sumNumber.getActionW1sum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;"border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${W1AmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${W2AmountsList.size()}!=0">
+				<td  style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualW2Machinae}+' 台'">W2</td>
+				<td   class="target_td" style="width: 10%;" th:text="${sumNumber.getActionW2sum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;"border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${W2AmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${UWBAmountsList.size()}!=0">
+				<td  style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center" th:title="'產出為0的機台數量：'+${UnusualUWBMachinae}+' 台'">UWB</td>
+				<td   class="target_td" style="width: 10%;" th:text="${sumNumber.getActionUWBsum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;" border="1">
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${UWBAmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr th:if="${SCONDAmountsList.size()}!=0">
+				<td  style="width: 8%;border-bottom: 1px solid;border-right: 1px solid;border-left: 1px solid;text-align:center"
+					 th:title="'產出為0的機台數量：'+${UnusualSCONDMachinae}+' 台'" >SCOND</td>
+				<td  class="target_td" style="width: 10%;" th:text="${sumNumber.getActionSCONDsum()}"></td>
+				<td>
+					<table  style="width: 100%;border-top: 0px;" border="1" >
+						<tr class="bordertd" style="border-top: 1px" th:each="amount : ${SCONDAmountsList}">
+							<td  style="width:14%;" th:text="${amount.getLINE_NAME()}"></td>
+							<td	 style="width:18%;" th:text="${amount.getMachine_no()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getAmountuph()==null ? '0':amount.getAmountuph()}"></td>
+							<td	 style="width:5%;" th:text="${amount.getFAIL_Q() ==null ? '0':amount.getFAIL_Q()}" ></td>
+							<td	 style="width:9%;" th:text="${amount.getFPY()==null ? '0':amount.getFPY()}+'%'" ></td>
+							<td	 style="width:9%;" th:text="${amount.getYIELD()==null ? '0':amount.getYIELD()}+'%'"></td>
+							<td	 style="width:9%;" th:text="${amount.getMISDETET()==null ? '0':amount.getMISDETET()}+'%'"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()} !=null" th:text="${amount.getFPYTarget() > amount.getFPY() ? 'KPI不達標，請排查機台及主板狀況':'KPI達標，請排查供板狀況'}"></td>
+							<td	 style="width:30%;" th:if="${amount.getFPY()}==null" >請排查機台及主板狀況</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>
+
+</body>
+
+
+
+<script type="text/javascript">
+    /* 标题导航栏jq */
+    $(function () {
+        $('[js-tab=3]').tab({
+            curDisplay: 1,/* 默认div第一位标题 */
+        });
+    });
+</script>
+</html>

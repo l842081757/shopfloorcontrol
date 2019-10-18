@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shop.dao.AUTOFLOOR_OP_ISSUEMapper" >
+  <resultMap id="BaseResultMap" type="com.shop.model.AUTOFLOOR_OP_ISSUE" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="AREA" property="area" jdbcType="VARCHAR" />
+    <result column="FLOOR" property="floor" jdbcType="VARCHAR" />
+    <result column="PRODUCT" property="product" jdbcType="VARCHAR" />
+    <result column="SN" property="sn" jdbcType="VARCHAR" />
+    <result column="LINE_NAME" property="lineName" jdbcType="VARCHAR" />
+    <result column="PRE_STATION" property="preStation" jdbcType="VARCHAR" />
+    <result column="STATION_NAME" property="stationName" jdbcType="VARCHAR" />
+    <result column="MACHINE_NO" property="machineNo" jdbcType="VARCHAR" />
+    <result column="EMP_NO" property="empNo" jdbcType="VARCHAR" />
+    <result column="ERROR_TYPE" property="errorType" jdbcType="DECIMAL" />
+    <result column="INPUT_DATETIME" property="inputDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, AREA, FLOOR, PRODUCT, SN, LINE_NAME, PRE_STATION, STATION_NAME, MACHINE_NO, EMP_NO, 
+    ERROR_TYPE, INPUT_DATETIME, P1, P2, P3, P4, P5, P6, P7, P8
+  </sql>
+
+  <!--投首漏扫描 使用此sql-->
+  <select id="OPISSUE_ERROR_TYPE2" resultMap="BaseResultMap">
+<![CDATA[
+SELECT M.LINE_NAME,M.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(select T.LINE_NAME,T.STATION_NAME,T.MACHINE_NO,T.INPUT_DATETIME,T.ERROR_TYPE
+from (select a.*,row_number() over(partition by a.SN order by a.INPUT_DATETIME ASC) rw
+from AUTOFLOOR_OP_ISSUE  a
+WHERE A.INPUT_DATETIME >=sysdate -2/24
+AND A.INPUT_DATETIME <sysdate
+AND LINE_NAME LIKE #{line_name}||'%'
+AND A.PRE_STATION='TEST_INPUT1'
+AND A.ERROR_TYPE=2) t
+where t.rw=1) M  GROUP BY M.LINE_NAME,M.ERROR_TYPE
+]]>
+</select>
+  <!--投首漏扫描 使用此sql-->
+  <select id="OPISSUE_ERROR_TYPE2OneDay" resultMap="BaseResultMap">
+<![CDATA[
+SELECT M.LINE_NAME,M.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(select T.LINE_NAME,T.STATION_NAME,T.MACHINE_NO,T.INPUT_DATETIME,T.ERROR_TYPE
+from (select a.*,row_number() over(partition by a.SN order by a.INPUT_DATETIME ASC) rw
+from AUTOFLOOR_OP_ISSUE  a
+WHERE A.INPUT_DATETIME >= to_date('${start_date} 00:00:00','YYYY/MM/DD HH24:MI:SS')
+AND A.INPUT_DATETIME < to_date('${end_date} 23:59:00','YYYY/MM/DD HH24:MI:SS')
+AND LINE_NAME LIKE #{line_name}||'%'
+AND A.PRE_STATION='TEST_INPUT1'
+AND A.ERROR_TYPE=2) t
+where t.rw=1) M  GROUP BY M.LINE_NAME,M.ERROR_TYPE
+]]>
+</select>
+
+
+  <!--投首漏扫描 使用此sql-->
+  <select id="OPISSUE_ERROR_TYPEOneDay" resultMap="BaseResultMap">
+  <![CDATA[
+select sum(w.qERRORTYPE) as ERRORTYPESUM from (
+select sum(q.ERROR_TYPENO) as qERRORTYPE from (
+SELECT M.LINE_NAME,M.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(select T.LINE_NAME,T.STATION_NAME,T.MACHINE_NO,T.INPUT_DATETIME,T.ERROR_TYPE
+from (select a.*,row_number() over(partition by a.SN order by a.INPUT_DATETIME ASC) rw
+from AUTOFLOOR_OP_ISSUE  a
+WHERE A.INPUT_DATETIME >= to_date('${start_date} 00:00:00','YYYY/MM/DD HH24:MI:SS')
+AND A.INPUT_DATETIME < to_date('${end_date} 23:59:00','YYYY/MM/DD HH24:MI:SS')
+AND LINE_NAME LIKE #{floor_name}||'%'
+AND A.PRE_STATION='TEST_INPUT1'
+AND A.ERROR_TYPE=2) t
+where t.rw=1) M  GROUP BY M.LINE_NAME,M.ERROR_TYPE)q
+union
+select sum(q.ERROR_TYPENO) as  qERRORTYPE from (
+SELECT T.LINE_NAME,T.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(SELECT DISTINCT LINE_NAME,STATION_NAME,MACHINE_NO,INPUT_DATETIME,ERROR_TYPE FROM AUTOFLOOR_OP_ISSUE
+WHERE INPUT_DATETIME >= to_date('${start_date} 00:00:00','YYYY/MM/DD HH24:MI:SS')
+AND INPUT_DATETIME < to_date('${end_date} 23:59:00','YYYY/MM/DD HH24:MI:SS')
+AND LINE_NAME LIKE #{floor_name}||'%'
+AND ERROR_TYPE!=2) T  GROUP BY T.LINE_NAME,T.ERROR_TYPE)q ) w
+  ]]>
+</select>
+
+  <!--投首漏扫描 使用此sql-->
+  <select id="OPISSUE_ERROR_TYPE7Day" resultMap="BaseResultMap">
+  <![CDATA[
+select sum(w.qERRORTYPE) as ERRORTYPESUM from (
+select sum(q.ERROR_TYPENO) as qERRORTYPE from (
+SELECT M.LINE_NAME,M.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(select T.LINE_NAME,T.STATION_NAME,T.MACHINE_NO,T.INPUT_DATETIME,T.ERROR_TYPE
+from (select a.*,row_number() over(partition by a.SN order by a.INPUT_DATETIME ASC) rw
+from AUTOFLOOR_OP_ISSUE  a
+WHERE A.INPUT_DATETIME >= sysdate-7
+AND A.INPUT_DATETIME < sysdate
+AND LINE_NAME LIKE #{floor_name}||'%'
+AND A.PRE_STATION='TEST_INPUT1'
+AND A.ERROR_TYPE=2) t
+where t.rw=1) M  GROUP BY M.LINE_NAME,M.ERROR_TYPE)q
+union
+select sum(q.ERROR_TYPENO) as  qERRORTYPE from (
+SELECT T.LINE_NAME,T.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(SELECT DISTINCT LINE_NAME,STATION_NAME,MACHINE_NO,INPUT_DATETIME,ERROR_TYPE FROM AUTOFLOOR_OP_ISSUE
+WHERE INPUT_DATETIME >= sysdate-7
+AND INPUT_DATETIME < sysdate
+AND LINE_NAME LIKE #{floor_name}||'%'
+AND ERROR_TYPE!=2) T  GROUP BY T.LINE_NAME,T.ERROR_TYPE)q ) w
+  ]]>
+</select>
+
+  <!--投首漏扫描 使用此sql-->
+  <select id="OPISSUE_ERROR_TYPE30Day" resultMap="BaseResultMap">
+  <![CDATA[
+select sum(w.qERRORTYPE) as ERRORTYPESUM from (
+select sum(q.ERROR_TYPENO) as qERRORTYPE from (
+SELECT M.LINE_NAME,M.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(select T.LINE_NAME,T.STATION_NAME,T.MACHINE_NO,T.INPUT_DATETIME,T.ERROR_TYPE
+from (select a.*,row_number() over(partition by a.SN order by a.INPUT_DATETIME ASC) rw
+from AUTOFLOOR_OP_ISSUE  a
+WHERE A.INPUT_DATETIME >= sysdate-30
+AND A.INPUT_DATETIME < sysdate
+AND LINE_NAME LIKE #{floor_name}||'%'
+AND A.PRE_STATION='TEST_INPUT1'
+AND A.ERROR_TYPE=2) t
+where t.rw=1) M  GROUP BY M.LINE_NAME,M.ERROR_TYPE)q
+union
+select sum(q.ERROR_TYPENO) as  qERRORTYPE from (
+SELECT T.LINE_NAME,T.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(SELECT DISTINCT LINE_NAME,STATION_NAME,MACHINE_NO,INPUT_DATETIME,ERROR_TYPE FROM AUTOFLOOR_OP_ISSUE
+WHERE INPUT_DATETIME >= sysdate-30
+AND INPUT_DATETIME < sysdate
+AND LINE_NAME LIKE #{floor_name}||'%'
+AND ERROR_TYPE!=2) T  GROUP BY T.LINE_NAME,T.ERROR_TYPE)q ) w
+  ]]>
+</select>
+
+  <!--漏测.混测.确认模式异常.工号无权限.機台號错误.SN扫描错误  使用此sql-->
+  <select id="OPISSUE_ERROR_TYPE3_8" resultMap="BaseResultMap">
+<![CDATA[
+SELECT T.LINE_NAME,T.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(SELECT DISTINCT LINE_NAME,STATION_NAME,MACHINE_NO,INPUT_DATETIME,ERROR_TYPE FROM AUTOFLOOR_OP_ISSUE
+WHERE INPUT_DATETIME >=sysdate -2/24
+AND INPUT_DATETIME < sysdate
+AND LINE_NAME LIKE #{line_name}||'%'
+AND ERROR_TYPE!=2) T  GROUP BY T.LINE_NAME,T.ERROR_TYPE
+]]>
+</select>
+  <!--漏测.混测.确认模式异常.工号无权限.機台號错误.SN扫描错误  使用此sql-->
+  <select id="OPISSUE_ERROR_TYPE3_8OneDay" resultMap="BaseResultMap">
+<![CDATA[
+SELECT T.LINE_NAME,T.ERROR_TYPE,COUNT(*) AS ERROR_TYPENO FROM
+(SELECT DISTINCT LINE_NAME,STATION_NAME,MACHINE_NO,INPUT_DATETIME,ERROR_TYPE FROM AUTOFLOOR_OP_ISSUE
+WHERE INPUT_DATETIME >= to_date('${start_date} 00:00:00','YYYY/MM/DD HH24:MI:SS')
+AND INPUT_DATETIME < to_date('${end_date} 23:59:00','YYYY/MM/DD HH24:MI:SS')
+AND LINE_NAME LIKE #{line_name}||'%'
+AND ERROR_TYPE!=2) T  GROUP BY T.LINE_NAME,T.ERROR_TYPE
+]]>
+</select>
+
+  <!--OPISSUE详细  使用此sql-->
+  <select id="OPISSUE_detail" resultType="com.shop.model.AUTOFLOOR_OP_ISSUE">
+<![CDATA[
+select SN as sn,LINE_NAME as lineName,STATION_NAME as stationName,MACHINE_NO as machineNo,INPUT_DATETIME as inputDatetime,ERROR_TYPE as errorType from (
+  select T.SN,T.LINE_NAME,T.STATION_NAME,T.MACHINE_NO,T.INPUT_DATETIME,T.ERROR_TYPE
+  from (select a.*,row_number() over(partition by a.SN order by a.INPUT_DATETIME ASC) rw
+  from AUTOFLOOR_OP_ISSUE  a
+  WHERE A.INPUT_DATETIME >=sysdate -2/24
+  AND A.INPUT_DATETIME < sysdate
+  AND A.PRE_STATION='TEST_INPUT1'
+  AND A.ERROR_TYPE=2
+  AND A.LINE_NAME=#{line_name}) t
+  where t.rw=1
+  union
+  SELECT DISTINCT SN,LINE_NAME,STATION_NAME,MACHINE_NO,INPUT_DATETIME,ERROR_TYPE FROM AUTOFLOOR_OP_ISSUE
+  WHERE INPUT_DATETIME  >=sysdate -2/24
+  AND INPUT_DATETIME < sysdate
+  AND ERROR_TYPE!=2
+  AND LINE_NAME=#{line_name})
+]]>
+</select>
+  <!--OPISSUE详细 PageInfo 使用此sql-->
+  <select id="OPISSUE_detailPage" resultType="com.shop.model.PageInfo">
+<![CDATA[
+select * from (
+  select T.SN,T.LINE_NAME,T.STATION_NAME,T.MACHINE_NO,T.INPUT_DATETIME,T.ERROR_TYPE
+  from (select a.*,row_number() over(partition by a.SN order by a.INPUT_DATETIME ASC) rw
+  from AUTOFLOOR_OP_ISSUE  a
+  WHERE A.INPUT_DATETIME >=sysdate -2/24
+  AND A.INPUT_DATETIME < sysdate
+  AND A.PRE_STATION='TEST_INPUT1'
+  AND A.ERROR_TYPE=2
+  AND A.LINE_NAME=#{line_name}) t
+  where t.rw=1
+  union
+  SELECT DISTINCT SN,LINE_NAME,STATION_NAME,MACHINE_NO,INPUT_DATETIME,ERROR_TYPE FROM AUTOFLOOR_OP_ISSUE
+  WHERE INPUT_DATETIME  >=sysdate -2/24
+  AND INPUT_DATETIME < sysdate
+  AND ERROR_TYPE!=2
+  AND LINE_NAME=#{line_name})
+]]>
+</select>
+
+
+
+
+
+</mapper>

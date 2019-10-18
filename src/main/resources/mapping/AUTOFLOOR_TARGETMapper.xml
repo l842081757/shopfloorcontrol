@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shop.dao.AUTOFLOOR_TARGETMapper" >
+  <resultMap id="BaseResultMap" type="com.shop.model.AUTOFLOOR_TARGET" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="TARGET_DATE" property="targetDate" jdbcType="TIMESTAMP" />
+    <result column="T_CLASS" property="tClass" jdbcType="VARCHAR" />
+    <result column="T_FLOOR" property="tFloor" jdbcType="VARCHAR" />
+    <result column="LINE_NAME" property="lineName" jdbcType="VARCHAR" />
+    <result column="T_PRODUCT" property="tProduct" jdbcType="VARCHAR" />
+    <result column="INPUT_TIME" property="inputTime" jdbcType="TIMESTAMP" />
+    <result column="D_TARGET" property="dTarget" jdbcType="DECIMAL" />
+    <result column="WORKING_HOURS" property="workingHours" jdbcType="DECIMAL" />
+    <result column="H_TARGET" property="hTarget" jdbcType="DECIMAL" />
+    <result column="TYPE_TARGET" property="typeTarget" jdbcType="VARCHAR" />
+    <result column="T_AREA" property="tArea" jdbcType="VARCHAR" />
+    <result column="P1" property="p1" jdbcType="VARCHAR" />
+    <result column="P2" property="p2" jdbcType="VARCHAR" />
+    <result column="P3" property="p3" jdbcType="VARCHAR" />
+    <result column="P4" property="p4" jdbcType="VARCHAR" />
+    <result column="P5" property="p5" jdbcType="VARCHAR" />
+    <result column="P6" property="p6" jdbcType="VARCHAR" />
+    <result column="P7" property="p7" jdbcType="VARCHAR" />
+    <result column="P8" property="p8" jdbcType="VARCHAR" />
+    <result column="P9" property="p9" jdbcType="VARCHAR" />
+    <result column="P10" property="p10" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, TARGET_DATE, T_CLASS, T_FLOOR, LINE_NAME, T_PRODUCT, INPUT_TIME, D_TARGET, WORKING_HOURS,
+    H_TARGET, TYPE_TARGET, T_AREA, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10
+  </sql>
+  <!--查询-->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select
+    <include refid="Base_Column_List" />
+    from AUTOFLOOR_TARGET
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 每條線的目标 名称  D073F  Lotus  （變量：時間）-->
+<select id="outPutTarGetF"   resultMap="BaseResultMap">
+  SELECT * FROM AUTOFLOOR_TARGET where
+  TARGET_date = to_date('${startdate} 00:00:00','YYYY-MM-DD HH24:MI:SS')
+  and T_FLOOR Like #{floorname}||'%'
+  and T_CLASS = #{tClass}
+  and T_PRODUCT =#{product}
+  and LINE_NAME  LIKE #{linename}||'%'
+  order by ID ASC
+</select>
+
+  <!-- 條線的名称获取所有目标  D073F  Lotus  （變量：時間）-->
+  <select id="LinenameTarGet"   resultMap="BaseResultMap">
+  SELECT * FROM AUTOFLOOR_TARGET where
+  TARGET_date = to_date('${startdate} 00:00:00','YYYY-MM-DD HH24:MI:SS')
+  and LINE_NAME = #{linename}
+  and T_CLASS = #{tClass}
+</select>
+
+  <!-- 按楼层机种获取條線的名称获取所有目标  D073F  Lotus  （變量：時間）-->
+  <select id="LinenameGet"   resultMap="BaseResultMap">
+ SELECT  T_FLOOR,LINE_NAME,T_PRODUCT,sum(WORKING_HOURS) as WORKING_HOURS,D_TARGET FROM AUTOFLOOR_TARGET where
+  TARGET_date = to_date('${startdate} 00:00:00','YYYY-MM-DD HH24:MI:SS')
+  and T_FLOOR Like #{floorname}||'%'
+  and LINE_NAME  LIKE #{linename}||'%'
+  and T_CLASS=#{tClass}
+  and T_PRODUCT =#{Productname}
+  group by LINE_NAME,T_FLOOR,T_PRODUCT,D_TARGET
+  order by LINE_NAME ASC
+</select>
+  <!-- 昨天條線的名称获取所有目标  D073F  Lotus  （變量：時間）-->
+  <select id="YesterDayLinenameTarGet"   resultMap="BaseResultMap">
+   SELECT  T_FLOOR,LINE_NAME,sum(D_TARGET) as D_TARGET ,sum(WORKING_HOURS)as WORKING_HOURS,sum(H_TARGET) as H_TARGET FROM AUTOFLOOR_TARGET where
+    TARGET_date = to_date('${startdate} 00:00:00','YYYY-MM-DD HH24:MI:SS')
+    and T_FLOOR Like #{floorname}||'%'
+    and T_PRODUCT =#{Productname}
+    and LINE_NAME  LIKE #{linename}||'%'
+    group by LINE_NAME,T_FLOOR
+</select>
+
+  <!-- RobotARF條線的名称获取所有目标  D073F  Lotus  （變量：時間）-->
+  <select id="RobotLinenameTarGet"   resultMap="BaseResultMap">
+  SELECT * FROM AUTOFLOOR_TARGET where
+  TARGET_date = to_date('${startdate} 00:00:00','YYYY-MM-DD HH24:MI:SS')
+  and T_FLOOR Like #{floorname}||'%'
+  and T_CLASS=#{tClass}
+  and LINE_NAME  LIKE #{linename}||'%'
+  order by LINE_NAME ASC
+</select>
+  <!-- 昨日RobotARF條線的名称获取所有目标  D073F  Lotus  （變量：時間）-->
+  <select id="RobotLinenameTarGetYesterday"   resultMap="BaseResultMap">
+  SELECT  T_FLOOR,LINE_NAME,T_PRODUCT,sum(WORKING_HOURS) as WORKING_HOURS,D_TARGET FROM AUTOFLOOR_TARGET where
+  TARGET_date = to_date('${startdate} 00:00:00','YYYY-MM-DD HH24:MI:SS')
+  and T_FLOOR Like #{floorname}||'%'
+  and LINE_NAME  LIKE #{linename}||'%'
+  and T_CLASS=#{tClass}
+  group by LINE_NAME,T_FLOOR,T_PRODUCT,D_TARGET
+  order by T_PRODUCT ASC
+</select>
+
+
+
+
+<!--Lot Day每條線的產能  D073F  Lotus  （變量：時間）-->
+<select id="actualOut"  resultType="int">
+    <![CDATA[
+  select sum(uph) from autofloor_uph
+  where start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and end_time < to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and  floor Like #{floorname}||'%'
+  and station_name='SCOND'
+  and line_name LIKE #{linename}||'%'
+    ]]>
+</select>
+
+<!--Lot YesterDay每條線的產能  D073F  Lotus  （變量：時間）-->
+<select id="actualOutYesterDay"  resultType="int">
+<![CDATA[
+select sum(uph) from autofloor_uph
+where start_time >= to_date('${startdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and end_time < to_date('${endstartdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+and  floor Like #{floorname}||'%'
+and station_name='SCOND'
+and line_name LIKE #{linename}||'%'
+]]>
+</select>
+
+
+  <!--Lot Day每條線的產能  D073F  Lotus  （變量：時間）-->
+<select id="HouractualOut"  resultType="int">
+    <![CDATA[
+  select sum(uph) from autofloor_uph
+  where start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and end_time < to_date('${enddate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and  floor Like #{floorname}||'%'
+  and station_name='SCOND'
+  and line_name LIKE #{linename}||'%'
+    ]]>
+</select>
+
+  <!--Night-->
+  <select id="NightactualOut"  resultType="int">
+<![CDATA[
+  select sum(uph) from autofloor_uph
+  where start_time >= to_date('${startdate} 20:30:00','YYYY/MM/DD HH24:MI:SS')
+  and end_time < to_date('${endstartdate} 08:30:00','YYYY/MM/DD HH24:MI:SS')
+  and  floor Like #{floorname}||'%'
+  and station_name='SCOND'
+  and line_name LIKE #{linename}||'%'
+      ]]>
+</select>
+
+
+  <select id="AutoFloorRate_cunchu" resultType="com.shop.model.AutoFloor_Rate">
+  <![CDATA[
+ select 'D073FARF01',round(exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FARF01%' group by station_name  order by station_name) t
+where t.rate<>0
+union
+select 'D073FARF02',round(exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FARF02%' group by station_name  order by station_name) t
+where t.rate<>0
+union
+select 'D073FARF03',round(exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FARF03%' group by station_name  order by station_name) t
+where t.rate<>0
+union
+select 'D073FARF04',round(exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FARF04%' group by station_name  order by station_name) t
+where t.rate<>0
+union
+select 'D073FARF05',round(exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FARF05%' group by station_name  order by station_name) t
+where t.rate<>0
+union
+select 'D073FARF06',round( exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FARF06%' group by station_name  order by station_name) t
+where t.rate<>0
+union
+select 'D073FRF13',round( exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FRF13%' group by station_name  order by station_name) t
+where t.rate<>0
+union
+select 'D073FRF14',round( exp(sum(ln(t.rate))),4) as rate1 from
+(select station_name, round(sum(pass)/(sum(input)+1),4) as Rate from autofloor_rate
+where  start_time >=sysdate -2/24 and start_time <sysdate
+and floor='D073F'
+and product='Lotus'
+and line_name like 'D073FARF14%' group by station_name  order by station_name) t
+where t.rate<>0
+]]>
+</select>
+
+
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from AUTOFLOOR_TARGET
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.shop.model.AUTOFLOOR_TARGET" >
+    insert into AUTOFLOOR_TARGET (ID, TARGET_DATE, T_CLASS,
+      T_FLOOR, LINE_NAME, T_PRODUCT,
+      INPUT_TIME, D_TARGET, WORKING_HOURS,
+      H_TARGET, TYPE_TARGET, T_AREA,
+      P1, P2, P3, P4,
+      P5, P6, P7, P8,
+      P9, P10)
+    values (#{id,jdbcType=DECIMAL}, #{targetDate,jdbcType=TIMESTAMP}, #{tClass,jdbcType=VARCHAR},
+      #{tFloor,jdbcType=VARCHAR}, #{lineName,jdbcType=VARCHAR}, #{tProduct,jdbcType=VARCHAR},
+      #{inputTime,jdbcType=TIMESTAMP}, #{dTarget,jdbcType=DECIMAL}, #{workingHours,jdbcType=DECIMAL},
+      #{hTarget,jdbcType=DECIMAL}, #{typeTarget,jdbcType=VARCHAR}, #{tArea,jdbcType=VARCHAR},
+      #{p1,jdbcType=VARCHAR}, #{p2,jdbcType=VARCHAR}, #{p3,jdbcType=VARCHAR}, #{p4,jdbcType=VARCHAR},
+      #{p5,jdbcType=VARCHAR}, #{p6,jdbcType=VARCHAR}, #{p7,jdbcType=VARCHAR}, #{p8,jdbcType=VARCHAR},
+      #{p9,jdbcType=VARCHAR}, #{p10,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.shop.model.AUTOFLOOR_TARGET" >
+    insert into AUTOFLOOR_TARGET
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="targetDate != null" >
+        TARGET_DATE,
+      </if>
+      <if test="tClass != null" >
+        T_CLASS,
+      </if>
+      <if test="tFloor != null" >
+        T_FLOOR,
+      </if>
+      <if test="lineName != null" >
+        LINE_NAME,
+      </if>
+      <if test="tProduct != null" >
+        T_PRODUCT,
+      </if>
+      <if test="inputTime != null" >
+        INPUT_TIME,
+      </if>
+      <if test="dTarget != null" >
+        D_TARGET,
+      </if>
+      <if test="workingHours != null" >
+        WORKING_HOURS,
+      </if>
+      <if test="hTarget != null" >
+        H_TARGET,
+      </if>
+      <if test="typeTarget != null" >
+        TYPE_TARGET,
+      </if>
+      <if test="tArea != null" >
+        T_AREA,
+      </if>
+      <if test="p1 != null" >
+        P1,
+      </if>
+      <if test="p2 != null" >
+        P2,
+      </if>
+      <if test="p3 != null" >
+        P3,
+      </if>
+      <if test="p4 != null" >
+        P4,
+      </if>
+      <if test="p5 != null" >
+        P5,
+      </if>
+      <if test="p6 != null" >
+        P6,
+      </if>
+      <if test="p7 != null" >
+        P7,
+      </if>
+      <if test="p8 != null" >
+        P8,
+      </if>
+      <if test="p9 != null" >
+        P9,
+      </if>
+      <if test="p10 != null" >
+        P10,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="targetDate != null" >
+        #{targetDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tClass != null" >
+        #{tClass,jdbcType=VARCHAR},
+      </if>
+      <if test="tFloor != null" >
+        #{tFloor,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null" >
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="tProduct != null" >
+        #{tProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="inputTime != null" >
+        #{inputTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dTarget != null" >
+        #{dTarget,jdbcType=DECIMAL},
+      </if>
+      <if test="workingHours != null" >
+        #{workingHours,jdbcType=DECIMAL},
+      </if>
+      <if test="hTarget != null" >
+        #{hTarget,jdbcType=DECIMAL},
+      </if>
+      <if test="typeTarget != null" >
+        #{typeTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="tArea != null" >
+        #{tArea,jdbcType=VARCHAR},
+      </if>
+      <if test="p1 != null" >
+        #{p1,jdbcType=VARCHAR},
+      </if>
+      <if test="p2 != null" >
+        #{p2,jdbcType=VARCHAR},
+      </if>
+      <if test="p3 != null" >
+        #{p3,jdbcType=VARCHAR},
+      </if>
+      <if test="p4 != null" >
+        #{p4,jdbcType=VARCHAR},
+      </if>
+      <if test="p5 != null" >
+        #{p5,jdbcType=VARCHAR},
+      </if>
+      <if test="p6 != null" >
+        #{p6,jdbcType=VARCHAR},
+      </if>
+      <if test="p7 != null" >
+        #{p7,jdbcType=VARCHAR},
+      </if>
+      <if test="p8 != null" >
+        #{p8,jdbcType=VARCHAR},
+      </if>
+      <if test="p9 != null" >
+        #{p9,jdbcType=VARCHAR},
+      </if>
+      <if test="p10 != null" >
+        #{p10,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shop.model.AUTOFLOOR_TARGET" >
+    update AUTOFLOOR_TARGET
+    <set >
+      <if test="targetDate != null" >
+        TARGET_DATE = #{targetDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tClass != null" >
+        T_CLASS = #{tClass,jdbcType=VARCHAR},
+      </if>
+      <if test="tFloor != null" >
+        T_FLOOR = #{tFloor,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null" >
+        LINE_NAME = #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="tProduct != null" >
+        T_PRODUCT = #{tProduct,jdbcType=VARCHAR},
+      </if>
+      <if test="inputTime != null" >
+        INPUT_TIME = #{inputTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dTarget != null" >
+        D_TARGET = #{dTarget,jdbcType=DECIMAL},
+      </if>
+      <if test="workingHours != null" >
+        WORKING_HOURS = #{workingHours,jdbcType=DECIMAL},
+      </if>
+      <if test="hTarget != null" >
+        H_TARGET = #{hTarget,jdbcType=DECIMAL},
+      </if>
+      <if test="typeTarget != null" >
+        TYPE_TARGET = #{typeTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="tArea != null" >
+        T_AREA = #{tArea,jdbcType=VARCHAR},
+      </if>
+      <if test="p1 != null" >
+        P1 = #{p1,jdbcType=VARCHAR},
+      </if>
+      <if test="p2 != null" >
+        P2 = #{p2,jdbcType=VARCHAR},
+      </if>
+      <if test="p3 != null" >
+        P3 = #{p3,jdbcType=VARCHAR},
+      </if>
+      <if test="p4 != null" >
+        P4 = #{p4,jdbcType=VARCHAR},
+      </if>
+      <if test="p5 != null" >
+        P5 = #{p5,jdbcType=VARCHAR},
+      </if>
+      <if test="p6 != null" >
+        P6 = #{p6,jdbcType=VARCHAR},
+      </if>
+      <if test="p7 != null" >
+        P7 = #{p7,jdbcType=VARCHAR},
+      </if>
+      <if test="p8 != null" >
+        P8 = #{p8,jdbcType=VARCHAR},
+      </if>
+      <if test="p9 != null" >
+        P9 = #{p9,jdbcType=VARCHAR},
+      </if>
+      <if test="p10 != null" >
+        P10 = #{p10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shop.model.AUTOFLOOR_TARGET" >
+    update AUTOFLOOR_TARGET
+    set TARGET_DATE = #{targetDate,jdbcType=TIMESTAMP},
+      T_CLASS = #{tClass,jdbcType=VARCHAR},
+      T_FLOOR = #{tFloor,jdbcType=VARCHAR},
+      LINE_NAME = #{lineName,jdbcType=VARCHAR},
+      T_PRODUCT = #{tProduct,jdbcType=VARCHAR},
+      INPUT_TIME = #{inputTime,jdbcType=TIMESTAMP},
+      D_TARGET = #{dTarget,jdbcType=DECIMAL},
+      WORKING_HOURS = #{workingHours,jdbcType=DECIMAL},
+      H_TARGET = #{hTarget,jdbcType=DECIMAL},
+      TYPE_TARGET = #{typeTarget,jdbcType=VARCHAR},
+      T_AREA = #{tArea,jdbcType=VARCHAR},
+      P1 = #{p1,jdbcType=VARCHAR},
+      P2 = #{p2,jdbcType=VARCHAR},
+      P3 = #{p3,jdbcType=VARCHAR},
+      P4 = #{p4,jdbcType=VARCHAR},
+      P5 = #{p5,jdbcType=VARCHAR},
+      P6 = #{p6,jdbcType=VARCHAR},
+      P7 = #{p7,jdbcType=VARCHAR},
+      P8 = #{p8,jdbcType=VARCHAR},
+      P9 = #{p9,jdbcType=VARCHAR},
+      P10 = #{p10,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>
