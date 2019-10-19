@@ -55,7 +55,7 @@ public class AutoFloor_OP_ISSUEService implements AutoFloor_OP_ISSUEServiceImpls
     }
 
     @Override
-    public AUTOFLOOR_OP_ISSUE OPISSUE_ERROR_TYPEOneDay(Date start_date, Date end_date, String floor_name) {
+    public AUTOFLOOR_OP_ISSUE OPISSUE_ERROR_TYPEOneDay(String start_date, String end_date, String floor_name) {
         return autofloor_op_issueMapper.OPISSUE_ERROR_TYPEOneDay(start_date,end_date,floor_name);
     }
 

@@ -135,9 +135,9 @@
 	<div><p>Remark:&nbsp;停線顯示灰色,0＜異常＜2筆時，黃色預警；異常≥2筆時，紅色預警</p></div>
 
 		<div style="width: 75%;height: 30px">
-			<form action="#" th:action="@{/AllfloorOPissueSelect}" method="post">
+			<form  th:action="@{/AllfloorOPissueSelect}" method="post" id="dateform" onsubmit="javascript:return formon()">
 				<label style="float: left;"><span>開始時間:&nbsp;</span><input   style="margin: 0px;" name="dateinput1" id="zane-input1" type="text" class="input"  th:placeholder="${dateinput1==null ?'yyyy/MM/dd':dateinput1}" th:value="${dateinput1}" ></label>
-				<button style="float: right" class="btn" type="submit" onclick="formon()">搜索</button>
+				<button style="float: right" class="btn"   type="submit" >搜索</button>
 				<label style="float: right;margin-right: 200px;"><span>結束時間:&nbsp;</span><input name="dateinput2" style="margin: 0px;" id="zane-input2" type="text" class="input" th:placeholder="${dateinput2==null ?'yyyy/MM/dd':dateinput2}" th:value="${dateinput2}"></label>
 			</form>
 
@@ -248,11 +248,14 @@
 
 </body>
 
-<script type="text/javascript">
+<script th:inline="javascript">
     (function () {
         facilitybar();
     })();
     function facilitybar() {
+        var datajson = [[${ALLBYMWDData}]];
+        var  datalist= JSON.parse(datajson);
+        var data=generateData(datalist);
         var echartsShow1 = echarts.init(document.getElementById('facilitybar'));
         var	option = {
             legend: {},
@@ -275,57 +278,26 @@
             },
             xAxis: {
                 type: 'category',
-                data: ['Sep','Oct-Week1','10/17','10/18'],
+                data:data.categoryData,
+                inverse:true
             },
+            dataZoom: [
+                {
+                    type: 'slider',
+                    show : true,
+                    realtime : true,
+                    start : 30,
+                    end : 0
+                }
+            ],
             yAxis: {},
             // Declare several bar series, each will be mapped
             // to a column of dataset.source by default.
-            color:[
-                function(){
-                    var dates  = [[${error_TTLMap.get('errortypesum30day')}]];
-                    if(dates>0&&dates<=2){
-                        return "#f9d830";/* 黄 */
-                    }else if(dates>2){
-                        return "#c23531";/* 红 */
-                    }else if (dates<=0) {
-                        return '#2196F3';
-                    }
-                },
-                function(){
-                    var dates  = [[${error_TTLMap.get('errortypesum7day')}]];
-                    if(dates>0&&dates<=2){
-                        return "#f9d830";/* 黄 */
-                    }else if(dates>2){
-                        return "#c23531";/* 红 */
-                    }else if (dates<=0) {
-                        return '#2196F3';
-                    }
-                },
-                function(){
-                    var dates  = [[${error_TTLMap.get('errortypesumYesterday')}]];
-                    if(dates>0&&dates<=2){
-                        return "#f9d830";/* 黄 */
-                    }else if(dates>2){
-                        return "#c23531";/* 红 */
-                    }else if (dates<=0) {
-                        return '#2196F3';
-                    }
-                },
-                function(){
-                    var dates  = [[${error_TTLMap.get('errortypeOneDaysum')}]];
-                    if(dates>0&&dates<=2){
-                        return "#f9d830";/* 黄 */
-                    }else if(dates>2){
-                        return "#c23531";/* 红 */
-                    }else if (dates<=0) {
-                        return '#2196F3';
-                    }
-                }
-			],
+            color:data.valueColor,
             series: [{
-                name: 'OP Issue',
+                name: data.nameDate,
                 type: 'bar',
-                data: [ [[${error_TTLMap.get('errortypesum30day')}]],[[${error_TTLMap.get('errortypesum7day')}]],[[${error_TTLMap.get('errortypesumYesterday')}]],[[${error_TTLMap.get('errortypeOneDaysum')}]] ],
+                data: data.valueDataOPIssue,
                 label:{
                     show: true,//开启显示
                     position: 'top',
@@ -343,10 +315,34 @@
         echartsShow1.setOption(option);
         tools.loopShowTooltip(echartsShow1,option,{loopSeries: true});
     }
+    function generateData(count) {
+        var valueDataOPIssue = [];
+        var categoryData=[];
+        var nameDate=['OP Issue'];
+		var valueColor=[];
+        for (var i = 0; i < count.length; i++) {
+            categoryData.push(count[i].tMark);
+            valueDataOPIssue.push(count[i].oPIssue);
+                if(count[i].oPIssue>0&&count[i].oPIssue<=2){
+                    valueColor.push("#f9d830");/* 黄 */
+                }else if(count[i].oPIssue>2){
+                    valueColor.push("#c23531");/* 红 */
+                }else if (count[i].oPIssue<=0) {
+                    rvalueColor.push('#2196F3');
+                }
+        }
+
+        return {
+            categoryData:categoryData,
+            valueDataOPIssue:valueDataOPIssue,
+            valueColor:valueColor,
+            nameDate:nameDate
+        };
+    }
 </script>
 
 <!-- 柱状图 -->
-<script type="text/javascript">
+<script th:inline="javascript">
     $('#facilitytable').mouseover(function () {
         $('#facilitytable').unbind('mouseover');
     })
@@ -383,12 +379,12 @@
     })*/
 </script>
 
-<script type="text/javascript">
+<script th:inline="javascript">
 /*<![CDATA[*/
     zaneDate({
         elem:'#zane-input1',
-        max: '2019-10-18',
-        min:'2019-10-11',
+        max:[[${Scheduledate}]],
+        min:[[${YesterWeekdate}]],
         format:'yyyy-MM-dd',
         //可选取时间最小范围 1900-10-01
         //elem:'#zane-calendar',  控件的dom原生 注意：仅限制于id选择器（必填参，其他参数皆为可选参）
@@ -416,8 +412,8 @@
     })
     zaneDate({
         elem:'#zane-input2',
-        max: '2019-10-18',
-        min:'2019-10-11',
+        max:[[${Scheduledate}]],
+        min:[[${YesterWeekdate}]],
         format:'yyyy-MM-dd',//可选取时间最小范围 1900-10-01
     })
     /*]]>*/
@@ -466,17 +462,42 @@
         })
     }
 	function formon() {
+
         var input1=$('#zane-input1').val();
         var input2=$('#zane-input2').val();
+
         if (input1==""&&input2==""){
             alert("日期不能為空");
-            location.reload([bForceGet]);
-            //location.replace(document.referrer);
+            return false;
+		}else {
+            return true;
 		}
-
-
     }
-
+    //从最根本上也就是提示用户输入不了特殊字符
+  /*function showKeyPress(evt) {
+	evt = (evt) ? evt : window.event
+	return checkSpecificKey(evt.keyCode);
+	}
+	function checkSpecificKey(keyCode) {
+		var specialKey = "[`~!#$^&*()=|{}':;',\\[\\].<>?~！#￥……&*（）——|{}【】‘；：”“'。，、？]‘'";//Specific Key list
+		var realkey = String.fromCharCode(keyCode);
+		var flg = false;
+		flg = (specialKey.indexOf(realkey) >= 0);
+		if (flg) {
+	// alert('请勿输入特殊字符: ' + realkey);
+			return false;
+		}
+		return true;
+	}
+    //拿到value值以后 在你传递之前处理
+	function stripscript(value) {
+		var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]")
+		var rs = "";
+		for (var i = 0; i < value.length; i++) {
+			rs = rs+s.substr(i, 1).replace(pattern, '');
+		}
+		return rs;
+	}*/
 
 </script>
 </html>

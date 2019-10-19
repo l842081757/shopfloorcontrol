@@ -1,9 +1,11 @@
 package com.shop.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class AUTOFLOOR_BYMWD {
+public class AUTOFLOOR_BYMWD implements Comparable<AUTOFLOOR_BYMWD>{
     private BigDecimal id;
 
     private String tMonth;
@@ -23,6 +25,16 @@ public class AUTOFLOOR_BYMWD {
     private Integer UNHealth;
 
     private Integer Warning;
+
+    private Integer OPIssue;
+
+    public Integer getOPIssue() {
+        return OPIssue;
+    }
+
+    public void setOPIssue(Integer OPIssue) {
+        this.OPIssue = OPIssue;
+    }
 
     public Integer getHealth() {
         return Health;
@@ -114,6 +126,22 @@ public class AUTOFLOOR_BYMWD {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", flag=" + flag +
+                ", Health=" + Health +
+                ", UNHealth=" + UNHealth +
+                ", Warning=" + Warning +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull AUTOFLOOR_BYMWD BYMWD) {
+
+        if (this.getId().intValue() < BYMWD.getId().intValue()){
+            return 1;
+        }else if (this.getId().intValue() > BYMWD.getId().intValue()){
+            return -1;
+        }else {
+            return 0;
+        }
+
     }
 }

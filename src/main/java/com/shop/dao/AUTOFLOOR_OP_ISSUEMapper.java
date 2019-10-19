@@ -26,7 +26,7 @@ List<AUTOFLOOR_OP_ISSUE> OPISSUE_detail(@Param("start_date")Date start_date, @Pa
 //OPISSUEPage详细  使用此sql
 Page<PageInfo> OPISSUE_detailPage(@Param("start_date")Date start_date, @Param("end_date")Date end_date, @Param("line_name") String line_name);
 
-AUTOFLOOR_OP_ISSUE OPISSUE_ERROR_TYPEOneDay(@Param("start_date")Date start_date,@Param("end_date")Date end_date,@Param("floor_name") String floor_name);
+AUTOFLOOR_OP_ISSUE OPISSUE_ERROR_TYPEOneDay(@Param("start_date")String start_date,@Param("end_date")String end_date,@Param("floor_name") String floor_name);
 
 AUTOFLOOR_OP_ISSUE OPISSUE_ERROR_TYPE7Day(@Param("floor_name") String floor_name);
 

@@ -358,53 +358,56 @@
 
 </body>
 
-<script type="text/javascript">
+<script  th:inline="javascript">
 /*<![CDATA[*/
     (function () {
         facilitybar();
     })();
 
     function facilitybar() {
-        var data = generateData([[${ALLBYMWDData}]]);
+        var datajson = [[${ALLBYMWDData}]];
+        var  datalist= JSON.parse(datajson);
+        var data=generateData(datalist);
         var echartsShow1 = echarts.init(document.getElementById('facilitybar'));
-
-        var	option = {
+        var option = {
             legend: {},
-            tooltip:{
+            tooltip: {
                 trigger: 'axis',
-                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
                 }
             },
             toolbox: {
-                show : true,
-                feature : {
-                    mark : {show: true},
+                show: true,
+                feature: {
+                    mark: {show: true},
                     //dataView : {readOnly:false},
                     //magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-				    magicType : {show: true, type: [ 'tiled','stack']},
+                    //magicType: {show: true, type: ['tiled', 'stack']},
                     //restore : {show: true},
-                    saveAsImage : {show: true}
+                    saveAsImage: {show: true}
                 }
             },
             xAxis: {
-                data: data.categoryData,
-                silent: false,
-                splitLine: {
-                    show: false
-                },
-                splitArea: {
-                    show: false
-                }
-            },
-            dataZoom: [{type: 'inside'},
-						{type: 'slider'}],
+                type: 'category',
+                data:data.categoryData,
+				inverse:true
+			},
+          dataZoom: [
+                {
+                    type: 'slider',
+                    show : true,
+                    realtime : true,
+                    start : 30,
+                    end : 0
+				}
+                ],
             yAxis: {},
-            color:['#209a20','#f9d830','#d64c4c'],
-            series: [{
+            color: ['#209a20','#f9d830','#d64c4c'],
+            series:[{
                 type: 'bar',
-                data: [data.HealthData,data.WarningData,data.UNHealthData],
-                // Set `large` for large data amount
+                name:['Health'],
+                data:data.valueDatahealth,
                 large: true,
                 label:{
                     show: true,//开启显示
@@ -414,35 +417,69 @@
                         color: '#000',
                         fontSize: 14
                     }
-                },
+                }
+            },
+			{
+				type: 'bar',
+				name:['Warning'],
+				data:data.valueDataWarning,
+				large: true,
+                label:{
+                    show: true,//开启显示
+                    position: 'top',
+                    textStyle: {
+                        //数值样式
+                        color: '#000',
+                        fontSize: 14
+                    }
+                }
+			},
+			{
+				type: 'bar',
+				name:['UNHealth'],
+				data:data.valueDataWarning,
+				large: true,
+                label:{
+                    show: true,//开启显示
+                    position: 'top',
+                    textStyle: {
+                        //数值样式
+                        color: '#000',
+                        fontSize: 14
+                    }
+                }
+			},
+            ],
 
-            }
-			]
-        };
-        echartsShow1.setOption(option);
-        tools.loopShowTooltip(echartsShow1,option,{loopSeries: true});
-    }
-
-    function generateData(date) {
-        var categoryData = [];
-        var HealthData = [];
-        var UNHealthData = [];
-        var WarningData = [];
-        for (var i = 0; i < date.length; i++) {
-            categoryData.push(date[i].tMark);
-            HealthData.push(date[i].Health);
-            UNHealthData.push(date[i].UNHealth);
-            WarningData.push(date[i].Warning);
         }
-
-        return {
-            HealthData: HealthData,
-            UNHealthData: UNHealthData,
-            WarningData: WarningData,
-            categoryData: categoryData
-        };
+        echartsShow1.setOption(option);
+        tools.loopShowTooltip(echartsShow1, option, {loopSeries: true});
     }
-    /*]]>*/
+
+function generateData(count) {
+    var categoryData = [];
+    var valueDatahealth = [];
+    var valueDataWarning = [];
+    var valueDatauNHealth = [];
+    var nameDate=['Health','Warning','UNHealth'];
+
+    for (var i = 0; i < count.length; i++) {
+        categoryData.push(count[i].tMark);
+        valueDatahealth.push(count[i].health);
+        valueDataWarning.push(count[i].warning);
+        valueDatauNHealth.push(count[i].uNHealth);
+
+    }
+
+    return {
+        categoryData: categoryData,
+        valueDatahealth:valueDatahealth,
+        valueDataWarning:valueDataWarning,
+        valueDatauNHealth:valueDatauNHealth,
+        nameDate:nameDate
+    };
+}
+
 </script>
 
 <!-- 柱状图 -->
@@ -452,7 +489,8 @@
     })
 </script>
 
-<script type="text/javascript">
+<script th:inline="javascript" >
+/*<![CDATA[*/
     /* 标题导航栏jq */
     $(function () {
         $('[js-tab=3]').tab({
@@ -498,6 +536,6 @@
             }
         })
     }
-
+    /*]]>*/
 </script>
 </html>

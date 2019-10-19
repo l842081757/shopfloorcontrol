@@ -1,6 +1,7 @@
 package com.shop.shopfloorcontroller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.shop.dao.AUTOFLOOR_HEALTH_MACHINEMapper;
 import com.shop.model.*;
 import com.shop.services.AUTOFLOOR_TARGEService;
@@ -250,513 +251,6 @@ public class AutoFloorFacilityFitnessCotller {
             if (lineName!=null){
             }
         }
-        /*
-        int  Health =0;
-        int  UNHealth =0;
-        int  Warning=0;
-        //实时一天生产的机台
-        List<AutoFloor_Rate> OneDayStationList = autoFloor_rateService.AllDayStationMidetect(Schedule, FloorName,Schedule);
-        for (AutoFloor_Rate floor_rate : AllStation) {
-            String AllstationName = floor_rate.getStationname();
-            String product = floor_rate.getProduct();
-            //判断机种 区分工站名称
-            if (product.equals(LinennameProduct)){
-                W1="WIFI/BT";
-                W2="WIFI/BT2";
-            }
-            for (AutoFloor_Rate autoFloor_rate : OneDayStationList) {
-                String OneDaystationName = autoFloor_rate.getStationname();
-                if (OneDaystationName!=null){
-
-                if (OneDaystationName.contains(DFU)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            //判断小于机台目标二倍的Health机台
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            //判断大于机台目标二倍的小于目标五倍的UNHealth机台
-                            UNHealth+=1;
-                        }else{
-                            //判断Warning机台
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(FCT)){
-
-                    if (OneDaystationName.equals(AllstationName)){
-
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(S1)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(S2)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(S3)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(CCT)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(W1)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(W2)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(UWB)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }else if (OneDaystationName.contains(SCOND)){
-                    if (OneDaystationName.equals(AllstationName)){
-                        if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                            Health+=1;
-                        }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                            UNHealth+=1;
-                        }else{
-                            Warning+=1;
-                        }
-                    }
-                }
-                }
-            }
-        }
-
-         Warning+=AllStation.size()-(Health+UNHealth+Warning);
-        //实时昨天生产的机台
-        int  YesterDayHealth =0;
-        int  YesterDayUNHealth =0;
-        int  YesterDayWarning=0;
-        List<AutoFloor_Rate> YesterDayStationList = autoFloor_rateService.AllDayStationMidetect(YesterdayDate, FloorName,YesterdayDate);
-        for (AutoFloor_Rate floor_rate : AllStation) {
-            String AllstationName = floor_rate.getStationname();
-            String product = floor_rate.getProduct();
-            //判断机种 区分工站名称
-            if (product.equals(LinennameProduct)){
-                W1="WIFI/BT";
-                W2="WIFI/BT2";
-            }
-            for (AutoFloor_Rate autoFloor_rate : YesterDayStationList) {
-                String OneDaystationName = autoFloor_rate.getStationname();
-                if (OneDaystationName!=null){
-                    if (OneDaystationName.contains(DFU)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                //判断小于机台目标二倍的Health机台
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                //判断大于机台目标二倍的小于目标五倍的UNHealth机台
-                                YesterDayUNHealth+=1;
-                            }else{
-                                //判断Warning机台
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(FCT)){
-
-                        if (OneDaystationName.equals(AllstationName)){
-
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S1)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S2)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S3)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(CCT)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(W1)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(W2)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(UWB)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(SCOND)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                YesterDayHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                YesterDayUNHealth+=1;
-                            }else{
-                                YesterDayWarning+=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        YesterDayWarning+=AllStation.size()-(YesterDayHealth+YesterDayUNHealth+YesterDayWarning);
-        //实时上一个周生产的机台
-        int  WeekHealth =0;
-        int  WeekUNHealth =0;
-        int  WeekWarning=0;
-        List<AutoFloor_Rate> AllWeekStationMidetect = autoFloor_rateService.AllWeekStationMidetect(FloorName);
-        for (AutoFloor_Rate floor_rate : AllStation) {
-            String AllstationName = floor_rate.getStationname();
-            String product = floor_rate.getProduct();
-            //判断机种 区分工站名称
-            if (product.equals(LinennameProduct)){
-                W1="WIFI/BT";
-                W2="WIFI/BT2";
-            }
-            for (AutoFloor_Rate autoFloor_rate : AllWeekStationMidetect) {
-                String OneDaystationName = autoFloor_rate.getStationname();
-                if (OneDaystationName!=null){
-                    if (OneDaystationName.contains(DFU)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                //判断小于机台目标二倍的Health机台
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                //判断大于机台目标二倍的小于目标五倍的UNHealth机台
-                                WeekUNHealth+=1;
-                            }else{
-                                //判断Warning机台
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(FCT)){
-
-                        if (OneDaystationName.equals(AllstationName)){
-
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S1)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S2)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S3)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(CCT)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(W1)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(W2)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(UWB)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(SCOND)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                WeekHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                WeekUNHealth+=1;
-                            }else{
-                                WeekWarning+=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        WeekWarning+=AllStation.size()-(WeekHealth+WeekUNHealth+WeekWarning);
-        //实时上一个月生产的机台
-        int  MonthHealth =0;
-        int  MonthUNHealth =0;
-        int  MonthWarning=0;
-        List<AutoFloor_Rate> AllMonthStationMidetect = autoFloor_rateService.AllMonthStationMidetect(FloorName);
-        for (AutoFloor_Rate floor_rate : AllStation) {
-            String AllstationName = floor_rate.getStationname();
-            String product = floor_rate.getProduct();
-            //判断机种 区分工站名称
-            if (product.equals(LinennameProduct)){
-                W1="WIFI/BT";
-                W2="WIFI/BT2";
-            }
-            for (AutoFloor_Rate autoFloor_rate : AllMonthStationMidetect) {
-                String OneDaystationName = autoFloor_rate.getStationname();
-                if (OneDaystationName!=null){
-                    if (OneDaystationName.contains(DFU)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                //判断小于机台目标二倍的Health机台
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                //判断大于机台目标二倍的小于目标五倍的UNHealth机台
-                                MonthUNHealth+=1;
-                            }else{
-                                //判断Warning机台
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(FCT)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S1)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S2)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(S3)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(CCT)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(W1)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(W2)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(UWB)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }else if (OneDaystationName.contains(SCOND)){
-                        if (OneDaystationName.equals(AllstationName)){
-                            if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                MonthHealth+=1;
-                            }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                MonthUNHealth+=1;
-                            }else{
-                                MonthWarning+=1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        MonthWarning+=AllStation.size()-(MonthHealth+MonthUNHealth+MonthWarning);
-
-*/
 
         Map<String, List<AUTOFLOOR_BYMWD>> ALLBYMWDlist = autoFloor_bymwdMapperService.SelectBYMWDList(FloorName);
 
@@ -774,8 +268,287 @@ public class AutoFloorFacilityFitnessCotller {
         for (AUTOFLOOR_BYMWD autofloor_bymwd : autofloor_bymwdListD) {
             String StartDate = df.format(autofloor_bymwd.getStartDate());
             String EndDate = df.format(autofloor_bymwd.getEndDate());
-            AUTOFLOOR_BYMWD autofloorBymwd=new AUTOFLOOR_BYMWD();
+            AUTOFLOOR_BYMWD autofloorBymwd = new AUTOFLOOR_BYMWD();
             List<AUTOFLOOR_HEALTH_MACHINE> autofloor_health_machines = autofloor_health_machineMapper.SelectDayStationMidetect(FloorName, StartDate, EndDate);
+            int DayHealth = 0;
+            int DayUNHealth = 0;
+            int DayWarning = 0;
+
+            for (AutoFloor_Rate floor_rate : AllStation) {
+                String AllstationName = floor_rate.getStationname();
+                String product = floor_rate.getProduct();
+                //判断机种 区分工站名称
+                if (product.equals(LinennameProduct)) {
+                    W1 = "WIFI/BT";
+                    W2 = "WIFI/BT2";
+                }
+                for (AUTOFLOOR_HEALTH_MACHINE autoFloor_rate : autofloor_health_machines) {
+                    String OneDaystationName = autoFloor_rate.getStationName();
+                    if (OneDaystationName != null) {
+
+                        if (OneDaystationName.contains(DFU)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    //判断小于机台目标二倍的Health机台
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    //判断大于机台目标二倍的小于目标五倍的UNHealth机台
+                                    DayUNHealth += 1;
+                                } else {
+                                    //判断Warning机台
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(FCT)) {
+
+                            if (OneDaystationName.equals(AllstationName)) {
+
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(S1)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(S2)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(S3)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(CCT)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(W1)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(W2)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(UWB)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        } else if (OneDaystationName.contains(SCOND)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            DayWarning+=AllStation.size()-(DayHealth+DayUNHealth+DayWarning);
+            autofloorBymwd.settMark(autofloor_bymwd.gettMark());
+            autofloorBymwd.setId(autofloor_bymwd.getId());
+            autofloorBymwd.setHealth(DayHealth);
+            autofloorBymwd.setUNHealth(DayUNHealth);
+            autofloorBymwd.setWarning(DayWarning);
+            ALLBYMWDData.add(autofloorBymwd);
+        }
+            //周類型數據
+            for (AUTOFLOOR_BYMWD autofloor_bymwd : autofloor_bymwdListW) {
+                String StartDate = df.format(autofloor_bymwd.getStartDate());
+                String EndDate = df.format(autofloor_bymwd.getEndDate());
+                AUTOFLOOR_BYMWD autofloorBymwd=new AUTOFLOOR_BYMWD();
+                List<AUTOFLOOR_HEALTH_MACHINE> autofloor_health_machines = autofloor_health_machineMapper.SelectWeekStationMidetect(FloorName, StartDate, EndDate);
+                int  DayHealth   =0;
+                int  DayUNHealth =0;
+                int  DayWarning  =0;
+
+                for (AutoFloor_Rate floor_rate : AllStation) {
+                    String AllstationName = floor_rate.getStationname();
+
+                    String product = floor_rate.getProduct();
+                    //判断机种 区分工站名称
+                    if (product.equals(LinennameProduct)) {
+                        W1 = "WIFI/BT";
+                        W2 = "WIFI/BT2";
+                    }
+                    for (AUTOFLOOR_HEALTH_MACHINE autoFloor_rate : autofloor_health_machines) {
+                        String OneDaystationName = autoFloor_rate.getStationName();
+                        if (OneDaystationName != null) {
+                            if (OneDaystationName.contains(DFU)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        //判断小于机台目标二倍的Health机台
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        //判断大于机台目标二倍的小于目标五倍的UNHealth机台
+                                        DayUNHealth += 1;
+                                    } else {
+                                        //判断Warning机台
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(FCT)) {
+
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(S1)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(S2)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(S3)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(CCT)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(W1)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(W2)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(UWB)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            } else if (OneDaystationName.contains(SCOND)) {
+                                if (OneDaystationName.equals(AllstationName)) {
+                                    if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                        DayHealth += 1;
+                                    } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                        DayUNHealth += 1;
+                                    } else {
+                                        DayWarning += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            DayWarning+=AllStation.size()-(DayHealth+DayUNHealth+DayWarning);
+            autofloorBymwd.setId(autofloor_bymwd.getId());
+            autofloorBymwd.settMark(autofloor_bymwd.gettMark());
+            autofloorBymwd.setHealth(DayHealth);
+            autofloorBymwd.setUNHealth(DayUNHealth);
+            autofloorBymwd.setWarning(DayWarning);
+            ALLBYMWDData.add(autofloorBymwd);
+        }
+        //月類型數據
+        for (AUTOFLOOR_BYMWD autofloor_bymwd : autofloor_bymwdListM) {
+            String StartDate = df.format(autofloor_bymwd.getStartDate());
+            String EndDate = df.format(autofloor_bymwd.getEndDate());
+            AUTOFLOOR_BYMWD autofloorBymwd=new AUTOFLOOR_BYMWD();
+            List<AUTOFLOOR_HEALTH_MACHINE> autofloor_health_machines = autofloor_health_machineMapper.SelectMonthStationMidetect(FloorName, StartDate, EndDate);
             int  DayHealth   =0;
             int  DayUNHealth =0;
             int  DayWarning  =0;
@@ -789,112 +562,111 @@ public class AutoFloorFacilityFitnessCotller {
                     W2 = "WIFI/BT2";
                 }
                 for (AUTOFLOOR_HEALTH_MACHINE autoFloor_rate : autofloor_health_machines) {
-                    String OneDaystationName = autoFloor_rate.getStationname();
-                    if (OneDaystationName!=null){
-
-                        if (OneDaystationName.contains(DFU)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
+                    String OneDaystationName = autoFloor_rate.getStationName();
+                    if (OneDaystationName != null) {
+                        if (OneDaystationName.contains(DFU)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
                                     //判断小于机台目标二倍的Health机台
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
                                     //判断大于机台目标二倍的小于目标五倍的UNHealth机台
-                                    DayUNHealth+=1;
-                                }else{
+                                    DayUNHealth += 1;
+                                } else {
                                     //判断Warning机台
-                                    DayWarning+=1;
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(FCT)){
+                        } else if (OneDaystationName.contains(FCT)) {
 
-                            if (OneDaystationName.equals(AllstationName)){
+                            if (OneDaystationName.equals(AllstationName)) {
 
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(S1)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(S1)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(S2)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(S2)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(S3)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(S3)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(CCT)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(CCT)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(W1)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(W1)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(W2)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(W2)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(UWB)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(UWB)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
-                        }else if (OneDaystationName.contains(SCOND)){
-                            if (OneDaystationName.equals(AllstationName)){
-                                if ((autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*HealthM)){
-                                    DayHealth+=1;
-                                }else if ((autoFloor_rate.getMisdetet()*100)>(DFUMisdetetRate*HealthM)&&(autoFloor_rate.getMisdetet()*100)<=(DFUMisdetetRate*UNHealthM)){
-                                    DayUNHealth+=1;
-                                }else{
-                                    DayWarning+=1;
+                        } else if (OneDaystationName.contains(SCOND)) {
+                            if (OneDaystationName.equals(AllstationName)) {
+                                if ((autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * HealthM)) {
+                                    DayHealth += 1;
+                                } else if ((autoFloor_rate.getMisdetet() * 100) > (DFUMisdetetRate * HealthM) && (autoFloor_rate.getMisdetet() * 100) <= (DFUMisdetetRate * UNHealthM)) {
+                                    DayUNHealth += 1;
+                                } else {
+                                    DayWarning += 1;
                                 }
                             }
                         }
@@ -903,34 +675,16 @@ public class AutoFloorFacilityFitnessCotller {
 
             }
             DayWarning+=AllStation.size()-(DayHealth+DayUNHealth+DayWarning);
+            autofloorBymwd.setId(autofloor_bymwd.getId());
             autofloorBymwd.settMark(autofloor_bymwd.gettMark());
             autofloorBymwd.setHealth(DayHealth);
             autofloorBymwd.setUNHealth(DayUNHealth);
             autofloorBymwd.setWarning(DayWarning);
             ALLBYMWDData.add(autofloorBymwd);
         }
-
-
-
-
-
-
-
-       /* OneDayMap.put("Health",Health);
-        OneDayMap.put("UNHealth",UNHealth);
-        OneDayMap.put("Warning",Warning);
-        OneDayMap.put("YesterDayHealth",YesterDayHealth);
-        OneDayMap.put("YesterDayUNHealth",YesterDayUNHealth);
-        OneDayMap.put("YesterDayWarning",YesterDayWarning);
-        OneDayMap.put("WeekHealth",WeekHealth);
-        OneDayMap.put("WeekUNHealth",WeekUNHealth);
-        OneDayMap.put("WeekWarning",WeekWarning);
-
-        OneDayMap.put("MonthHealth",MonthHealth);
-        OneDayMap.put("MonthUNHealth",MonthUNHealth);
-        OneDayMap.put("MonthWarning",MonthWarning);*/
-
-        map.put("ALLBYMWDData",ALLBYMWDData);
+        Collections.sort(ALLBYMWDData);
+        String ALLBYMWDDataJson = JSON.toJSONString(ALLBYMWDData);
+        map.put("ALLBYMWDData",ALLBYMWDDataJson);
         map.put("OneDayMap", OneDayMap);
         map.put("MisdetetMap",MisdetetMap);
         map.put("FacilityListMacan",FacilityListMacan);

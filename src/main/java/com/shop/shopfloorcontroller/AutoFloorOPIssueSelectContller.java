@@ -1,8 +1,11 @@
 package com.shop.shopfloorcontroller;
 
+import com.alibaba.fastjson.JSON;
+import com.shop.model.AUTOFLOOR_BYMWD;
 import com.shop.model.AUTOFLOOR_OP_ISSUE;
 import com.shop.model.AUTOFLOOR_TARGET;
 import com.shop.services.AUTOFLOOR_TARGEService;
+import com.shop.services.AutoFloor_BYMWDMapperService;
 import com.shop.services.AutoFloor_OP_ISSUEService;
 import com.shop.services.AutoFloor_RateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +18,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author
@@ -35,6 +35,8 @@ public class AutoFloorOPIssueSelectContller {
 
     @Autowired
     AutoFloor_OP_ISSUEService autoFloor_op_issueService;
+    @Autowired
+    AutoFloor_BYMWDMapperService autoFloor_bymwdMapperService;
 
     @Autowired
     TaskService taskService;
@@ -304,35 +306,68 @@ public class AutoFloorOPIssueSelectContller {
         error_TTLMap.put("errorTypeTTL8", errorTypeTTL8);
         //OP柱状图数据
 
-        AUTOFLOOR_OP_ISSUE autofloor_op_issueOneDay = autoFloor_op_issueService.OPISSUE_ERROR_TYPEOneDay(Schedule, Schedule, FloorName);
-        Integer errortypeOneDaysum=0;
-        if (autofloor_op_issueOneDay!=null){
-            errortypeOneDaysum=autofloor_op_issueOneDay.getERRORTYPESUM();
+        Map<String, List<AUTOFLOOR_BYMWD>> ALLBYMWDlist = autoFloor_bymwdMapperService.SelectBYMWDList(FloorName);
+        //月
+        List<AUTOFLOOR_BYMWD> autofloor_bymwdListM = ALLBYMWDlist.get("bymwdListM");
+        //周
+        List<AUTOFLOOR_BYMWD> autofloor_bymwdListW = ALLBYMWDlist.get("bymwdListW");
+        //天
+        List<AUTOFLOOR_BYMWD> autofloor_bymwdListD = ALLBYMWDlist.get("bymwdListD");
+        //柱狀圖所有數據
+        List<AUTOFLOOR_BYMWD> ALLBYMWDData=new ArrayList<>();
+        //天数据
+        for (AUTOFLOOR_BYMWD autofloorBymwd : autofloor_bymwdListD) {
+            String StartDate = df.format(autofloorBymwd.getStartDate());
+            String EndDate = df.format(autofloorBymwd.getEndDate());
+            AUTOFLOOR_BYMWD autofloor_bymwd=new AUTOFLOOR_BYMWD();
+            autofloor_bymwd.setId(autofloorBymwd.getId());
+            autofloor_bymwd.settMark(autofloorBymwd.gettMark());
+            AUTOFLOOR_OP_ISSUE autofloor_op_issueOneDay = autoFloor_op_issueService.OPISSUE_ERROR_TYPEOneDay(StartDate, EndDate, FloorName);
+            Integer errortypeOneDaysum=0;
+            if (autofloor_op_issueOneDay!=null){
+                errortypeOneDaysum=autofloor_op_issueOneDay.getERRORTYPESUM();
+            }
+            autofloor_bymwd.setOPIssue(errortypeOneDaysum);
+
+            ALLBYMWDData.add(autofloor_bymwd);
         }
-        error_TTLMap.put("errortypeOneDaysum",errortypeOneDaysum);
+        //周数据
+        for (AUTOFLOOR_BYMWD autofloorBymwd : autofloor_bymwdListW) {
+            String StartDate = df.format(autofloorBymwd.getStartDate());
+            String EndDate = df.format(autofloorBymwd.getEndDate());
+            AUTOFLOOR_BYMWD autofloor_bymwd=new AUTOFLOOR_BYMWD();
+            autofloor_bymwd.setId(autofloorBymwd.getId());
+            autofloor_bymwd.settMark(autofloorBymwd.gettMark());
+            AUTOFLOOR_OP_ISSUE autofloor_op_issueOneDay = autoFloor_op_issueService.OPISSUE_ERROR_TYPEOneDay(StartDate, EndDate, FloorName);
+            Integer errortypeOneDaysum=0;
+            if (autofloor_op_issueOneDay!=null){
+                errortypeOneDaysum=autofloor_op_issueOneDay.getERRORTYPESUM();
+            }
+            autofloor_bymwd.setOPIssue(errortypeOneDaysum);
 
-        AUTOFLOOR_OP_ISSUE autofloor_op_issueYesterday = autoFloor_op_issueService.OPISSUE_ERROR_TYPEOneDay(YesterdayDate,YesterdayDate, FloorName);
-        Integer errortypesumYesterday =0;
-                if(autofloor_op_issueYesterday!=null){
-                    errortypesumYesterday =autofloor_op_issueYesterday.getERRORTYPESUM();
-                }
-        error_TTLMap.put("errortypesumYesterday",errortypesumYesterday);
-
-        AUTOFLOOR_OP_ISSUE autofloor_op_issue7day = autoFloor_op_issueService.OPISSUE_ERROR_TYPE7Day(FloorName);
-        Integer errortypesum7day   =0;
-        if(autofloor_op_issue7day!=null){
-            errortypesum7day=autofloor_op_issue7day.getERRORTYPESUM();
+            ALLBYMWDData.add(autofloor_bymwd);
         }
-        error_TTLMap.put("errortypesum7day",errortypesum7day);
+        //月数据
+        for (AUTOFLOOR_BYMWD autofloorBymwd : autofloor_bymwdListM) {
+            String StartDate = df.format(autofloorBymwd.getStartDate());
+            String EndDate = df.format(autofloorBymwd.getEndDate());
+            AUTOFLOOR_BYMWD autofloor_bymwd=new AUTOFLOOR_BYMWD();
+            autofloor_bymwd.setId(autofloorBymwd.getId());
+            autofloor_bymwd.settMark(autofloorBymwd.gettMark());
+            AUTOFLOOR_OP_ISSUE autofloor_op_issueOneDay = autoFloor_op_issueService.OPISSUE_ERROR_TYPEOneDay(StartDate, EndDate, FloorName);
+            Integer errortypeOneDaysum=0;
+            if (autofloor_op_issueOneDay!=null){
+                errortypeOneDaysum=autofloor_op_issueOneDay.getERRORTYPESUM();
+            }
+            autofloor_bymwd.setOPIssue(errortypeOneDaysum);
 
-        AUTOFLOOR_OP_ISSUE autofloor_op_issue30day = autoFloor_op_issueService.OPISSUE_ERROR_TYPE30Day(FloorName);
-        Integer errortypesum30day  =0;
-        if(autofloor_op_issue30day!=null){
-            errortypesum30day  =autofloor_op_issue30day.getERRORTYPESUM();
+            ALLBYMWDData.add(autofloor_bymwd);
         }
-        error_TTLMap.put("errortypesum30day",errortypesum30day);
-
-
+        Collections.sort(ALLBYMWDData);
+        String ALLBYMWDDataJson = JSON.toJSONString(ALLBYMWDData);
+        map.put("ALLBYMWDData",ALLBYMWDDataJson);
+        map.put("Scheduledate",Schedule.toString());
+        map.put("YesterWeekdate", YesterWeek.toString());
         map.put("OPIssueList",OPIssueList);
         map.put("OPIssueListMacan",OPIssueListMacan);
         map.put("error_TTLMap",error_TTLMap);

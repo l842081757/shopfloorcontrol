@@ -30,7 +30,7 @@
     <![CDATA[
     select * from AUTOFLOOR_BYMWD
     where ID>'${W_Id}'
-    and ID<'${D_Id}'
+    and ID<='${D_Id}'
     and FLAG=1
     ]]>
   </select>
